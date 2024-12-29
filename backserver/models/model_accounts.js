@@ -46,10 +46,12 @@ class Accounts extends Sequelize.Model {
         ratingPoint:{
             type: Sequelize.INTEGER,
             allowNull: true,
+            defaultValue: 1,
         },
         savedMoney:{
             type: Sequelize.INTEGER,
             allowNull: true,
+            defaultValue: 0,
         },
         created_at:{
             type: Sequelize.DATE,
@@ -60,6 +62,11 @@ class Accounts extends Sequelize.Model {
             type: Sequelize.DATE,
             allowNull: true,
             defaultValue: Sequelize.NOW,
+        },
+        super_admin:{
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
         },
     },{
         sequelize,

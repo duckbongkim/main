@@ -1,11 +1,35 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
+import AdminView from '../views/AdminView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: MainView
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminView,
+    children:[
+      {
+        path:'',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/defaultAdminPage.vue')
+      },
+      {
+        path:'users/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageUsers.vue')
+      },
+      {
+        path:'orders/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageOrders.vue')
+      },
+      {
+        path:'products/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
+      },
+    ]
   },
   // {
   //   path: '/about',
