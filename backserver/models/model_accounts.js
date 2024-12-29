@@ -46,7 +46,7 @@ class Accounts extends Sequelize.Model {
         ratingPoint:{
             type: Sequelize.INTEGER,
             allowNull: true,
-            defaultValue: 1,
+            defaultValue: 0,
         },
         savedMoney:{
             type: Sequelize.INTEGER,
