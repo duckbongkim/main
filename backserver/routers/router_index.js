@@ -5,6 +5,8 @@ const Orders = require('../models/model_orders');
 const Products = require('../models/model_products');
 const RecommendTags = require('../models/model_recommendTags');
 
+
+//메인페이지에서 사용할 데이터 전달.
 router.get('/',async(req,res)=>{
     //판매량,싼 가격, 비싼 가격, 추천태그 별(연령별), 신상품(지금 기준 한달 전 까지 나온 상품)
     const mainData = {};

@@ -15,6 +15,10 @@ class Products extends Sequelize.Model {
                 type: Sequelize.TEXT,
                 allowNull: false,
             },
+            product_description_img:{
+                type: Sequelize.STRING(300),
+                allowNull: true,
+            },
             product_stock:{//재고
                 type: Sequelize.INTEGER,
                 allowNull: false,

@@ -27,11 +27,9 @@ import FooterLayout from '@/components/layout/FooterLayout.vue'
   color: #2c3e50;
 }
 span{
-  color:#31a344;
+  color:#bebebe;
 }
-nav {
-  padding: 30px;
-}
+
 
 nav a {
   font-weight: bold;
