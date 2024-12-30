@@ -20,3 +20,9 @@
 </div>
     
 </template>
+
+<style scoped>
+.container{
+z-index: 1020;
+}
+</style>
