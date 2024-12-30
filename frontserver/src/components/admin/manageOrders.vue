@@ -1,6 +1,6 @@
 <template>
 <div>
-    <h1>Main View</h1>
+    <h1>주문 관리</h1>
 </div>
 </template>
 
@@ -12,7 +12,7 @@ export default{
     computed:{},
     data(){
         return{
-
+            
         };
     },
     setup(){},

@@ -1,42 +1,4 @@
 <template>
-  <!-- <nav>
-    <span>Day1</span> : | <router-link to="/">Home</router-link> | 
-    <span>Day2</span> : BindingPrac ->(|
-    <router-link to="/test">Test</router-link> |
-    <router-link to="/string">String</router-link> |
-    <router-link to="/html">Html</router-link> |
-    <router-link to="/attribute">Attribute</router-link> |
-    <router-link to="/class">Class</router-link> |
-    <router-link to="/input">Input</router-link> |
-    <router-link to="/list">List</router-link> |
-    <router-link to="/tt">TT</router-link> |
-    <router-link to="/CBS">CheckBoxSelectRadio</router-link> |
-    ) <br /> 
-    <span>Day3</span> : Event ->(
-      | <router-link to="/click">Click</router-link> |
-        <router-link to="/change">Change</router-link> |
-        <router-link to="/change2">ChangePrac</router-link> |
-        <router-link to="/key">Key</router-link> |
-    )<br />
-    :Extra ->(
-      | <router-link to="/render">Render</router-link> |
-        <router-link to="/rendershow">RenderShow</router-link> |
-        <router-link to="/computed">Computed</router-link> |
-        <router-link to="/watch">Watch</router-link> |
-        <router-link to="/lifecycle">LifeCycle</router-link> |
-    )<br />
-    <span>Day4,5</span> : Reuse ->(
-      | <router-link to="/pagetitle">Page</router-link> |
-        <router-link to="/parentview">ParentView</router-link> |
-        <router-link to="/grid">TableView</router-link> |
-        <router-link to="/mygrid">Mygrid</router-link> |
-    )<br />
-    <span>Day6</span> : ->(
-      | <router-link to="/slot">Slot</router-link> |
-        <router-link to="/provide">provide</router-link> |
-        <router-link to="/directive">Custom Directive</router-link> |
-    )
-  </nav> -->
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
   <div class="container-fluid">
     <a class="navbar-brand" @click="goToMenu('/')">Navbar</a>
@@ -47,6 +9,9 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" @click="goToMenu('/admin')" href="#">Admin</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

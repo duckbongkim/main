@@ -1,10 +1,12 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
 
 const express = require('express');
 const {sequelize} = require('./models/model_index.js');
 const cors = require('cors');
 const path = require('path');
 const indexRouter = require('./routers/router_index.js');
+const adminRouter = require('./routers/router_admin.js');
 
 //서번 생성
 const app = express();
@@ -36,7 +38,18 @@ app.use(cors(corsOptions));
 
 //라우터 
 app.use('/',indexRouter);
+app.use('/admin',adminRouter);
 
+//404 에러 처리
+app.use((req,res,next)=>{
+    res.status(404).send('Router Not Found');
+});
+
+//500 에러 처리
+app.use((err,req,res,next)=>{
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
+});
 
 
 app.listen(app.get('port'),()=>{
