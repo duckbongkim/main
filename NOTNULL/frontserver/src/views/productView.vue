@@ -45,7 +45,7 @@
    
     <div class="product-info-container text-center text-md-start">
         <div class="product-info">
-            <div>
+            <div><!-- db에서 데이터를 받아와 여기에 뿌림 -->
                 <h3 class="product-name mb-5">{{selectedProduct.product_name}}</h3>
                 <p class="price-text">{{selectedProduct.product_price}}원</p>
                 <div class="product-stock"><p>남은수량</p><p> {{selectedProduct.product_stock}}개</p></div>
@@ -105,6 +105,7 @@
 
 
 <!-- 추천상품 -->
+<!-- recommendProduct 에서 data를 받아와 v-for 로 data를 뿌림 -->
 <section class="recomend-section">
     <h3>추천상품?? 이런식으로??</h3>
     <div class="recomend-container">
@@ -165,56 +166,56 @@ export default{
     },
     data(){
         return{
+        // getProduct() 메소드로 데이터를 받아옴
             selectedProduct : {
-                id:1,
-                product_name : '발렌타인20년산',
-                product_price : 300000,
-                product_description:'발렌타인 20년산',
-                product_stock:20,
-                product_image:'/emg.png',
+                id:null,
+                product_name : '',
+                product_price : null,
+                product_description:'',
+                product_stock:null,
+                product_image:'',
             },
-
+        //getrecommendProdcut 메소드로 데이터를 받아옴
             recommendProduct : 
             [
-                {
-                    id:2,
-                    product_name : '발렌타인20년산',
-                    product_price : 600000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
+                // {
+                //     id:2,
+                //     product_name : '발렌타인20년산',
+                //     product_price : 600000,
+                //     product_description:'발렌타인 20년산',
+                //     product_stock:20,
+                //     product_image:'/emg.png',
+                // },
 
-                {
-                    id:3,
-                    product_name : '발렌타인20년산',
-                    product_price : 700000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
+                // {
+                //     id:3,
+                //     product_name : '발렌타인20년산',
+                //     product_price : 700000,
+                //     product_description:'발렌타인 20년산',
+                //     product_stock:20,
+                //     product_image:'/emg.png',
+                // },
 
-                {
-                    id:4,
-                    product_name : '발렌타인20년산',
-                    product_price : 800000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
+                // {
+                //     id:4,
+                //     product_name : '발렌타인20년산',
+                //     product_price : 800000,
+                //     product_description:'발렌타인 20년산',
+                //     product_stock:20,
+                //     product_image:'/emg.png',
+                // },
 
-                {
-                    id:5,
-                    product_name : '발렌타인20년산',
-                    product_price : 600000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
+                // {
+                //     id:5,
+                //     product_name : '발렌타인20년산',
+                //     product_price : 600000,
+                //     product_description:'발렌타인 20년산',
+                //     product_stock:20,
+                //     product_image:'/emg.png',
+                // },
             ],
              product_id: null,
             orderQuantity : 1,
-            
         };
     },
     setup(){},
@@ -224,7 +225,7 @@ export default{
         this.product_id = this.$route.params.product_id;
         console.log(this.product_id)
         this.getProducts()
-        // this.getRecommendProducts()
+        this.getRecommendProducts()
     },
     unmounted(){},
     methods:{

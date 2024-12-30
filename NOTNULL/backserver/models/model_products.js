@@ -4,7 +4,7 @@ class Products extends Sequelize.Model {
     static initiate(sequelize){
         Products.init({
             product_name:{
-                type: Sequelize.STRING(20),
+                type: Sequelize.STRING(100),
                 allowNull: false,
             },
             product_price:{
@@ -14,6 +14,10 @@ class Products extends Sequelize.Model {
             product_description:{
                 type: Sequelize.TEXT,
                 allowNull: false,
+            },
+            product_description_img:{
+                type: Sequelize.STRING(300),
+                allowNull: true,
             },
             product_stock:{//재고
                 type: Sequelize.INTEGER,
@@ -30,6 +34,16 @@ class Products extends Sequelize.Model {
             product_kind:{
                 type: Sequelize.STRING(20),
                 allowNull: false,
+            },
+            created_at:{
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.NOW,
+            },
+            updated_at:{
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: Sequelize.NOW,
             },
         },{
             sequelize,
