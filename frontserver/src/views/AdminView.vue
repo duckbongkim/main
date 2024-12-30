@@ -1,7 +1,7 @@
 <template>
 <div>
   <Sidebar />
-  <div>
+  <div class="container">
     <router-view />
   </div>
 
@@ -31,3 +31,9 @@ export default{
 }
 </script>
 
+<style scoped>
+.container{
+  margin-left: 250px;
+  margin-top: 20px;
+}
+</style>

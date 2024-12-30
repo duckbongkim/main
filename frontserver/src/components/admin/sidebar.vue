@@ -108,13 +108,13 @@ export default{
 <style scoped>
 .sidebar {
   position: fixed;
-  top: 56px; /* 네비게이션 바 높이만큼 아래로 이동 */
+  top: 56px;
   left: 0;
-  height: calc(100vh - 56px); /* 네비게이션 바 높이만큼 빼기 */
+  height: calc(100vh - 56px);
   width: 250px;
   padding-top: 20px;
-  z-index: 1020; /* 네비게이션 바보다 낮은 z-index */
-  background-color: #1a1a1a; /* 어두운 배경색 추가 */
+  z-index: 1010;
+  background-color: #1a1a1a;
 }
 
 .material-icons {

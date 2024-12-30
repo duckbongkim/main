@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
-
 const routes = [
   {
     path: '/',
@@ -29,6 +28,10 @@ const routes = [
         path:'products/',
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
       },
+      {
+        path:'addAccount/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/addAccount.vue')
+      }
     ]
   },
   // {
