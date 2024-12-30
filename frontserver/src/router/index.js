@@ -29,6 +29,7 @@ const routes = [
         path:'products/',
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
       },
+      
     ]
   },
   // {

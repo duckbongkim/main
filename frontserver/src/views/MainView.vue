@@ -72,7 +72,7 @@
 
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">
+          <div class="swiper-slide" v-for="(slide, index) in slides" :key="index">
             <img src="img\곰표.jpg" alt="2021 뉴이어, 스타벅스와 함께 즐겁고 활기차게 시작하세요!" />
             <a href="javascript:void(0)" class="btn">자세히 보기</a>
           </div>
@@ -172,7 +172,6 @@
       </div>
 
       <div class="swiper-pagination"></div>
-
       <div class="swiper-prev swiper-button">
         <span class="material-icons arrow_back">arrow_back_ios</span>
       </div>
@@ -188,13 +187,17 @@
 
 
 <script>
+import axios from 'axios';
+
+
+
 export default{ 
     name:'',
     components:{},
     computed:{},
     data(){
         return{
-
+          items: [], // 데이터를 저장할 변수
         };
     },
     setup(){},
@@ -207,7 +210,17 @@ export default{
         el: '.swiper-pagination',
         clickable: true,
       },
-    })
+    }),
+    axios
+      .get("http://localhost:3000/") 
+      .then((response) => {
+        console.log(response)
+        this.items = response.data; // 응답 데이터를 items 저장
+      })
+
+      .catch((error) => {
+        console.error("데이터를 불러오는 중 오류 발생:", error);
+      });
     },
 
     unmounted(){},
