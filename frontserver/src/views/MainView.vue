@@ -265,6 +265,8 @@ export default{
   .promotion .swiper-slide-active {
     opacity: 1;
   }
+
+  
   .promotion .swiper-slide .btn {
     width: 130px;
     position: absolute;
