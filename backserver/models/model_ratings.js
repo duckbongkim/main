@@ -10,7 +10,7 @@ class Ratings extends Sequelize.Model {
             saved_money_rate:{
                 type: Sequelize.FLOAT,
                 allowNull: false,
-                defaultValue: 0,
+                defaultValue: 0.1,
             },
         },{
             sequelize,
