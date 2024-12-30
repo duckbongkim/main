@@ -115,7 +115,7 @@ db.Replies.belongsTo(db.Products,{foreignKey: { name: 'product_id'}, targetKey:'
 db.Products.hasMany(db.Replies,{foreignKey: { name: 'product_id'}, sourceKey:'id'});
 
 //account
-db.Accounts.belongsTo(db.Ratings,{foreignKey: { name: 'rating_id'}, targetKey:'id'});
-db.Ratings.hasMany(db.Accounts,{foreignKey: { name: 'rating_id'}, sourceKey:'id'});
+db.Accounts.belongsTo(db.Ratings,{foreignKey: { name: 'rating_id',defaultValue:1}, targetKey:'id'});
+db.Ratings.hasMany(db.Accounts,{foreignKey: { name: 'rating_id',defaultValue:1}, sourceKey:'id'});
 
 module.exports = db;
