@@ -217,12 +217,11 @@ export default{
         console.log(response)
         this.items = response.data; // 응답 데이터를 items 저장
       })
-
+         // 어렵다
       .catch((error) => {
         console.error("데이터를 불러오는 중 오류 발생:", error);
       });
     },
-
     unmounted(){},
     methods:{
       
