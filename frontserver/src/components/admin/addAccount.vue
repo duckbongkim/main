@@ -4,7 +4,7 @@
         <div class="input-form-backgroud row">
             <div class="input-form col-md-12 mx-auto">
                 <h4 class="mb-3">회원 추가</h4>
-                <form class="validation-form" @submit.prevent="submitAddAccount" novalidate>
+                <form class="validation-form" @submit.prevent="submitAddAccount">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                         <label for="name">이름</label>
@@ -119,48 +119,49 @@ export default{
             }
         };
     },
-    // directives:{
-    //     email_format:{
-    //         mounted(el) {
-    //             el.addEventListener('input', () => {
-    //                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //                 if (!emailPattern.test(el.value)) {
-    //                     el.setCustomValidity('올바른 이메일 형식을 입력하세요.');
-    //                 } 
-    //                 else {
-    //                     el.setCustomValidity('');
-    //                 }
-    //             });
-    //         }
-    //     },
-    //     number_format:{
-    //         mounted(el) {
-    //             el.addEventListener('input', () => {
-    //                 // 한국 핸드폰 번호 형식: 010-XXXX-XXXX
-    //                 const phonePattern = /^010-\d{4}-\d{4}$/;
-    //                 el.value = el.value.replace(/[^0-9-]/g, ""); // 숫자와 '-'만 허용
-    //                 if (!phonePattern.test(el.value)) {
-    //                     el.setCustomValidity('올바른 한국 핸드폰 번호 형식을 입력하세요. 예: 010-1234-5678');
-    //                 } else {
-    //                     el.setCustomValidity('');
-    //                 }
-    //             });
-    //         }
-    //     },
-    //     password_format:{
-    //         mounted(el) {
-    //             el.addEventListener('input', () => {
-    //                 // 비밀번호는 12-16��리, 특수문자 최소 1개 포함
-    //                 const passwordPattern = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,16}$/;
-    //                 if (!passwordPattern.test(el.value)) {
-    //                     el.setCustomValidity('비밀번호는 12자리 이상 16자리 이하이어야 하며, 특수문자를 최소 1회 이상 포함해야 합니다.');
-    //                 } else {
-    //                     el.setCustomValidity('');
-    //                 }
-    //             });
-    //         }
-    //     }
-    // },
+    directives:{
+        //입력 양식 제한
+        email_format:{
+            mounted(el) {
+                el.addEventListener('input', () => {
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(el.value)) {
+                        el.setCustomValidity('올바른 이메일 형식을 입력하세요.');
+                    } 
+                    else {
+                        el.setCustomValidity('');
+                    }
+                });
+            }
+        },
+        number_format:{
+            mounted(el) {
+                el.addEventListener('input', () => {
+                    // 한국 핸드폰 번호 형식: 010-XXXX-XXXX
+                    const phonePattern = /^010-\d{4}-\d{4}$/;
+                    el.value = el.value.replace(/[^0-9-]/g, ""); // 숫자와 '-'만 허용
+                    if (!phonePattern.test(el.value)) {
+                        el.setCustomValidity('올바른 한국 핸드폰 번호 형식을 입력하세요. 예: 010-1234-5678');
+                    } else {
+                        el.setCustomValidity('');
+                    }
+                });
+            }
+        },
+        password_format:{
+            mounted(el) {
+                el.addEventListener('input', () => {
+                    // 비밀번호는 12-16��리, 특수문자 최소 1개 포함
+                    const passwordPattern = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,16}$/;
+                    if (!passwordPattern.test(el.value)) {
+                        el.setCustomValidity('비밀번호는 12자리 이상 16자리 이하이어야 하며, 특수문자를 최소 1회 이상 포함해야 합니다.');
+                    } else {
+                        el.setCustomValidity('');
+                    }
+                });
+            }
+        }
+    },
     setup(){},
     created(){},
     mounted(){},
@@ -170,6 +171,18 @@ export default{
             try{
                 console.log(this.dataForAddAccount);
                 const response = await axios.post('http://localhost:3000/admin/addAccount',this.dataForAddAccount);
+                this.dataForAddAccount = {
+                name:'',
+                nickname:'',
+                email:'',
+                password:'',
+                address:'',
+                addressDetail:'',
+                addressNumber:'',
+                birth:'',
+                phone_number:'',
+                super_admin:false,
+                }
                 console.log(response);
             }
             catch(error){

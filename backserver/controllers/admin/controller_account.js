@@ -1,6 +1,6 @@
-const {sequelize} = require('../models/model_index');
-const Accounts = require('../models/model_accounts');
-const Ratings = require('../models/model_ratings');
+const {sequelize} = require('../../models/model_index.js');
+const Accounts = require('../../models/model_accounts.js');
+const Ratings = require('../../models/model_ratings.js');
 
 
 exports.getUsers = async(req,res,next)=>{
