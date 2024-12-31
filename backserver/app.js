@@ -37,8 +37,8 @@ app.use(cors(corsOptions));
 
 
 //라우터 
-app.use('/',indexRouter);
 app.use('/admin',adminRouter);
+app.use('/',indexRouter);
 
 //404 에러 처리
 app.use((req,res,next)=>{

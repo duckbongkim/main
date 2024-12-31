@@ -31,6 +31,14 @@ const routes = [
       {
         path:'addAccount/',
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/addAccount.vue')
+      },
+      {
+        path:'ModifyProduct/:id',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/addOrModifyProduct.vue')
+      },
+      {
+        path:'addProduct/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/addOrModifyProduct.vue')
       }
     ]
   },

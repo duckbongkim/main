@@ -6,6 +6,7 @@
 
 
 <script>
+import axios from 'axios';
 export default{ 
     name:'',
     components:{},
@@ -17,9 +18,23 @@ export default{
     },
     setup(){},
     created(){},
-    mounted(){},
+    mounted(){
+        this.getProducts();
+    },
     unmounted(){},
-    methods:{},
+    methods:{
+        async getProducts(){
+            try{
+                const response = await axios.get('http://localhost:3000/');
+                this.products = response.data;
+                console.log(this.products);
+            }
+            catch(error){
+                alert('상품 목록을 불러오는데 실패했습니다.');
+                console.log("상품 목록을 불러오는데 실패했습니다.",error);
+            }
+        }
+    },
     watch:{}
 }
 </script>
