@@ -205,7 +205,7 @@
         <li v-for="item in mainData.expensive" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
           <p>{{ item.product_description }}</p>
-          <strong>{{ item.product_name }}</strong> <strong> {{ item.product_price }}원</strong>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
         </li>
       </ul>
     </section>
@@ -216,7 +216,7 @@
         <li v-for="item in mainData.cheap" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
           <p>{{ item.product_description }}</p>
-          <strong>{{ item.product_name }}</strong> <strong> {{ item.product_price }}원</strong>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
         </li>
       </ul>
     </section>
@@ -227,7 +227,7 @@
         <li v-for="item in mainData.recommend['20대 베스트']" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
           <p>{{ item.product_description }}</p>
-          <strong>{{ item.product_name }}</strong> <strong> {{ item.product_price }}원</strong>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
         </li>
       </ul>
     </section>
@@ -238,7 +238,7 @@
         <li v-for="item in mainData.recommend['30대 베스트']" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
           <p>{{ item.product_description }}</p>
-          <strong>{{ item.product_name }}</strong> <strong> {{ item.product_price }}원</strong>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
         </li>
       </ul>
     </section>
@@ -249,7 +249,7 @@
         <li v-for="item in mainData.newProduct" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
           <p>{{ item.product_description }}</p>
-          <strong>{{ item.product_name }}</strong> <strong> {{ item.product_price }}원</strong>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
         </li>
       </ul>
     </section>

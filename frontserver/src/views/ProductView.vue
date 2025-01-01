@@ -74,7 +74,7 @@
 
 
 
-<productInfoVue />
+<productInfoVue :product="selectedProduct"/>
 
 
 </div>
