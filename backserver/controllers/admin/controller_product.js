@@ -31,6 +31,7 @@ exports.getSpecificProduct = async(req,res,next)=>{
 exports.modifyProduct = async(req,res,next)=>{
     try{
         const product = req.body;
+        product.updated_at = new Date();
         const result = await Products.update(product,{where:{id:product.id}});
         res.status(200).json(result);
     }
@@ -55,6 +56,12 @@ exports.deleteProduct = async(req,res,next)=>{
 exports.addProduct = async(req,res,next)=>{
     try{
         const product = req.body;
+        if(!product.created_at){
+            product.created_at = new Date();
+        }
+        if(!product.updated_at){
+            product.updated_at = new Date();
+        }
         const result = await Products.create(product);
         res.status(200).json(result);
     }

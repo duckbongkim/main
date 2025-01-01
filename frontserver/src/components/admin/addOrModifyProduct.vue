@@ -181,10 +181,9 @@ export default{
                 });
                 this.product.product_description_img = response.data.imageUrl;
                 console.log("product.product_description_img",this.product.product_description_img);
-                alert('이미지가 성공적으로 업로드되었습니다.');
+                console.log("이미지 업로드 응답",response);
             } catch (error) {
                 console.error('이미지 업로드 실패:', error);
-                alert('이미지 업로드에 실패했습니다.');
             }
         },
         async uploadProductImage() {
@@ -202,10 +201,9 @@ export default{
                 });
                 this.product.product_image = response.data.imageUrl;
                 console.log("product.product_image",this.product.product_image);
-                alert('이미지가 성공적으로 업로드되었습니다.');
+                console.log("이미지 업로드 응답",response);
             } catch (error) {
                 console.error('이미지 업로드 실패:', error);
-                alert('이미지 업로드에 실패했습니다.');
             }
         },
 
@@ -214,12 +212,11 @@ export default{
             try{
                 const response = await axios.post('http://localhost:3000/admin/addProduct', this.product);
                 console.log("상품 추가 응답",response);
-                alert("상품 추가 완료");
                 this.product = {};
             }
             catch(error){
                 console.log("상품 추가 실패",error);
-                alert("상품 추가 실패");
+                
             }
 
         },
@@ -228,11 +225,10 @@ export default{
             try{
                 const response = await axios.patch('http://localhost:3000/admin/modifyProduct', this.product);
                 console.log("상품 수정 응답",response);
-                alert("상품 수정 완료");
             }
             catch(error){
                 console.log("상품 수정 실패",error);
-                alert("상품 수정 실패");
+                
             }
         },
     },

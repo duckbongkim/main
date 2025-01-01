@@ -57,14 +57,14 @@ router.get('/',async(req,res)=>{
         raw: true
     });
     const formatBestSeller = bestSeller.map(item => ({
-    product_id: item.product_id,
-    totalQuantity: item.totalQuantity,
-    product_name: item['Product.product_name'],
-    product_price: item['Product.product_price'],
-    product_description: item['Product.product_description'],
-    product_stock: item['Product.product_stock'],
-    product_image: item['Product.product_image'],
-    drink_type: item['Product.drink_type']
+        product_id: item.product_id,
+        totalQuantity: item.totalQuantity,
+        product_name: item['Product.product_name'],
+        product_price: item['Product.product_price'],
+        product_description: item['Product.product_description'],
+        product_stock: item['Product.product_stock'],
+        product_image: item['Product.product_image'],
+        drink_type: item['Product.drink_type']
     }));
     mainData.bestSeller = formatBestSeller;
 

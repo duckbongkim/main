@@ -24,9 +24,13 @@ export default{
   },
   setup(){},
   created(){},
-  mounted(){},
+  mounted(){
+    
+  },
   unmounted(){},
-  methods:{},
+  methods:{
+    
+  },
   watch:{}
 }
 </script>
