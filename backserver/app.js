@@ -40,6 +40,8 @@ app.use(cors(corsOptions));
 app.use('/',indexRouter);
 app.use('/admin',adminRouter);
 
+
+
 //404 에러 처리
 app.use((req,res,next)=>{
     res.status(404).send('Router Not Found');
