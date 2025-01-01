@@ -1,150 +1,150 @@
 <template>
 <div>
-    <!-- <section class="product-main d-flex justify-content-center sub-container grid gap-5">
-    <div>
-        <img :src="selectedProduct.product_image" alt="product_img" class="product-img">
-    </div>
-
-    <div class="product-price"> 
-        <h3 class="d-flex flex-row mb-3 p-2">{{selectedProduct.product_name}}</h3>
-        <p class="d-flex flex-row mb-3 p-2 price-text">{{selectedProduct.product_price}}원</p>
-        
-            <div>
-                <p>배송예정일</p>
-                <p>택배사<span>CJ대한통운</span></p>
-                
-            </div>
-       
-        
-        
-        <div class="quanitity-group d-flex justify-content-end align-items-center flex-wrap">
-            <p id="quanitity-label" class="me-3">수량</p>
-            <div class="quantity-controls d-flex align-items-center gap-2">
-                <button @click="minusQ" class="btn btn-light border">-</button>
-                <input type="number" v-model="orderQuantity" class="input-box form-control text-center" style="width: 50px;">
-                <button @click="plusQ" class="btn btn-light border">+</button>
-            </div>
-            <p class="ms-3">{{selectedProduct.product_price * orderQuantity}}원</p>
-        </div>
-        
-        <div class="button-group">
-            <button @click="addLikes" class="wish-button">찜</button>
-            <button @click="addCarts" class="cart-button">장바구니</button> 
-            <button @click="dirOrder" class="buy-button">바로구매</button> 
+        <!-- <section class="product-main d-flex justify-content-center sub-container grid gap-5">
+        <div>
+            <img :src="selectedProduct.product_image" alt="product_img" class="product-img">
         </div>
 
-        </div>
-    </section>  -->
+        <div class="product-price"> 
+            <h3 class="d-flex flex-row mb-3 p-2">{{selectedProduct.product_name}}</h3>
+            <p class="d-flex flex-row mb-3 p-2 price-text">{{selectedProduct.product_price}}원</p>
+            
+                <div>
+                    <p>배송예정일</p>
+                    <p>택배사<span>CJ대한통운</span></p>
+                    
+                </div>
         
-<section class="product-main container d-flex justify-content-center align-items-center flex-wrap">
+            
+            
+            <div class="quanitity-group d-flex justify-content-end align-items-center flex-wrap">
+                <p id="quanitity-label" class="me-3">수량</p>
+                <div class="quantity-controls d-flex align-items-center gap-2">
+                    <button @click="minusQ" class="btn btn-light border">-</button>
+                    <input type="number" v-model="orderQuantity" class="input-box form-control text-center" style="width: 50px;">
+                    <button @click="plusQ" class="btn btn-light border">+</button>
+                </div>
+                <p class="ms-3">{{selectedProduct.product_price * orderQuantity}}원</p>
+            </div>
+            
+            <div class="button-group">
+                <button @click="addLikes" class="wish-button">찜</button>
+                <button @click="addCarts" class="cart-button">장바구니</button> 
+                <button @click="dirOrder" class="buy-button">바로구매</button> 
+            </div>
+
+            </div>
+        </section>  -->
+            
+    <section class="product-main container d-flex justify-content-center align-items-center flex-wrap">
+        
+        <div class="product-image-container text-center">
+            <img :src="selectedProduct.product_image" alt="product_img" class="product-img img-fluid">
+        </div>
+
     
-    <div class="product-image-container text-center">
-        <img :src="selectedProduct.product_image" alt="product_img" class="product-img img-fluid">
-    </div>
-
-   
-    <div class="product-info-container text-center text-md-start">
-        <div class="product-info">
-            <div>
-                <h3 class="product-name mb-5">{{selectedProduct.product_name}}</h3>
-                <p class="price-text">{{selectedProduct.product_price}}원</p>
-                <div class="product-stock"><p>남은수량</p><p> {{selectedProduct.product_stock}}개</p></div>
-                
+        <div class="product-info-container text-center text-md-start">
+            <div class="product-info">
+                <div>
+                    <h3 class="product-name mb-5">{{selectedProduct.product_name}}</h3>
+                    <p class="price-text">{{selectedProduct.product_price}}원</p>
+                    <div class="product-stock"><p>남은수량</p><p> {{selectedProduct.product_stock}}개</p></div>
+                    
+                </div>
+            
+                <div class="delivery-box">
+                    <div class="delivery-info"><p>배송예정일</p> <p>평일기준 2일</p></div>
+                    <div class="delivery-corpor"><p>택배사</p><p>CJ대한통운</p></div>
+                </div>
             </div>
-        
-            <div class="delivery-box">
-                <div class="delivery-info"><p>배송예정일</p> <p>평일기준 2일</p></div>
-                <div class="delivery-corpor"><p>택배사</p><p>CJ대한통운</p></div>
+            
+            <div class="quantity-group gap-3 mb-3">
+                <p id="quantity-label" class="mb-0">수량</p>
+                <div class="quantity-controls d-flex align-items-center">
+                    <button @click="minusQ" class="btn btn-light border">-</button>
+                    <input type="number" v-model="orderQuantity" class="input-box form-control text-center" style="width: 50px;">
+                    <button @click="plusQ" class="btn btn-light border">+</button>
+                </div>
             </div>
-        </div>
-        
-        <div class="quantity-group gap-3 mb-3">
-            <p id="quantity-label" class="mb-0">수량</p>
-            <div class="quantity-controls d-flex align-items-center">
-                <button @click="minusQ" class="btn btn-light border">-</button>
-                <input type="number" v-model="orderQuantity" class="input-box form-control text-center" style="width: 50px;">
-                <button @click="plusQ" class="btn btn-light border">+</button>
+
+            <div class="total-price-container">
+                    <p>총 합계금액</p>
+                    <p class="price-txt">{{selectedProduct.product_price * orderQuantity}}원</p>
             </div>
+
+            
+            <div class="button-group d-flex flex-wrap gap-3">
+                <button @click="addWish()" class="btn btn-outline-secondary heart-button">
+                    <i class="bi bi-heart wish-heart"></i>
+                </button>
+                <button @click="addCarts()" class="btn btn-outline-dark cart-button">장바구니</button>
+                <button @click="dirOrder()" class="btn btn-dark buy-button">구매하기</button>
+            </div>
+
+
+
         </div>
+    </section>
 
-        <div class="total-price-container">
-                <p>총 합계금액</p>
-                <p class="price-txt">{{selectedProduct.product_price * orderQuantity}}원</p>
+
+
+    <!-- <section class="recoment-section">
+    <h3>추천상품 구성??</h3>
+        <div class="recoment-container">
+            <ul class="recomend-product">
+                <li v-for="(pro,i) in recommendProduct" :key="i">
+                    <a href="#">
+                        <img :src="pro.product_image" alt="product_img" class="recomend-img">
+                        <p class="recoment-name">{{pro.product_name}}</p>
+                        <p class="recoment-price">{{pro.product_price}}원</p>
+                    </a>
+                </li>
+            </ul>
         </div>
-
-        
-        <div class="button-group d-flex flex-wrap gap-3">
-            <button @click="addwish()" class="btn btn-outline-secondary heart-button">
-                <i class="bi bi-heart wish-heart"></i>
-            </button>
-            <button @click="addCarts()" class="btn btn-outline-dark cart-button">장바구니</button>
-            <button @click="dirOrder()" class="btn btn-dark buy-button">구매하기</button>
-        </div>
+    </section> -->
 
 
-
-    </div>
-</section>
-
-
-
-<!-- <section class="recoment-section">
-<h3>추천상품 구성??</h3>
-    <div class="recoment-container">
-        <ul class="recomend-product">
-            <li v-for="(pro,i) in recommendProduct" :key="i">
-                <a href="#">
+    <!-- 추천상품 -->
+    <section class="recomend-section">
+        <h3> ##어떤걸 추천해줄지 정해야합니다##</h3>
+        <div class="recomend-container">
+            <div v-for="pro in recommendProduct" :key="pro.id" class="recomend-product">
+                <a @click="reRendRecommend(pro.id)">
                     <img :src="pro.product_image" alt="product_img" class="recomend-img">
-                    <p class="recoment-name">{{pro.product_name}}</p>
-                    <p class="recoment-price">{{pro.product_price}}원</p>
+                    <p>{{pro.product_name}}</p>
+                    <p>{{pro.product_price}}원</p>
                 </a>
-            </li>
-        </ul>
-    </div>
-</section> -->
-
-
-<!-- 추천상품 -->
-<section class="recomend-section">
-    <h3> ##어떤걸 추천해줄지 정해야합니다##</h3>
-    <div class="recomend-container">
-        <div v-for="pro in recommendProduct" :key="pro.id" class="recomend-product">
-            <a @click="reRendRecommend(pro.id)">
-                <img :src="pro.product_image" alt="product_img" class="recomend-img">
-                <p>{{pro.product_name}}</p>
-                <p>{{pro.product_price}}원</p>
-            </a>
+            </div>
         </div>
-    </div>
 
-</section>
+    </section>
 
-    <!-- <div>
-        <h1>추천상품</h1>
-    </div>
-    <div>
-        <div>
-            <연관제품1 대표이미지>
-            <연관제품1 가격>
+        <!-- <div>
+            <h1>추천상품</h1>
         </div>
         <div>
-            <연관제품2 대표이미지>
-            <연관제품2 가격>
+            <div>
+                <연관제품1 대표이미지>
+                <연관제품1 가격>
+            </div>
+            <div>
+                <연관제품2 대표이미지>
+                <연관제품2 가격>
+            </div>
+            <div>
+                <연관제품3 대표이미지>
+                <연관제품3 가격>
+            </div>
+            <div>
+                <연관제품4 대표이미지>
+                <연관제품4 가격>
+            </div>
         </div>
-        <div>
-            <연관제품3 대표이미지>
-            <연관제품3 가격>
-        </div>
-        <div>
-            <연관제품4 대표이미지>
-            <연관제품4 가격>
-        </div>
-    </div>
-     -->
+        -->
 
-<productInfoVue />
+    <productInfoVue />
 
-<footer-vue />
+    <footer-vue />
 
 </div>
 </template>
@@ -212,8 +212,12 @@ export default{
                     product_image:'/emg.png',
                 },
             ],
-             product_id: null,
+            product_id: null,
             orderQuantity : 1,
+            dummy: {
+                userid: 1,
+
+            }
             
         };
     },
@@ -280,14 +284,24 @@ export default{
                 //1. selectedProduct.id 를 likes DB에 추가
 
                     //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
-                    //세션에서 userid를, data에서 productid를 따와 params으로 만들기.     
-                const userId = this.session.userId;
+                    //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
+
+                //const userId = this.session.userId;
+                const userId = this.dummy.userid;
                 const userWish = {
                     userId,
-                    productId : this.selectedProduct.id,
+                    product_Id : this.selectedProduct.id,
                 };
                 await axios.post(`http://localhost:3000/orders/wish/`, userWish);
-                // 2. 찜에 추가되었습니다. 모달 띄우기는 템플렛에서. 
+
+                // 2. 찜에 추가되었습니다.
+                const GotoWish = confirm("찜가실?");
+                if(GotoWish) {
+                    this.$router.push('/wish');              
+                    /// frontserver/src/router/index.js 에 라우터 추가 
+                } else {
+                    alert("상품이 찜에 추가됐다.");
+                }
             } catch(err) {
                 console.error(err);
             }
@@ -295,15 +309,30 @@ export default{
 
         async addCarts() {
             try{
-                await axios.post(`http://localhost:3000/carts/`,{
-                    product_id : this.selectedProduct.id,
-                    quantity : this.orderQuantity
-                });
+
+            // 1. selectedProduct.id 와 orderQuantity 를 carts DB에 추가.
+                //세션에서 userid를, data에서 productid와 orderQ를를 따와 params으로 만들기.
+                //const userId = this.session.userId;
+                const userId = this.dummy.userid;
+                const userOrder = {
+                    userId,
+                    product_Id :this.selectedProduct.id,
+                    quantity : this.orderQuantity, 
+                }
+                await axios.post(`http://localhost:3000/carts/`, userOrder);
+
+                // "장바구니 갈래? y/n"
+                const GotoCart = confirm("장바구니가실?");
+                if(GotoCart) {
+                    this.$router.push('/cart');              
+                    /// frontserver/src/router/index.js 에 라우터 추가 
+                } else {
+                    alert("상품이 장바구니에 추가됐다.");
+                }
             }catch(err){
-                console.error(err)
+                console.error(err);
             }
-            // selectedProduct.id 와 orderQuantity 를 carts DB에 추가. 
-            // "장바구니 갈래? y/n" 모달창 띄우기
+            
         },
 
         async dirOrder() {
