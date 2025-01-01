@@ -76,7 +76,6 @@
 
 <productInfoVue />
 
-<footer-vue />
 
 </div>
 </template>
@@ -98,52 +97,16 @@ export default{
     data(){
         return{
             selectedProduct : {
-                id:1,
-                product_name : '발렌타인20년산',
-                product_price : 300000,
-                product_description:'발렌타인 20년산',
-                product_stock:20,
-                product_image:'/emg.png',
+                id:null,
+                product_name : '',
+                product_price : null,
+                product_description:'',
+                product_stock:'',
+                product_image:'',
             },
 
             recommendProduct : 
-            [
-                {
-                    id:2,
-                    product_name : '발렌타인20년산',
-                    product_price : 600000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
-
-                {
-                    id:3,
-                    product_name : '발렌타인20년산',
-                    product_price : 700000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
-
-                {
-                    id:4,
-                    product_name : '발렌타인20년산',
-                    product_price : 800000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
-
-                {
-                    id:5,
-                    product_name : '발렌타인20년산',
-                    product_price : 600000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
-            ],
+            [], //1월1일 추천상품 목록 진열
              product_id: null,
             orderQuantity : 1,
             
@@ -153,10 +116,10 @@ export default{
     created(){
     },
     mounted(){
-        this.product_id = this.$route.params.product_id;
-        console.log(this.product_id)
+        
+        
         this.getProducts()
-        // this.getRecommendProducts()
+        this.getRecommendProducts()
     },
     unmounted(){},
     methods:{
@@ -178,8 +141,10 @@ export default{
         async getProducts() {
             try {
                 //도메인 요청, 돌아오는 response 잡기
+                this.product_id = this.$route.params.product_id;
                 const response = await axios.get(`http://localhost:3000/products/${this.product_id}`);
                 // product_id에 해당하는 제품 data object를 받아온다.
+                console.log(response)
                 this.selectedProduct = response.data ; 
                 
             }catch(err) {

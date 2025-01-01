@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 
 const {sequelize} = require('../models/model_index')
-const Products = require('../models/model_products')
+// const Products = require('../models/model_products') // const {Products,ProductLocations} = require('../models/model_index') 오 불러오는중
 // const ProductLocations = require('../models/model_productLocations')
 const {Products,ProductLocations} = require('../models/model_index')
 const {Op} = require('sequelize');
@@ -16,6 +16,7 @@ router.get('/:product_id',async(req,res,next)=>{
         const {product_id} = req.params;
         const selectedProduct = await Products.findOne({where:{id:product_id}})
         res.status(200).json(selectedProduct)
+        console.log(selectedProduct)
     }catch(err){
         console.error(err)
         next(err)

@@ -202,7 +202,7 @@
     <section>
       <h2>가격순</h2>
       <ul>
-        <li v-for="item in mainData.expensive" :key="item.id">
+        <li v-for="item in mainData.expensive" :key="item.id" @click="goDetail(item.id)">
           <strong>{{ item.product_name }}</strong> - {{ item.product_price }}원
           <p>{{ item.product_description }}</p>
           <img :src="item.product_image" alt="Product Image" />
@@ -262,14 +262,16 @@ export default{
       async getmain(){
         try{
           const response = await axios.get("http://localhost:3000/") 
-          this.mainData = response.data  
-          console.log(response)        
+          this.mainData = response.data     
         }catch(err){
           console.error(err)
         }
-      }
+      },
+
+      goDetail(product_id){ // 1월1일(동진) 상품 클릭시 해당 상품의 아이디를 가지고 이동되는 메소드
+        this.$router.push(`/products/${product_id}`)
     },
-    watch:{}
+  }
 }
 </script>
 
