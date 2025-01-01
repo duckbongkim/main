@@ -211,7 +211,7 @@
     </section>
 
     <section>
-      <h2>싼 가격순</h2>
+      <h2>싼 가격순</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
       <ul class="product-list">
         <li v-for="item in mainData.cheap" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -222,7 +222,7 @@
     </section>
 
     <section>
-      <h2>20대 추천</h2>
+      <h2>20대 추천</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
       <ul class="product-list">
         <li v-for="item in mainData.recommend['20대 베스트']" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -244,7 +244,7 @@
     </section>
 
     <section>
-      <h2>신상품</h2>
+      <h2>신상품</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
       <ul class="product-list">
         <li v-for="item in mainData.newProduct" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -297,15 +297,7 @@ export default{
       },
     });
   },
-    // axios
-    //   .get("http://localhost:3000/") 
-    //   .then((response) => {
-    //     console.log(response)
-    //     this.items = response.data; // 응답 데이터를 items 저장
-    //   })
-    //   .catch((error) => {
-    //     console.error("데이터를 불러오는 중 오류 발생:", error);
-    //   });
+    
     unmounted(){},
     methods:{
       async getmain(){

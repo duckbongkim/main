@@ -96,6 +96,8 @@ export default{
     },
     data(){
         return{
+            
+
             selectedProduct : {
                 id:null,
                 product_name : '',
@@ -106,8 +108,8 @@ export default{
             },
 
             recommendProduct : 
-            [], //1월1일 추천상품 목록 진열
-             product_id: null,
+            [], //1월1일 추천상품 목록 진열 기능 확인 위해 주석제거(동진)
+            product_id: null,
             orderQuantity : 1,
             
         };
@@ -119,7 +121,7 @@ export default{
         
         
         this.getProducts()
-        this.getRecommendProducts()
+        this.getRecommendProducts() //1월1일 추천상품 목록 진열 기능 확인 위해 주석제거(동진)
     },
     unmounted(){},
     methods:{
