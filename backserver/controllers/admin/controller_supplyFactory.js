@@ -7,15 +7,15 @@ const getSupplyFactories = async (req,res) => {
 }
 
 const addSupplyFactory = async (req,res) => {
-    const {name,address,phone_number,email} = req.body;
-    const newFactory = await SupplyFactory.create({name,address,phone_number,email});
-    res.status(201).json(newFactory);
+    const factory = req.body;
+    await SupplyFactory.create(factory);
+    res.status(201).send();
 }
 
 const modifySupplyFactory = async (req,res) => {
-    const {id,name,address,phone_number,email} = req.body;
-    const updatedFactory = await SupplyFactory.update({name,address,phone_number,email},{where:{id}});
-    res.status(200).json(updatedFactory);
+    const factory = req.body;
+    await SupplyFactory.update(factory,{where:{id:factory.id}});
+    res.status(200).send();
 }
 
 const deleteSupplyFactory = async (req,res) => {
