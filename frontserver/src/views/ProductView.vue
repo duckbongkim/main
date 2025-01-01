@@ -1,40 +1,6 @@
 <template>
 <div>
-    <!-- <section class="product-main d-flex justify-content-center sub-container grid gap-5">
-    <div>
-        <img :src="selectedProduct.product_image" alt="product_img" class="product-img">
-    </div>
 
-    <div class="product-price"> 
-        <h3 class="d-flex flex-row mb-3 p-2">{{selectedProduct.product_name}}</h3>
-        <p class="d-flex flex-row mb-3 p-2 price-text">{{selectedProduct.product_price}}원</p>
-        
-            <div>
-                <p>배송예정일</p>
-                <p>택배사<span>CJ대한통운</span></p>
-                
-            </div>
-       
-        
-        
-        <div class="quanitity-group d-flex justify-content-end align-items-center flex-wrap">
-            <p id="quanitity-label" class="me-3">수량</p>
-            <div class="quantity-controls d-flex align-items-center gap-2">
-                <button @click="minusQ" class="btn btn-light border">-</button>
-                <input type="number" v-model="orderQuantity" class="input-box form-control text-center" style="width: 50px;">
-                <button @click="plusQ" class="btn btn-light border">+</button>
-            </div>
-            <p class="ms-3">{{selectedProduct.product_price * orderQuantity}}원</p>
-        </div>
-        
-        <div class="button-group">
-            <button @click="addLikes" class="wish-button">찜</button>
-            <button @click="addCarts" class="cart-button">장바구니</button> 
-            <button @click="dirOrder" class="buy-button">바로구매</button> 
-        </div>
-
-        </div>
-    </section>  -->
         
 <section class="product-main container d-flex justify-content-center align-items-center flex-wrap">
     
@@ -88,25 +54,12 @@
 
 
 
-<!-- <section class="recoment-section">
-<h3>추천상품 구성??</h3>
-    <div class="recoment-container">
-        <ul class="recomend-product">
-            <li v-for="(pro,i) in recommendProduct" :key="i">
-                <a href="#">
-                    <img :src="pro.product_image" alt="product_img" class="recomend-img">
-                    <p class="recoment-name">{{pro.product_name}}</p>
-                    <p class="recoment-price">{{pro.product_price}}원</p>
-                </a>
-            </li>
-        </ul>
-    </div>
-</section> -->
+
 
 
 <!-- 추천상품 -->
 <section class="recomend-section">
-    <h3> ##어떤걸 추천해줄지 정해야합니다##</h3>
+    <h3> ##어떤걸 추천해줄지 정해야합니다## // 1월1일 현재 기능만 구현한 상태(동진)</h3>
     <div class="recomend-container">
         <div v-for="pro in recommendProduct" :key="pro.id" class="recomend-product">
             <a @click="reRendRecommend(pro.id)">
@@ -119,32 +72,10 @@
 
 </section>
 
-    <!-- <div>
-        <h1>추천상품</h1>
-    </div>
-    <div>
-        <div>
-            <연관제품1 대표이미지>
-            <연관제품1 가격>
-        </div>
-        <div>
-            <연관제품2 대표이미지>
-            <연관제품2 가격>
-        </div>
-        <div>
-            <연관제품3 대표이미지>
-            <연관제품3 가격>
-        </div>
-        <div>
-            <연관제품4 대표이미지>
-            <연관제품4 가격>
-        </div>
-    </div>
-     -->
 
-<productInfoVue />
 
-<footer-vue />
+<productInfoVue :product="selectedProduct"/>
+
 
 </div>
 </template>
@@ -165,54 +96,20 @@ export default{
     },
     data(){
         return{
+            
+
             selectedProduct : {
-                id:1,
-                product_name : '발렌타인20년산',
-                product_price : 300000,
-                product_description:'발렌타인 20년산',
-                product_stock:20,
-                product_image:'/emg.png',
+                id:null,
+                product_name : '',
+                product_price : null,
+                product_description:'',
+                product_stock:'',
+                product_image:'',
             },
 
             recommendProduct : 
-            [
-                {
-                    id:2,
-                    product_name : '발렌타인20년산',
-                    product_price : 600000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
-
-                {
-                    id:3,
-                    product_name : '발렌타인20년산',
-                    product_price : 700000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
-
-                {
-                    id:4,
-                    product_name : '발렌타인20년산',
-                    product_price : 800000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
-
-                {
-                    id:5,
-                    product_name : '발렌타인20년산',
-                    product_price : 600000,
-                    product_description:'발렌타인 20년산',
-                    product_stock:20,
-                    product_image:'/emg.png',
-                },
-            ],
-             product_id: null,
+            [], //1월1일 추천상품 목록 진열 기능 확인 위해 주석제거(동진)
+            product_id: null,
             orderQuantity : 1,
             
         };
@@ -221,10 +118,10 @@ export default{
     created(){
     },
     mounted(){
-        this.product_id = this.$route.params.product_id;
-        console.log(this.product_id)
+        
+        
         this.getProducts()
-        // this.getRecommendProducts()
+        this.getRecommendProducts() //1월1일 추천상품 목록 진열 기능 확인 위해 주석제거(동진)
     },
     unmounted(){},
     methods:{
@@ -246,8 +143,10 @@ export default{
         async getProducts() {
             try {
                 //도메인 요청, 돌아오는 response 잡기
+                this.product_id = this.$route.params.product_id;
                 const response = await axios.get(`http://localhost:3000/products/${this.product_id}`);
                 // product_id에 해당하는 제품 data object를 받아온다.
+                console.log(response)
                 this.selectedProduct = response.data ; 
                 
             }catch(err) {
@@ -339,14 +238,6 @@ input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
-/* .product-main {
-    display: flex;
-    align-items: center; 
-    justify-content: center; 
-    flex-wrap: wrap; 
-    gap: 10%; 
-} */
 
 .product-main{
     padding: 20px;

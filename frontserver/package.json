@@ -9,14 +9,10 @@
   "dependencies": {
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
-<<<<<<< HEAD
-    "core-js": "^3.8.3",
-=======
     "crypto": "^1.0.1",
     "express-session": "^1.18.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
->>>>>>> 70c0e56e9e5828ac4709d17a49448da8b94d70f8
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"

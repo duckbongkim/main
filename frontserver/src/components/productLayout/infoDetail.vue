@@ -1,7 +1,10 @@
 <template>
 <div>
     <div class="product-info">
-        <img :src="selectedProduct.product_image" class="detail-img">
+        <p>{{product.product_name}}</p>
+        <p>{{product.product_price}}</p>
+        <p>{{product.product_description}}</p>
+        <img class="detail-img" :src="product.product_image" alt="product image">
     </div>
 </div>
 </template>
@@ -10,19 +13,19 @@
 
 export default{ 
     name:'',
+    props:{
+        product:{
+            type:Object,
+        }
+    },
     components:{},
     data(){
         return{
-            selectedProduct:{
-                product_image:'/detail.jpg'
-            },
             
         };
     },
     setup(){},
-    created(){
-        // this.getProductsDetail();
-    },
+    created(){},
     mounted(){},
     unmounted(){},
     methods:{
