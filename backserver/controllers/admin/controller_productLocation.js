@@ -9,13 +9,13 @@ const getProductLocations = async (req,res) => {
 const addProductLocation = async (req,res) => {
     const location = req.body;
     const newLocation = await ProductLocation.create(location);
-    res.status(201).json(newLocation);
+    res.status(201).send();
 }
 
 const modifyProductLocation = async (req,res) => {
     const location = req.body;
     const updatedLocation = await ProductLocation.update(location,{where:{id:location.id}});
-    res.status(200).json(updatedLocation);
+    res.status(200).send();
 }
 
 const deleteProductLocation = async (req,res) => {
