@@ -47,7 +47,8 @@ router.get('/:product_id/recommend',async(req,res,next)=>{
                 id:{[Op.ne]:product_id} // 현재 상품 제외
             },
             limit: 4, // 4개만 가져오기
-            attributes:['id','product_name','product_price','product_image'] // 필요한 속성만 가져오기
+            attributes:['id','product_name','product_price','product_image'], // 필요한 속성만 가져오기
+            order: sequelize.literal('rand()') // 랜덤으로 가져오기
         })
         res.status(200).json(recommend)
     }catch(err){

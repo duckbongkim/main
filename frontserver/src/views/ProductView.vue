@@ -59,7 +59,7 @@
 
 <!-- 추천상품 -->
 <section class="recomend-section">
-    <h3> ##어떤걸 추천해줄지 정해야합니다##</h3>
+    <h3> ##어떤걸 추천해줄지 정해야합니다## // 1월1일 현재 기능만 구현한 상태(동진)</h3>
     <div class="recomend-container">
         <div v-for="pro in recommendProduct" :key="pro.id" class="recomend-product">
             <a @click="reRendRecommend(pro.id)">
