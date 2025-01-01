@@ -3,15 +3,15 @@
     <h1>상품 수정, 추가 페이지</h1>
     <div class="container">
         <div class="mb-3">
-            <label for="product_name" class="form-label">상품명</label>
+            <label for="product_name" class="form-label">상품명(필수)</label>
             <input type="text" class="form-control" id="product_name" v-model="product.product_name">
         </div>
         <div class="mb-3">
-            <label for="product_price" class="form-label">가격</label>
+            <label for="product_price" class="form-label">가격(필수)</label>
             <input type="number" class="form-control" id="product_price" v-model="product.product_price">
         </div>
         <div class="mb-3">
-            <label for="product_description" class="form-label">상품 설명</label>
+            <label for="product_description" class="form-label">상품 설명(필수)</label>
             <textarea class="form-control" id="product_description" v-model="product.product_description" rows="3"></textarea>
         </div>
 
@@ -27,7 +27,7 @@
         </form>
 
         <div class="mb-3">
-            <label for="product_stock" class="form-label">재고</label>
+            <label for="product_stock" class="form-label">재고(필수)</label>
             <input type="number" class="form-control" id="product_stock" v-model="product.product_stock">
         </div>
 
@@ -43,15 +43,15 @@
         </form>
 
         <div class="mb-3">
-            <label for="drink_type" class="form-label">주종</label>
+            <label for="drink_type" class="form-label">주종(필수)</label>
             <input type="text" class="form-control" id="drink_type" v-model="product.drink_type">
         </div>
         <div class="mb-3">
-            <label for="product_kind" class="form-label">상품 종류</label>
+            <label for="product_kind" class="form-label">상품 종류(필수)</label>
             <input type="text" class="form-control" id="product_kind" v-model="product.product_kind">
         </div>
         <div class="mb-3">
-            <label for="product_location" class="form-label">원산지</label>
+            <label for="product_location" class="form-label">원산지(필수)</label>
             <select class="form-select" id="product_location" v-model="product.product_location_id">
                 <option v-for="location in productLocations" 
                         :key="location.id" 
@@ -61,7 +61,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="supply_factory" class="form-label">공급처</label>
+            <label for="supply_factory" class="form-label">공급처(필수)</label>
             <select class="form-select" id="supply_factory" v-model="product.supply_factory_id">
                 <option v-for="factory in supplyFactories" 
                         :key="factory.id" 

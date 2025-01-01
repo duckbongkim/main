@@ -29,7 +29,7 @@ class Products extends Sequelize.Model {
             },
             drink_type:{
                 type: Sequelize.STRING(20),
-                allowNull: true,
+                allowNull: false,
             },
             product_kind:{
                 type: Sequelize.STRING(20),

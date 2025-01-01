@@ -15,7 +15,8 @@ exports.getOrders = async(req,res,next)=>{
                     model: Accounts,
                     attributes: ['email']
                 }
-            ]
+            ],
+            order: [['create_at', 'DESC']]
         });
         res.status(200).json(orders);
     }
