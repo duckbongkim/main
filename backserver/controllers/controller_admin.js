@@ -51,3 +51,15 @@ exports.deleteUser = async(req,res,next)=>{
         next(error);
     }
 };
+
+exports.addAccount = async(req,res,next)=>{
+    try{
+        const account = req.body;
+        const result = await Accounts.create(account);
+        res.status(200).json(result);
+    }
+    catch(error){
+        console.log("회원 추가에 실패했습니다.",error);
+        next(error);
+    }
+};

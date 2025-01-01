@@ -144,7 +144,7 @@
     </div>
 
     <!-- 싼 가격대 추천 -->
-    <div class="promotion">
+    <!-- <div class="promotion">
 
       <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -178,9 +178,37 @@
       <div class="swiper-next swiper-button">
         <span class="material-icons arrow_forward">arrow_forward_ios</span>
       </div>
+    </div> -->
+    <div class="promotion">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <!-- v-for로 동적으로 슬라이드 생성 -->
+          <div class="swiper-slide" v-for="(item, index) in main" :key="index">
+            <img :src="item.imgSrc" :alt="item.altText" />
+            <a href="javascript:void(0)" class="btn">{{ mainData }}</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-pagination"></div>
+        <div class="swiper-prev swiper-button">
+          <span class="material-icons arrow_back">arrow_back_ios</span>
+        </div>
+        <div class="swiper-next swiper-button">
+          <span class="material-icons arrow_forward">arrow_forward_ios</span>
+      </div>
     </div>
 
-
+    <section>
+      <h2>가격순</h2>
+      <ul>
+        <li v-for="item in mainData.expensive" :key="item.id">
+          <strong>{{ item.product_name }}</strong> - {{ item.product_price }}원
+          <p>{{ item.product_description }}</p>
+          <img :src="item.product_image" alt="Product Image" />
+        </li>
+      </ul>
+    </section>
 
 </div>
 </template>
@@ -191,18 +219,26 @@ import axios from 'axios';
 
 
 
+
 export default{ 
     name:'',
     components:{},
     computed:{},
     data(){
         return{
-          items: [], // 데이터를 저장할 변수
+          mainData:{expensive:[]},
+          bestSeller:{
+            
+          },
+
+
         };
     },
     setup(){},
     created(){},
     mounted(){
+      this.getmain();
+
       new Swiper('.swiper-container', {
       slidesPerView: 1,
       spaceBetween: 10,
@@ -210,21 +246,28 @@ export default{
         el: '.swiper-pagination',
         clickable: true,
       },
-    }),
-    axios
-      .get("http://localhost:3000/") 
-      .then((response) => {
-        console.log(response)
-        this.items = response.data; // 응답 데이터를 items 저장
-      })
-         // 어렵다
-      .catch((error) => {
-        console.error("데이터를 불러오는 중 오류 발생:", error);
-      });
-    },
+    });
+  },
+    // axios
+    //   .get("http://localhost:3000/") 
+    //   .then((response) => {
+    //     console.log(response)
+    //     this.items = response.data; // 응답 데이터를 items 저장
+    //   })
+    //   .catch((error) => {
+    //     console.error("데이터를 불러오는 중 오류 발생:", error);
+    //   });
     unmounted(){},
     methods:{
-      
+      async getmain(){
+        try{
+          const response = await axios.get("http://localhost:3000/") 
+          this.mainData = response.data  
+          console.log(response)        
+        }catch(err){
+          console.error(err)
+        }
+      }
     },
     watch:{}
 }
@@ -304,9 +347,7 @@ export default{
   .promotion .swiper-pagination .swiper-pagination-bullet:last-child {
     margin-right: 0;
   }
-  .notice .promotion .swiper-pagination .swiper-pagination-bullet-active {
-
-  }
+  
   .promotion .swiper-prev,
   .promotion .swiper-next {
     width: 42px;
