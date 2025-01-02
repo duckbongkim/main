@@ -14,8 +14,6 @@ const Searched = require('./model_searched.js');
 const SupplyFactory = require('./model_supplyFactory.js');
 
 
-
-
 //환경변수 설정
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];

@@ -9,7 +9,7 @@ const routes = [
     component: MainView
   },
   {
-    path: '/products',
+    path: '/products/:product_id', //products에서 products/:product_id로 변경 (25,1,1 동진)
     name: 'products',
     component: ProductView
   },
@@ -33,7 +33,7 @@ const routes = [
       {
         path:'manageProducts/', //products에서 manageProducts로 변경 (241230 누리)
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
-      },      
+      },
       {
         path:'addAccount/',
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/addAccount.vue')
