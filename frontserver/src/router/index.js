@@ -77,7 +77,6 @@ const routes = [
       {
         path:'productLocations/',
         component: () => import(/* webpackChunkName: "manageProductLocations" */ '../components/admin/manageProductLocations.vue')
-
       },
       {
         path:'cart/',

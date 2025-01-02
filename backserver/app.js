@@ -13,8 +13,12 @@ const passport = require('passport');
 const indexRouter = require('./routers/router_index.js');
 const adminRouter = require('./routers/router_admin.js');
 const productRouter = require('./routers/router_products.js');// 1월1일 productRouter 추가
+
+const listRouter = require('./routers/router_list.js');
+
 const loginRouter = require('./routers/router_login.js');
 const orderRouter = require('./routers/router_orders.js');// 1월2일 orderRouter 추가 (누리)
+
 
 
 
@@ -57,18 +61,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
-
 //라우터 
 app.use('/',indexRouter);
 app.use('/admin',adminRouter);
 app.use('/products',productRouter);// 1월1일 productRouter 추가
 app.use('/login',loginRouter);
-
-
-
-
+app.use('/class',listRouter);
 app.use('/orders',orderRouter);// 1월2일 orderRouter 추가 (누리)
+
 
 
 
