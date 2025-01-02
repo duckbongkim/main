@@ -1,8 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import MainView from '../views/MainView.vue';
-import AdminView from '../views/AdminView.vue';
-import ProductView from '../views/ProductView.vue';
-import OrderView from '../views/OrderView.vue';
+
+import { createRouter, createWebHistory } from 'vue-router'
+import MainView from '../views/MainView.vue'
+import AdminView from '../views/AdminView.vue'
+import ProductView from '../views/ProductView.vue'
+import test from '../components/layout/test.vue'; // nav바 주류리스트로 이동하는지 테스트 입니다.
+
+
 
 const routes = [
   {
@@ -73,8 +76,8 @@ const routes = [
       },
       {
         path:'productLocations/',
-
         component: () => import(/* webpackChunkName: "manageProductLocations" */ '../components/admin/manageProductLocations.vue')
+
       },
       {
         path:'cart/',
@@ -104,8 +107,35 @@ const routes = [
         name:'order',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/makeOrder.vue')
       },
+
+
     ]
   },
+
+  // 2025-01-02 김우진 nav바에서 주류사이트로 이동이 가능하게 components에 test를 만들어서 연결 시켰습니다.성공!!
+  {
+  path: '/layout',
+  name: 'layout',
+  component: test,
+  children:[
+    {
+      path:'/test',
+      name:'test',
+      component: () => import(/* webpackChunkName: "about" */ '../components/layout/test.vue')
+  
+    },
+  ]
+  },
+  
+  // {
+  //   path: '/about',
+  //   name: 'about',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  // }
+
 ]
 
 const router = createRouter({

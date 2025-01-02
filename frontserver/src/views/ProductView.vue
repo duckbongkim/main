@@ -81,9 +81,13 @@
                 <p>{{pro.product_name}}</p>
                 <p>{{pro.product_price}}원</p>
             </a>
-        </div>
+
+            
+
+        
 
     </div>
+
 
         </div>
 
