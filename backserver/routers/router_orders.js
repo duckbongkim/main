@@ -12,19 +12,19 @@ const {userId, product_Id} = req.body;
 console.log(`U_id:${userId}, P_id:${product_Id}`);
 
 try {
-// //FK값이 해당 테이블에 데이터 있는지 확인
-// const user = await Accounts.findByPk(userId);
-// const targetProduct = await Products.findByPk(product_Id);
+//FK값이 해당 테이블에 데이터 있는지 확인
+const user = await Accounts.findByPk(userId);
+const targetProduct = await Products.findByPk(product_Id);
 
-// if(!user || !targetProduct) {
-//     return res.status(404).json({message:"없는 유저거나 없는 상품임"})
-// }
+if(!user || !targetProduct) {
+    return res.status(404).json({message:"없는 유저거나 없는 상품임"})
+}
 
-// // ################### Wish 테이블 어떻게 불러와야하나
-// await Wish.create({
-//     account_id: user.id,
-//     product_id: targetProduct.id, 
-// });
+// ################### Wish 테이블 어떻게 불러와야하나
+await Wish.create({
+    account_id: user.id,
+    product_id: targetProduct.id, 
+});
 res.status(201).json({message: "찜에 추가됨"});
         //201 : 찜 데이터 생성 성공 (Created)
 
