@@ -81,7 +81,14 @@
                 <p>{{pro.product_name}}</p>
                 <p>{{pro.product_price}}원</p>
             </a>
-            </div>  
+
+            
+
+        
+
+    </div>
+
+
         </div>
 
     </section>
@@ -89,9 +96,7 @@
 
 
 
-    <productInfoVue />
 
-    <footer-vue />
 
 
 
@@ -134,7 +139,7 @@ export default{
             product_id: null,
             orderQuantity : 1,
             dummy: {
-                userid: 1,
+                userid: 41,
 
             }
             
@@ -170,9 +175,10 @@ export default{
             try {
                 //도메인 요청, 돌아오는 response 잡기
                 this.product_id = this.$route.params.product_id;
+                //console.log(this.product_id)
                 const response = await axios.get(`http://localhost:3000/products/${this.product_id}`);
                 // product_id에 해당하는 제품 data object를 받아온다.
-                console.log(response)
+                //console.log(response)
                 this.selectedProduct = response.data ; 
                 
             }catch(err) {
@@ -209,6 +215,7 @@ export default{
 
                 //const userId = this.session.userId;
                 const userId = this.dummy.userid;
+                console.log(`######################################################${userId}`)
                 const userWish = {
                     userId,
                     product_Id : this.selectedProduct.id,
@@ -218,7 +225,7 @@ export default{
                 // 2. 찜에 추가되었습니다.
                 const GotoWish = confirm("찜가실?");
                 if(GotoWish) {
-                    this.$router.push('/wish');              
+                await this.$router.push('/orders');               
                     /// frontserver/src/router/index.js 에 라우터 추가 
                 } else {
                     alert("상품이 찜에 추가됐다.");
