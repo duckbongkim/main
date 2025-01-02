@@ -81,17 +81,14 @@
                 <p>{{pro.product_name}}</p>
                 <p>{{pro.product_price}}원</p>
             </a>
-
         </div>
-
+        </div>
     </section>
 
 
 
 
-    <productInfoVue />
 
-    <footer-vue />
 
 
 
@@ -170,6 +167,7 @@ export default{
             try {
                 //도메인 요청, 돌아오는 response 잡기
                 this.product_id = this.$route.params.product_id;
+                console.log(this.product_id)
                 const response = await axios.get(`http://localhost:3000/products/${this.product_id}`);
                 // product_id에 해당하는 제품 data object를 받아온다.
                 console.log(response)
