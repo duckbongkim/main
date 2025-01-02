@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
+import MypageView from '../views/MypageView.vue'
+
 const routes = [
   {
     path: '/',
@@ -82,6 +84,13 @@ const routes = [
       },
     ]
   },
+  {
+    path: '/user-info', //products에서 products/:product_id로 변경 (25,1,1 동진)
+    name: 'user',
+    component: MypageView
+  }, // 마이페이지 view 추가
+
+  
 
   // {
   //   path: '/about',
