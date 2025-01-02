@@ -9,6 +9,10 @@
     <header>
       <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
     </header>    
+
+    <header>
+      <button class="basket-button" @click="$router.push('/basket')">회원가입</button>
+    </header>    
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
@@ -20,16 +24,16 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" @click="goToMenu('/admin')" href="#">Admin</a>
+          <a class="nav-link active" aria-current="page" @click="goToMenu('/admin')">Admin</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" @click="goToMenu('/products')" href="#">productDetail</a>
+          <a class="nav-link active" aria-current="page" @click="goToMenu('/products')">productDetail</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" role="button" aria-expanded="false">
             주류
           </a>
           <ul class="dropdown-menu">

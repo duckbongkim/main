@@ -203,7 +203,7 @@
       <h2>가격순</h2>
       <ul>
         <li v-for="item in mainData.expensive" :key="item.id">
-          <strong>{{ item.product_name }}</strong> - {{ item.product_price }}원
+          <strong>{{ item.product_name }}</strong> - {{ item.product_price }}
           <p>{{ item.product_description }}</p>
           <img :src="item.product_image" alt="Product Image" />
         </li>

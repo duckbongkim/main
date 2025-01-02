@@ -34,14 +34,10 @@ const routes = [
         path:'manageProducts/', //products에서 manageProducts로 변경 (241230 누리)
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
       },
-<<<<<<< HEAD
-      
-=======
       {
         path:'addAccount/',
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/addAccount.vue')
       }
->>>>>>> 70c0e56e9e5828ac4709d17a49448da8b94d70f8
     ]
   },
 
