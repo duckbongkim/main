@@ -7,6 +7,7 @@ const cors = require('cors');
 const path = require('path');
 const indexRouter = require('./routers/router_index.js');
 const adminRouter = require('./routers/router_admin.js');
+const productRouter = require('./routers/router_products.js');// 1월1일 productRouter 추가
 
 //서번 생성
 const app = express();
@@ -37,8 +38,12 @@ app.use(cors(corsOptions));
 
 
 //라우터 
-app.use('/',indexRouter);
 app.use('/admin',adminRouter);
+
+app.use('/',indexRouter);
+
+app.use('/products',productRouter);// 1월1일 productRouter 추가
+
 
 
 

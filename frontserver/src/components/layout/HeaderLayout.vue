@@ -3,29 +3,26 @@
 
   <div class="clear">
     <header>
-      <button class="login-button" @click="$router.push('/login')">로그인</button>
+      <button class="login-button" @click="getaccount('/login')">로그인</button>
     </header>
 
     <header>
-      <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
+      <button class="basket-button" @click="$getaccount('/basket')">장바구니</button>
     </header>    
 
     <header>
-      <button class="basket-button" @click="$router.push('/basket')">회원가입</button>
+      <button class="createAccount-button" @click="getaccount('/createAccount')">회원가입</button>
     </header>    
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
   <div class="container-fluid">
-    <a class="navbar-brand" @click="goToMenu('/')">Navbar</a>
+    <a class="navbar-brand" @click="goToMenu('/')">Home</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page">Home</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" @click="goToMenu('/admin')">Admin</a>
         </li>
@@ -70,7 +67,7 @@
         </li>
           <!-- 커뮤니티 -->
           <li class="nav-item">
-            <a class="nav-link" href="#">커뮤니티</a>
+            <a class="nav-link" >커뮤니티</a>
           </li>
       </ul>
     </div>
@@ -80,12 +77,30 @@
 </template>
 
 <script>
+import axios from 'axios';
+
     export default{
+    data(){
+      return {
+        account: [],
+      }
+    },
     methods :{
+      async getaccount(){
+      try{
+        const response = await axios.get(`http://localhost:3000/${router}`);
+        this.account = response.data;
+        console.log(response);
+      }catch(err){
+        console.error(err);
+      }
+    },
+
     goToMenu(path){
     this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
-        }
+        },
       }
+      
     }
 </script>
 
@@ -130,6 +145,16 @@
     padding: 5px 10px;   
     font-size: 14px;
   }
+  /* 회원가입 버튼 */
+  .createAccount-button{
+    top: 20px;
+    margin-right: 20px; /* 20px 왼쪽으로 이동 */
+    margin-top: 20px; /* 20px 아래로 이동 */
+    float:right;
+    padding: 5px 10px;   
+    font-size: 14px;
+  }  
+
 
   /* navbar 호버 기능 추가 */
   /* 드롭다운을 호버로 열리도록 설정 */
@@ -140,5 +165,12 @@
     min-width: 100%; /* 원하는 너비를 설정 */
   }
 
+  .nav-item {
+    margin-right: 50px;  /* 항목들 간의 간격을 늘림 */
+  }
+
+  .nav-item:last-child {
+    margin-right: 0;  /* 마지막 항목은 오른쪽 마진 제거 */
+  }
 </style>
 
