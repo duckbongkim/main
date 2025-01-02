@@ -1,30 +1,28 @@
-
 <template>
-    <div>
-        <h1>찜</h1>
-    </div>
+<div>
+    <h1>Test Page</h1>
+    <p>이 페이지는 테스트용으로 만들었습니다.</p>
+</div>
 </template>
 
 
 <script>
-import axios from 'axios';
 export default{ 
     name:'',
     components:{},
     data(){
         return{
-            sampleData:''
+
         };
     },
     setup(){},
     created(){},
     mounted(){},
     unmounted(){},
-    methods:{}
+    methods:{
+
+    },
+    computed:{},
+    watch:{}
 }
-
 </script>
-
-<style scoped>
-
-</style>
