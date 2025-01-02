@@ -1,14 +1,21 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+//module import
 const express = require('express');
 const {sequelize} = require('./models/model_index.js');
 const cors = require('cors');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const passport = require('passport');
+//router import
 const indexRouter = require('./routers/router_index.js');
 const adminRouter = require('./routers/router_admin.js');
 const productRouter = require('./routers/router_products.js');// 1월1일 productRouter 추가
+const loginRouter = require('./routers/router_login.js');
 const orderRouter = require('./routers/router_orders.js');// 1월2일 orderRouter 추가 (누리)
+
 
 
 //서번 생성
@@ -33,18 +40,33 @@ const corsOptions = {
     origin: process.env.FRONT_URL,
     credentials: true,
     optionsSuccessStatus: 200
-};
+};//cors 설정
 app.use(cors(corsOptions));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(session({
+    resave:false,
+    saveUninitialized:false,
+    secret:process.env.COOKIE_SECRET,
+    cookie:{
+        httpOnly:true,
+        secure:false,
+        maxAge:60*1000*60*24,//1day
+    }
+}));//session 설정
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
 
 //라우터 
-app.use('/admin',adminRouter);
-
 app.use('/',indexRouter);
-
+app.use('/admin',adminRouter);
 app.use('/products',productRouter);// 1월1일 productRouter 추가
+app.use('/login',loginRouter);
+
+
+
 
 app.use('/orders',orderRouter);// 1월2일 orderRouter 추가 (누리)
 

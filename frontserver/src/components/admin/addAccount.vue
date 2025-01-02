@@ -97,11 +97,10 @@ export default{
                 email:'',
                 password:'',
                 address:'',
-                addressDetail:'',
-                addressNumber:'',
-                birth:'',
-                phone_number:'',
-                super_admin:false,
+                addressDetail:null,
+                addressNumber:null,
+                birth:null,
+                phone_number:null,
             }
         };
     },
@@ -167,7 +166,6 @@ export default{
                 addressNumber:'',
                 birth:'',
                 phone_number:'',
-                super_admin:false,
                 }
                 console.log(response);
             }
