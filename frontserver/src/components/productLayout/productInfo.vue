@@ -25,7 +25,7 @@
     <hr>
 
     <keep-alive>
-        <component :is="currentComponent" />
+        <component :is="currentComponent" :product="product"/>
     </keep-alive>
 
     
@@ -40,6 +40,9 @@ import infoReview from './infoReview.vue';
 
 export default{ 
     name:'',
+    props:{
+        product:Object
+    },
     components:{
         infoDelivery,
         infoDetail,
