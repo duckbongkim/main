@@ -118,4 +118,17 @@ db.Products.hasMany(db.Replies,{foreignKey: { name: 'product_id'}, sourceKey:'id
 db.Accounts.belongsTo(db.Ratings,{foreignKey: { name: 'rating_id',defaultValue:1}, targetKey:'id'});
 db.Ratings.hasMany(db.Accounts,{foreignKey: { name: 'rating_id',defaultValue:1}, sourceKey:'id'});
 
+
+
+
+///외래테이블
+//wishes
+class Wishes extends Sequelize.Model {
+    static assiciate(db) {
+        db.Wishes.belongsTo(db.Accounts, { foreignKey: 'account_id', targetKey: 'id'});
+        db.Wishes.belongsTo(db.Products, { foreignKey : 'product_id', targetKey : 'id'});
+    }
+}
+
+
 module.exports = db;
