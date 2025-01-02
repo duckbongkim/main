@@ -47,7 +47,7 @@
                     <td>{{user.delete_time}}</td>
                     <td>{{user.super_admin ? '관리자' : '사용자'}}</td>
                     <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="modifyUser(user)">수정</button></td>
-                    <td><button class="btn btn-danger">삭제</button></td>
+                    <td><button class="btn btn-danger" @click="deleteUser(user)">삭제</button></td>
                 </tr>
             </tbody>
         </table>

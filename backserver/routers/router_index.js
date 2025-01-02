@@ -7,7 +7,7 @@ const RecommendTags = require('../models/model_recommendTags');
 
 
 //메인페이지에서 사용할 데이터 전달.
-router.get('',async(req,res)=>{
+router.get('/',async(req,res)=>{
     //판매량,싼 가격, 비싼 가격, 추천태그 별(연령별), 신상품(지금 기준 한달 전 까지 나온 상품)
     const mainData = {};
 
@@ -57,14 +57,14 @@ router.get('',async(req,res)=>{
         raw: true
     });
     const formatBestSeller = bestSeller.map(item => ({
-    product_id: item.product_id,
-    totalQuantity: item.totalQuantity,
-    product_name: item['Product.product_name'],
-    product_price: item['Product.product_price'],
-    product_description: item['Product.product_description'],
-    product_stock: item['Product.product_stock'],
-    product_image: item['Product.product_image'],
-    drink_type: item['Product.drink_type']
+        product_id: item.product_id,
+        totalQuantity: item.totalQuantity,
+        product_name: item['Product.product_name'],
+        product_price: item['Product.product_price'],
+        product_description: item['Product.product_description'],
+        product_stock: item['Product.product_stock'],
+        product_image: item['Product.product_image'],
+        drink_type: item['Product.drink_type']
     }));
     mainData.bestSeller = formatBestSeller;
 
