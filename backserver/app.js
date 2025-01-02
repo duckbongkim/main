@@ -14,6 +14,7 @@ const indexRouter = require('./routers/router_index.js');
 const adminRouter = require('./routers/router_admin.js');
 const productRouter = require('./routers/router_products.js');// 1월1일 productRouter 추가
 const loginRouter = require('./routers/router_login.js');
+const orderRouter = require('./routers/router_orders.js');// 1월2일 orderRouter 추가 (누리)
 
 
 
@@ -66,6 +67,8 @@ app.use('/login',loginRouter);
 
 
 
+
+app.use('/orders',orderRouter);// 1월2일 orderRouter 추가 (누리)
 
 
 
