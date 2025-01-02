@@ -38,9 +38,12 @@ app.use(cors(corsOptions));
 
 
 //라우터 
-app.use('/',indexRouter);
 app.use('/admin',adminRouter);
+
+app.use('/',indexRouter);
+
 app.use('/products',productRouter);// 1월1일 productRouter 추가
+
 
 
 

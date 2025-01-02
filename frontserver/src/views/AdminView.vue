@@ -24,9 +24,13 @@ export default{
   },
   setup(){},
   created(){},
-  mounted(){},
+  mounted(){
+    
+  },
   unmounted(){},
-  methods:{},
+  methods:{
+    
+  },
   watch:{}
 }
 </script>
@@ -35,5 +39,6 @@ export default{
 .container{
   margin-left: 250px;
   margin-top: 20px;
+  width: 100%;
 }
 </style>

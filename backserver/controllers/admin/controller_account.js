@@ -1,6 +1,6 @@
-const {sequelize} = require('../models/model_index');
-const Accounts = require('../models/model_accounts');
-const Ratings = require('../models/model_ratings');
+const {sequelize} = require('../../models/model_index.js');
+const Accounts = require('../../models/model_accounts.js');
+const Ratings = require('../../models/model_ratings.js');
 
 
 exports.getUsers = async(req,res,next)=>{
@@ -29,9 +29,8 @@ exports.getUsers = async(req,res,next)=>{
 exports.modifyUser = async(req,res,next)=>{
     try{
         const user = req.body;
-        console.log(user);
+        user.updated_at = new Date();
         const result = await Accounts.update(user,{where:{id:user.id}});
-        console.log(result);
         res.status(200).json(result);
     }
     catch(error){
@@ -55,6 +54,12 @@ exports.deleteUser = async(req,res,next)=>{
 exports.addAccount = async(req,res,next)=>{
     try{
         const account = req.body;
+        if(!account.created_at){
+            account.created_at = new Date();
+        }
+        if(!account.updated_at){
+            account.updated_at = new Date();
+        }
         const result = await Accounts.create(account);
         res.status(200).json(result);
     }

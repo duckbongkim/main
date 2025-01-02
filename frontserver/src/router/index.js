@@ -44,6 +44,22 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/addAccount.vue')
       },
       {
+
+        path:'ModifyProduct/:id',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/addOrModifyProduct.vue')
+      },
+      {
+        path:'addProduct/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/addOrModifyProduct.vue')
+      },
+      {
+        path:'supplyFactories/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageSupplyFactories.vue')
+      },
+      {
+        path:'productLocations/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProductLocations.vue')
+
         path:'cart/',
         name:'cart',
         component: () => import(/* webpackChunkName: "about" */ '../components/orders/userCart.vue')
@@ -57,6 +73,7 @@ const routes = [
         path:'order/',
         name:'order',
         component: () => import(/* webpackChunkName: "about" */ '../components/orders/makeOrder.vue')
+
       },
     ]
   },

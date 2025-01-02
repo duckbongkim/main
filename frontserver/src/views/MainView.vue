@@ -261,9 +261,6 @@
 <script>
 import axios from 'axios';
 
-
-
-
 export default{ 
     name:'',
     components:{},
@@ -286,6 +283,9 @@ export default{
     setup(){},
     created(){},
     mounted(){
+
+
+
       this.getmain();
 
       new Swiper('.swiper-container', {
@@ -314,6 +314,7 @@ export default{
         this.$router.push(`/products/${product_id}`)
     },
   }
+
 }
 </script>
 
