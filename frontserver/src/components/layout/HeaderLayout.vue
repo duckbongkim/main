@@ -2,13 +2,11 @@
 <div>
 
   <div class="clear">
-    <header>
-      <button class="login-button" @click="$router.push('/login')">로그인</button>
-    </header>
 
-    <header>
+      <button class="login-button" @click="$router.push('/login')">로그인</button>
+      <button class="login-button" @click="$router.push('/createAccount')">회원가입(임시로 만든 버튼, 우진씨가 버튼 만들면 그걸루 변경)</button>
       <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
-    </header>    
+       
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">

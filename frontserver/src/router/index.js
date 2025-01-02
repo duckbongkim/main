@@ -14,6 +14,11 @@ const routes = [
     component: ProductView
   },
   {
+    path: '/createAccount', //products에서 products/:product_id로 변경 (25,1,1 동진)
+    name: 'createAccount',
+    component: () => import(/* webpackChunkName: "createAccount" webpackPrefetch:true*/ '../views/auth/createAccountView.vue')
+  },
+  {
     path: '/admin',
     name: 'admin',
     component: AdminView,
@@ -21,48 +26,48 @@ const routes = [
       {
         path:'',
         name:'',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/defaultAdminPage.vue')
+        component: () => import(/* webpackChunkName: "defaultAdminPage" */ '../components/admin/defaultAdminPage.vue')
       },
       {
         path:'users/',
         name:'users',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageUsers.vue')
+        component: () => import(/* webpackChunkName: "manageUsers" */ '../components/admin/manageUsers.vue')
       },
       {
         path:'orders/',
         name:'orders',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageOrders.vue')
+        component: () => import(/* webpackChunkName: "manageOrders" */ '../components/admin/manageOrders.vue')
       },
       {
         path:'products/',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
+        component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
       },
       {
         path:'manageProducts/', //products에서 manageProducts로 변경 (241230 누리)
         name:'manageProducts',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
+        component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
       },      
       {
         path:'addAccount/',
         name:'addAccount',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/addAccount.vue')
+        component: () => import(/* webpackChunkName: "addAccount" */ '../components/admin/addAccount.vue')
       },
       {
 
         path:'ModifyProduct/:id',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/addOrModifyProduct.vue')
+        component: () => import(/* webpackChunkName: "addOrModifyProduct" */ '../components/admin/addOrModifyProduct.vue')
       },
       {
         path:'addProduct/',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/addOrModifyProduct.vue')
+        component: () => import(/* webpackChunkName: "addOrModifyProduct" */ '../components/admin/addOrModifyProduct.vue')
       },
       {
         path:'supplyFactories/',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageSupplyFactories.vue')
+        component: () => import(/* webpackChunkName: "manageSupplyFactories" */ '../components/admin/manageSupplyFactories.vue')
       },
       {
         path:'productLocations/',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProductLocations.vue')
+        component: () => import(/* webpackChunkName: "manageProductLocations" */ '../components/admin/manageProductLocations.vue')
       },
       {
         path:'cart/',
