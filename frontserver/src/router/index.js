@@ -8,6 +8,7 @@ import OrderView from '../views/OrderView.vue';
 import productList from '../components/list/productList.vue';
 
 
+
 const routes = [
   {
     path: '/',
@@ -22,7 +23,8 @@ const routes = [
   {
     path: '/createAccount', 
     name: 'createAccount',
-    component: () => import(/* webpackChunkName: "createAccount" webpackPrefetch:true*/ '../views/auth/createAccountView.vue')
+        //250103 누리) ',' 추가. chunkname이랑 prefetch 사이에 ',' 있어야 오류 안남
+    component: () => import(/* webpackChunkName: "createAccount", webpackPrefetch: true */ '../views/auth/createAccountView.vue')
   },
   {
 
@@ -39,7 +41,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" webpackPrefetch:true*/ '../views/auth/loginView.vue')
+    component: () => import(/* webpackChunkName: "login", webpackPrefetch: true */ '../views/auth/loginView.vue')
   },
   {
     path: '/admin',
@@ -65,15 +67,6 @@ const routes = [
         path:'products/',
         component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
       },
-      {
-        path:'products/',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
-      },
-      {
-        path:'manageProducts/', //products에서 manageProducts로 변경 (241230 누리)
-        name:'manageProducts',
-        component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
-      },      
       {
         path:'addAccount/',
         name:'addAccount',
@@ -120,7 +113,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userCart.vue')
       },
       {
-        path:'/wish',
+        path:'/wish/:userId',
         name:'wish',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userWishes.vue')
       },

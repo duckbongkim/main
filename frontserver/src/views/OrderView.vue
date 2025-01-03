@@ -6,13 +6,13 @@
 
     <ul>
         <li>
-            <a @click="goToMenu('/wish')"> 찜 </a>
+            <a @click="goWish(dummy.userId)"> 찜 </a>
         </li>
         <li>
-            <a @click="goToMenu('/cart')"> 장바구니 </a>
+            <a @click="goCart(dummy.userId)"> 장바구니 </a>
         </li>
         <li>
-            <a @click="goToMenu('/order')"> 주문 </a>
+            <a @click="goOrder(dummy.userId)"> 주문 </a>
         </li>
     </ul>
 
@@ -32,7 +32,7 @@ export default{
     },
     data(){
         return{
-            sampleData:''
+            dummy : {userId : 42},
         };
     },
     setup(){},
@@ -40,9 +40,15 @@ export default{
     mounted(){},
     unmounted(){},
     methods:{
-        goToMenu(path){
-            this.$router.push({path:path});
-        }
+        goWish(userId){
+            this.$router.push(`/wish/${userId}`)
+        },
+        goCart(userId){
+            this.$router.push(`/cart/${userId}`)
+        },
+        goOrder(userId){
+            this.$router.push(`/order/${userId}`)
+        },
     },
 }
 
