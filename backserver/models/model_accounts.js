@@ -4,7 +4,7 @@ class Accounts extends Sequelize.Model {
   static initiate(sequelize) {
     Accounts.init({
         email:{
-            type: Sequelize.STRING(20),
+            type: Sequelize.STRING(100),
             allowNull: false,
         },
         password:{

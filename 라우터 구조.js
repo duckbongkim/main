@@ -25,4 +25,7 @@
         - localhost:3000/orders '/wish' => 찜 // table의 like와 겹쳐서 wish로 바꿈
         - localhost:3000/orders '/order' => 주문
        
-        
+
+
+
+

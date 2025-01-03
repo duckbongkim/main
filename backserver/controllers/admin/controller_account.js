@@ -1,6 +1,7 @@
 const {sequelize} = require('../../models/model_index.js');
 const Accounts = require('../../models/model_accounts.js');
 const Ratings = require('../../models/model_ratings.js');
+const crypto = require('../../methods/crypto.js');
 
 
 exports.getUsers = async(req,res,next)=>{
@@ -54,11 +55,20 @@ exports.deleteUser = async(req,res,next)=>{
 exports.addAccount = async(req,res,next)=>{
     try{
         const account = req.body;
+        const existUser = await Accounts.findOne({where:{email:account.email}});
+        if(existUser){
+            return res.json({message:'이미 가입된 이메일입니다.'});
+        }
+        
         if(!account.created_at){
             account.created_at = new Date();
         }
         if(!account.updated_at){
             account.updated_at = new Date();
+        }
+        if(account.password !==null || account.password !== ''){
+            const hash = await crypto(account.password);
+            account.password = hash;
         }
         const result = await Accounts.create(account);
         res.status(200).json(result);

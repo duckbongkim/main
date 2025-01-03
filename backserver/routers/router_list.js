@@ -1,14 +1,15 @@
+require('dotenv').config();
 
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql12');
+const mysql = require('mysql2');
 
 //MySQL 연결 설정
 const productList = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: '', 
-  database: '' 
+  user: process.env.DB_USER,   
+  password: process.env.DB_PASSWORD, 
+  database: process.env.DB_NAME
 });
 
 productList.connect((err) => {
@@ -22,12 +23,14 @@ productList.connect((err) => {
 
 //상품 조회 (리스트 품목 이동 시 데이터 보여주기)
 
-app.get('/products', async (req, res) => {
-  const query = 'SELECT * FROM productTable'; 
+router.get('/', async (req, res) => {
+  const query = 'SELECT * FROM products'; 
 
   try{
       const [results] = await productList.promise().query(query);
+      console.log('상품 목록:', results); // 데이터 연결 확인
       res.json(results);
+   
      } catch (err) {
       console.error('상품 목록 조회 실패:', err);
       return res.status(500).json({ error: '상품 목록 조회에 실패했습니다.' });
@@ -35,9 +38,10 @@ app.get('/products', async (req, res) => {
 });
 
 
+
 //상품 검색 (검색창에 검색할때 사용할 기능)
-app.get('/products/search', (req, res) => {
-  const { product_name, product_description } = req.query;
+router.get('/search', (req, res) => {
+  const { product_name, product_description, product_kind } = req.query;
   let query = 'SELECT * FROM products WHERE 1=1'; 
 
   // 검색 조건에 따른 쿼리에 추가작성
@@ -47,11 +51,15 @@ app.get('/products/search', (req, res) => {
   if (product_description) {
     query += ` AND product_description LIKE ?`; 
   }
+  if (product_kind) {
+    query += ` AND product_kind LIKE ?`;
+  }
 
   //검색 조건에서 추가되는 값 설정
   const values = [];
   if (product_name) values.push(`%${product_name}%`);
   if (product_description) values.push(`%${product_description}%`);
+  if (product_kind) values.push(`%${product_kind}%`);
 
   // 쿼리 실행
   productList.query(query, values, (err, results) => {
@@ -64,15 +72,20 @@ app.get('/products/search', (req, res) => {
 })
 
 //품목별 상품 조회 
-app.get('/products/:category', async (req, res) => {
-  const { productKind } = req.params;  
-  const query = 'SELECT * FROM products WHERE productKind = ?';  
+router.get('/:product_kind', async (req, res) => {
+  const { product_kind } = req.params;  
+  const query = 'SELECT * FROM products WHERE product_kind = ?';  
   
   try {
-    const [results] = await productList.promise().query(query, [category]);
+    const [results] = await productList.promise().query(query, [product_kind]);
     res.json(results); 
   } catch (err) {
     console.error('상품 목록 조회 실패:', err);
     return res.status(500).json({ error: '상품이 준비되지 않았습니다.' });
   }
 });
+
+
+module.exports = router;
+
+// 데이터가 빈값으로 들어옴...

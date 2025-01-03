@@ -56,9 +56,13 @@ export default{
     unmounted(){},
     methods:{
         async getOrders(){
-            const response = await axios.get('http://localhost:3000/admin/orders');
-            this.orders = response.data;
-            console.log("주문 목록 응답",response);
+            try{
+                const response = await axios.get('http://localhost:3000/admin/orders');
+                this.orders = response.data;
+                console.log("주문 목록 응답",response);
+            }catch(error){
+                console.error("주문 목록 조회 오류",error);
+            }
         }
     },
     watch:{}

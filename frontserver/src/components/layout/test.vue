@@ -1,23 +1,28 @@
 <template>
 <div>
+    <h1>Test Page</h1>
+    <p>이 페이지는 테스트용으로 만들었습니다.</p>
 </div>
 </template>
+
+
 <script>
 export default{ 
     name:'',
     components:{},
     data(){
         return{
-            user:null,
+
         };
     },
     setup(){},
-    created(){
-        this.getUsers()
-    },
+    created(){},
     mounted(){},
     unmounted(){},
     methods:{
-        }
-    }
+
+    },
+    computed:{},
+    watch:{}
+}
 </script>
