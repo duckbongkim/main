@@ -3,7 +3,7 @@ const router = express.Router();
 const {isNotLoggedIn,isLoggedIn} = require('../middlewares/middleware_checkLogin.js');
 const {localLogin,logout} = require('../controllers/auth/controller_login.js');
 const {kakaoLogin,kakaoCallback} = require('../controllers/auth/controller_kakaoLogin.js');
-
+const {naverLogin,naverCallback} = require('../controllers/auth/controller_naverLogin.js');
 
 
 //로컬 로그인
@@ -38,7 +38,8 @@ router.get('/kakao',isNotLoggedIn,kakaoLogin);
 router.get('/kakao/callback',kakaoCallback);
 
 //네이버 로그인
-
+router.get('/naver',isNotLoggedIn,naverLogin);
+router.get('/naver/callback',naverCallback);
 
 //로그아웃
 router.post('/logout',isLoggedIn,logout);

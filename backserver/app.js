@@ -9,6 +9,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
+const passportSetting = require('./methods/passportSetting.js');
 //router import
 const indexRouter = require('./routers/router_index.js');
 const adminRouter = require('./routers/router_admin.js');
@@ -18,7 +19,6 @@ const listRouter = require('./routers/router_list.js');
 
 const loginRouter = require('./routers/router_login.js');
 const orderRouter = require('./routers/router_orders.js');// 1월2일 orderRouter 추가 (누리)
-
 
 
 
@@ -46,6 +46,7 @@ const corsOptions = {
     optionsSuccessStatus: 200
 };//cors 설정
 app.use(cors(corsOptions));
+passportSetting.passportSetting();
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
     resave:false,
