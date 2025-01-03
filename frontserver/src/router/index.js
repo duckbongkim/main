@@ -4,8 +4,8 @@ import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
-import OrderView from '../views/OrderView.vue'
-import test from '../components/layout/test.vue'; // nav바 주류리스트로 이동하는지 테스트 입니다.
+import OrderView from '../views/OrderView.vue';
+import productList from '../components/list/productList.vue';
 
 
 const routes = [
@@ -23,6 +23,18 @@ const routes = [
     path: '/createAccount', 
     name: 'createAccount',
     component: () => import(/* webpackChunkName: "createAccount" webpackPrefetch:true*/ '../views/auth/createAccountView.vue')
+  },
+  {
+
+    path: '/liqueur', // 상품리스트 임시용
+    name: 'liqueur',
+    component: productList
+  },
+  {
+    path: '/liqueur/:drink_type', // 상품리스트 임시용
+    name: 'drink_type',
+    component: productList,
+    props: true
   },
   {
     path: '/login',
@@ -124,19 +136,73 @@ const routes = [
 
   // 2025-01-02 김우진 nav바에서 주류사이트로 이동이 가능하게 components에 test를 만들어서 연결 시켰습니다.성공!!
   {
-  path: '/layout',
-  name: 'layout',
-  component: test,
-  children:[
-    {
-      path:'/test',
-      name:'test',
-      component: () => import(/* webpackChunkName: "about" */ '../components/layout/test.vue')
-  
-    },
-  ]
+    path:'/liqueur',
+    name:'liqueur',
+    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/liqueur.vue')
+
+  },
+  {
+    path:'/whiskey',
+    name:'whiskey',
+    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/whiskey.vue')
+
+  },
+  {
+    path:'/wine',
+    name:'wine',
+    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/wine.vue')
+
+  },
+  {
+    path:'/traditional',
+    name:'traditional',
+    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
+
   },
   
+  // 2025-01-03 김우진 여기는 etc상품 이동 라우터 입니다.
+  {
+    path:'/glass',
+    name:'glass',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/glass.vue')
+
+  },
+  {
+    path:'/holder',
+    name:'holder',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/holder.vue')
+
+  },
+  {
+    path:'/opener',
+    name:'opener',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/opener.vue')
+
+  },
+  {
+    path:'/ontherocks',
+    name:'ontherocks',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/ontherocks.vue')
+
+  },
+  {
+    path:'/straight',
+    name:'straight',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/straight.vue')
+
+  },
+  {
+    path:'/decanter',
+    name:'decanter',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
+
+  },
+
+
+
+
+
+
   // {
   //   path: '/about',
   //   name: 'about',
