@@ -4,6 +4,8 @@ import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import test from '../components/layout/test.vue'; // nav바 주류리스트로 이동하는지 테스트 입니다.
+import OrderView from '../views/OrderView.vue'; // oderView 추가 (25,1,2 동진)
+import myPageView from '../views/MyPageView.vue'; // myPageView 추가 (25,1,2 동진)
 
 
 
@@ -92,7 +94,6 @@ const routes = [
     children:[
       {
         path:'/cart',
-
         name:'cart',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userCart.vue')
       },
@@ -124,6 +125,11 @@ const routes = [
   
     },
   ]
+  },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: myPageView
   },
   
   // {
