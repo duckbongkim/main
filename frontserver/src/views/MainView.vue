@@ -8,7 +8,7 @@
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
       </div>
       <div class="carousel-inner">
-        <div class="carousel-item active test">
+        <div class="carousel-item active test" @click="goProducts()">
           <img src="img\곰표.jpg" class="d-block w-100" alt="01">
         </div>
         <div class="carousel-item test">
