@@ -24,7 +24,10 @@
         </section>
 
         <section class="middle-content2"> <!--  -->
-            <div class="middle-div2"></div>
+            <div class="middle-div2">
+                <p>배송지 관리</p>
+                <p></p>
+            </div>
         </section>
     </div>
 </div>
