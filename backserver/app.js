@@ -66,7 +66,7 @@ app.use('/',indexRouter);
 app.use('/admin',adminRouter);
 app.use('/products',productRouter);// 1월1일 productRouter 추가
 app.use('/login',loginRouter);
-app.use('/class',listRouter);
+app.use('/liqueur',listRouter);
 app.use('/orders',orderRouter);// 1월2일 orderRouter 추가 (누리)
 
 

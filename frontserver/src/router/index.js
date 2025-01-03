@@ -4,7 +4,8 @@ import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import test from '../components/layout/test.vue'; // nav바 주류리스트로 이동하는지 테스트 입니다.
-
+import OrderView from '../views/OrderView.vue';
+import productList from '../components/list/productList.vue';
 
 
 const routes = [
@@ -22,6 +23,17 @@ const routes = [
     path: '/createAccount', //products에서 products/:product_id로 변경 (25,1,1 동진)
     name: 'createAccount',
     component: () => import(/* webpackChunkName: "createAccount" webpackPrefetch:true*/ '../views/auth/createAccountView.vue')
+  },
+  {
+    path: '/liqueur', // 상품리스트 임시용
+    name: 'liqueur',
+    component: productList
+  },
+  {
+    path: '/liqueur/:drink_type', // 상품리스트 임시용
+    name: 'drink_type',
+    component: productList,
+    props: true
   },
   {
     path: '/admin',
