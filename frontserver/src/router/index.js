@@ -4,14 +4,8 @@ import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
-import OrderView from '../views/OrderView.vue'
-import test from '../components/layout/test.vue'; // nav바 주류리스트로 이동하는지 테스트 입니다.
 import OrderView from '../views/OrderView.vue';
 import productList from '../components/list/productList.vue';
-
-
-import OrderView from '../views/OrderView.vue';
-
 
 const routes = [
   {
