@@ -31,20 +31,24 @@ export default{
     data(){
         return{
             userWishList:[],
-            dummy : {userId : 41},
+            userid: 0,
         };
     },
     setup(){},
     created(){},
-    mounted(){},
+    mounted(){
+        this.getWishList()
+    },
     unmounted(){},
     methods:{
         async getWishList() {
             try{
                 //const userId = this.session.userId;
-                const userId = this.dummy.userid;
+                this.userid = this.$route.params.userId;
+                console.log(`################프론트userId:${userId}`);
                 // 로그인된 유저가 가지고있는 찜 리스트만 불러온다. 
-                const response = await axios.get('http://localhost:3000/orders/wish', userId);
+                const response = await axios.get(`http://localhost:3000/orders/wish/${userId}`); 
+                                                                        // get 요청보낼때는 data 말고 params로 보내자
                 this.userWishList = response.data;
             } catch(err){
                 console.error(err);
