@@ -2,12 +2,10 @@
 <div>
 
   <div class="clear">
-  
       <button class="login-button" @click="$router.push('/login')">로그인</button>
       <button class="login-button" @click="$router.push('/createAccount')">회원가입</button>
       <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
-      <button @click="$router.push('/mypage')">마이페이지</button>
-       
+      <button @click="$router.push('/mypage')">마이페이지</button>       
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">

@@ -7,6 +7,7 @@ import MypageView from '../views/MypageView.vue'
 import OrderView from '../views/OrderView.vue';
 import productList from '../components/list/productList.vue';
 
+
 const routes = [
   {
     path: '/',
