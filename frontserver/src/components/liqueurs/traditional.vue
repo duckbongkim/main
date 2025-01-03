@@ -1,7 +1,7 @@
 <template>
 <div>
     <h1>Test Page</h1>
-    <p>이 페이지는 테스트용으로 만들었습니다.</p>
+    <p>이 페이지는 동양주류 리스트입니다.</p>
 </div>
 </template>
 
