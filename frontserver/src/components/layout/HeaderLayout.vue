@@ -2,25 +2,10 @@
 <div>
 
   <div class="clear">
-
-    <header>
-      <button class="login-button" @click="getaccount('/login')">로그인</button>
-    </header>
-
-    <header>
-      <button class="basket-button" @click="$getaccount('/basket')">장바구니</button>
-    </header>    
-
-    <header>
-      <button class="createAccount-button" @click="getaccount('/createAccount')">회원가입</button>
-    </header>    
-
-
       <button class="login-button" @click="$router.push('/login')">로그인</button>
-      <button class="login-button" @click="$router.push('/createAccount')">회원가입(임시로 만든 버튼, 우진씨가 버튼 만들면 그걸루 변경)</button>
+      <button class="login-button" @click="$router.push('/createAccount')">회원가입</button>
       <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
-       
-
+      <button @click="$router.push('/mypage')">마이페이지</button>       
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
@@ -42,40 +27,30 @@
             주류
           </a>
           <ul class="dropdown-menu">
-            <li><p class="inner-title">하이볼</p></li>
-            <li><a class="dropdown-item" @click="goToMenu('/test')">버번 위스키 하이볼</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/string')">코슈 하이볼</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/html')">로얄 오크 하이볼</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/attribute')">고베 쿄류치 하이볼</a></li>
-            <li><p class="inner-title">위스키</p></li>
-            <li><a class="dropdown-item" @click="goToMenu('/class')">잭 다니엘스 테네시 허니</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/list')">탈리스만</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/input')">에반 윌리엄스 블랙</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/tt')">라벨 5</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/CBS')">제임슨 스탠다드</a></li>
-          </ul>
+
+            <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
+            <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
+            <li><a class="inner-title" @click="goToMenu('/whiskey')">위스키</a></li>      
+            <li><a class="inner-title" @click="goToMenu('/traditional')">동양주류</a></li>               
+          </ul>           
         </li>
+        
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" aria-expanded="false">
-            Day3
+            etc 상품
           </a>
           <ul class="dropdown-menu">
-            <li ><p class="inner-title">Event</p></li>
-            <li><a class="dropdown-item" @click="goToMenu('/click')">Click</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/change')">Change</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/change2')">Change2</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/key')">Key</a></li>
-            <li ><p class="inner-title">Extra</p></li>
-            <li><a class="dropdown-item" @click="goToMenu('/render')">Render</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/rendershow')">RenderShow</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/computed')">Computed</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/watch')">Watch</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/lifecycle')">LifeCycle</a></li>
+            <li><a class="inner-title" @click="goToMenu('/glass')">와인잔</a></li> 
+            <li><a class="inner-title" @click="goToMenu('/holder')">와인홀더</a></li> 
+            <li><a class="inner-title" @click="goToMenu('/opener')">와인오프너</a></li> 
+            <li><a class="inner-title" @click="goToMenu('/onetherock')">온더락잔</a></li> 
+            <li><a class="inner-title" @click="goToMenu('/straight')">스트레이트 잔</a></li> 
+            <li><a class="inner-title" @click="goToMenu('/decanter')">위스키 디캔터</a></li>
           </ul>
         </li>
           <!-- 커뮤니티 -->
           <li class="nav-item">
-            <a class="nav-link" >커뮤니티</a>
+            <a class="nav-link" @click="goToMenu('/test')">커뮤니티</a>
           </li>
       </ul>
     </div>
