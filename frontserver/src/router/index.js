@@ -1,7 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import MainView from '../views/MainView.vue'
-import AdminView from '../views/AdminView.vue'
-import ProductView from '../views/ProductView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import MainView from '../views/MainView.vue';
+import AdminView from '../views/AdminView.vue';
+import ProductView from '../views/ProductView.vue';
+import OrderView from '../views/OrderView.vue';
+
 const routes = [
   {
     path: '/',
@@ -12,7 +14,7 @@ const routes = [
     path: '/products/:product_id', //products에서 products/:product_id로 변경 (25,1,1 동진)
     name: 'products',
     component: ProductView
-  },
+  }, 
   {
     path: '/createAccount', //products에서 products/:product_id로 변경 (25,1,1 동진)
     name: 'createAccount',
@@ -48,6 +50,10 @@ const routes = [
         component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
       },
       {
+        path:'products/',
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
+      },
+      {
         path:'manageProducts/', //products에서 manageProducts로 변경 (241230 누리)
         name:'manageProducts',
         component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
@@ -72,35 +78,39 @@ const routes = [
       },
       {
         path:'productLocations/',
+
         component: () => import(/* webpackChunkName: "manageProductLocations" */ '../components/admin/manageProductLocations.vue')
       },
       {
         path:'cart/',
-        name:'cart',
-        component: () => import(/* webpackChunkName: "about" */ '../components/orders/userCart.vue')
-      },
-      {
-        path:'wish/',
-        name:'wish',
-        component: () => import(/* webpackChunkName: "about" */ '../components/orders/userWishes.vue')
-      },
-      {
-        path:'order/',
-        name:'order',
-        component: () => import(/* webpackChunkName: "about" */ '../components/orders/makeOrder.vue')
 
+        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProductLocations.vue')
       },
     ]
   },
+  {
+    path: '/orders',
+    name: 'orders',
+    component: OrderView,
+    children:[
+      {
+        path:'/cart',
 
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
+        name:'cart',
+        component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userCart.vue')
+      },
+      {
+        path:'/wish',
+        name:'wish',
+        component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userWishes.vue')
+      },
+      {
+        path:'/order',
+        name:'order',
+        component: () => import(/* webpackChunkName: "orders" */ '../components/orders/makeOrder.vue')
+      },
+    ]
+  },
 ]
 
 const router = createRouter({
