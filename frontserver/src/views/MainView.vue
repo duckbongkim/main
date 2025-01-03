@@ -9,7 +9,7 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active test">
-          <img src="img\곰표.jpg" class="d-block w-100" alt="01">
+            <img src="img\곰표.jpg" class="d-block w-100" alt="01">
         </div>
         <div class="carousel-item test">
           <img src="img\청하.jpg" class="d-block w-100" alt="02">
@@ -72,7 +72,7 @@
 
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">
+          <div class="swiper-slide" v-for="(slide, index) in slides" :key="index">
             <img src="img\곰표.jpg" alt="2021 뉴이어, 스타벅스와 함께 즐겁고 활기차게 시작하세요!" />
             <a href="javascript:void(0)" class="btn">자세히 보기</a>
           </div>
@@ -143,43 +143,84 @@
       </div>
     </div>
 
-    <!-- 싼 가격대 추천 -->
     <div class="promotion">
-
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2021 뉴이어, 스타벅스와 함께 즐겁고 활기차게 시작하세요!" />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="기간 내 스타벅스 카드 e-Gift를 3만원 이상 선물 시, 아메리카노 e-쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="뉴이어 푸드와 제조 음료를 세트로 구매 시, 뉴이어 음료 BOGO(1+1) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="신년 MD 상품 포함 3만원 이상 구매 고객께 아메리카노(톨사이즈) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2017 DIGITAL LUCKY DRAW 100% 당첨의 행운을 드립니다!" />
-            <a href="javascript:void(0)" class="btn btn-primary">자세히 보기</a>
+          <!-- v-for로 동적으로 슬라이드 생성 -->
+          <div class="swiper-slide" v-for="(item, index) in main" :key="index">
+            <img :src="item.imgSrc" :alt="item.altText" />
+            <a href="javascript:void(0)" class="btn">{{ mainData }}</a>
           </div>
         </div>
       </div>
 
       <div class="swiper-pagination"></div>
-
-      <div class="swiper-prev swiper-button">
-        <span class="material-icons arrow_back">arrow_back_ios</span>
-      </div>
-      <div class="swiper-next swiper-button">
-        <span class="material-icons arrow_forward">arrow_forward_ios</span>
+        <div class="swiper-prev swiper-button">
+          <span class="material-icons arrow_back">arrow_back_ios</span>
+        </div>
+        <div class="swiper-next swiper-button">
+          <span class="material-icons arrow_forward">arrow_forward_ios</span>
       </div>
     </div>
+
+    <section>
+      <h2>비싼 가격순</h2>
+      <ul class="product-list">
+        <li v-for="item in mainData.expensive" :key="item.id" @click="goProducts(item.id)">
+          <img :src="item.product_image" alt="Product Image" />
+          <p>{{ item.product_description }}</p>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>싼 가격순</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <ul class="product-list">
+        <li v-for="item in mainData.cheap" :key="item.id" @click="goProducts(item.id)">
+          <img :src="item.product_image" alt="Product Image" />
+          <p>{{ item.product_description }}</p>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>20대 추천</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <ul class="product-list">
+        <li v-for="item in mainData.recommend['20대 베스트']" :key="item.id" @click="goProducts(item.id)">
+          <img :src="item.product_image" alt="Product Image" />
+          <p>{{ item.product_description }}</p>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>30대 추천</h2> <!-- 이건 어떻게 받아와야 하지? -->
+      <ul class="product-list">
+        <li v-for="item in mainData.recommend['30대 베스트']" :key="item.id" @click="goProducts(item.id)">
+          <img :src="item.product_image" alt="Product Image" />
+          <p>{{ item.product_description }}</p>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>신상품</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <ul class="product-list">
+        <li v-for="item in mainData.newProduct" :key="item.id" @click="goProducts(item.id)">
+          <img :src="item.product_image" alt="Product Image" />
+          <p>{{ item.product_description }}</p>
+          <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
+        </li>
+      </ul>
+    </section>
+
+
+
+
 
 
 
@@ -188,18 +229,35 @@
 
 
 <script>
+import axios from 'axios';
+
 export default{ 
     name:'',
     components:{},
     computed:{},
     data(){
         return{
+          mainData:{
+            expensive:[],
+            cheap:[],
+            newProduct:[],
+            recommend:{},
+          },
+          bestSeller:{
+            
+          },
+
 
         };
     },
     setup(){},
     created(){},
     mounted(){
+
+
+
+      this.getmain();
+
       new Swiper('.swiper-container', {
       slidesPerView: 1,
       spaceBetween: 10,
@@ -207,14 +265,25 @@ export default{
         el: '.swiper-pagination',
         clickable: true,
       },
-    })
-    },
-
+    });
+  },
+    
     unmounted(){},
     methods:{
-      
+      async getmain(){
+        try{
+          const response = await axios.get("http://localhost:3000/") 
+          this.mainData = response.data
+          console.log(response)
+        }catch(err){
+          console.error(err)
+        }
+      },
+      goProducts(product_id){ // 1월1일(동진) 상품 클릭시 해당 상품의 아이디를 가지고 이동되는 메소드
+        this.$router.push(`/products/${product_id}`)
     },
-    watch:{}
+  }
+
 }
 </script>
 
@@ -292,9 +361,7 @@ export default{
   .promotion .swiper-pagination .swiper-pagination-bullet:last-child {
     margin-right: 0;
   }
-  .notice .promotion .swiper-pagination .swiper-pagination-bullet-active {
-
-  }
+  
   .promotion .swiper-prev,
   .promotion .swiper-next {
     width: 42px;
@@ -337,6 +404,18 @@ export default{
   .arrow_forward{
     position: absolute;
     right: 15%;
+  }
+
+  .product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .product-list li {
+    list-style: none;
+    cursor: pointer;
   }
 
 </style>

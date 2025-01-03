@@ -4,7 +4,7 @@ class Products extends Sequelize.Model {
     static initiate(sequelize){
         Products.init({
             product_name:{
-                type: Sequelize.STRING(20),
+                type: Sequelize.STRING(200),
                 allowNull: false,
             },
             product_price:{
@@ -29,7 +29,7 @@ class Products extends Sequelize.Model {
             },
             drink_type:{
                 type: Sequelize.STRING(20),
-                allowNull: true,
+                allowNull: false,
             },
             product_kind:{
                 type: Sequelize.STRING(20),

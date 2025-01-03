@@ -12,8 +12,7 @@ const RecommendTags = require('./model_recommendTags.js');
 const Replies = require('./model_replies.js');
 const Searched = require('./model_searched.js');
 const SupplyFactory = require('./model_supplyFactory.js');
-
-
+const Wishes = require ('./model_wishes.js');
 
 
 //환경변수 설정
@@ -65,6 +64,16 @@ Searched.initiate(sequelize);
 db.SupplyFactory = SupplyFactory;
 SupplyFactory.initiate(sequelize);
 
+//!!지우지마셈!! 
+// 250103누리) 다대다로 인해 생성되는 중간테이블 정의하기.
+db.Wishes = Wishes; // 정의된 sequelize wish를 db에 넣기. 
+Wishes.initiate(sequelize); 
+    // init 메서드는 테이블을 생성도 하지만, 기존 테이블과 Sequelize 모델을 연결하는 작업이기도 함. 
+    // DB와 Sequelize 모델을 연결하고 모델의 정의와 DB 테이블의 구조를 일치시킴.
+    // 테이블을 새로 만들지 않더라도 sequelize에서 이 db테이블을 모델로 다룰 수 있도록 초기화해줘야함.
+
+
+
 
 //테이블 관계 설정
 //Products
@@ -72,11 +81,14 @@ db.Products.belongsTo(db.ProductLocations,{foreignKey: { name: 'product_location
 db.ProductLocations.hasMany(db.Products,{foreignKey: { name: 'product_location_id', allowNull: true }, sourceKey:'id'});
 db.Products.belongsTo(db.SupplyFactory,{foreignKey: { name: 'supply_factory_id', allowNull: true }, targetKey:'id'});
 db.SupplyFactory.hasMany(db.Products,{foreignKey: { name: 'supply_factory_id', allowNull: true }, sourceKey:'id'});
-// N:M
+// N:M 다대다, 중간테이블로 연결.
 db.Products.belongsToMany(db.RecommendTags, { through: 'ProductsRecommendTags', foreignKey: 'product_id' });
 db.RecommendTags.belongsToMany(db.Products, { through: 'ProductsRecommendTags', foreignKey: 'recommend_tag_id' });
-db.Products.belongsToMany(db.Accounts, { through: 'Wishes', foreignKey: 'product_id' }); //Wishes -> 찜 테이블 명
-db.Accounts.belongsToMany(db.Products, { through: 'Wishes', foreignKey: 'account_id' });
+
+
+/// (250103누리) through : 'wishes' 에서, Wishes를 import 하여 실제 db.Wishes로 변경.
+db.Products.belongsToMany(db.Accounts, { through: db.Wishes, foreignKey: 'product_id' }); //Wishes -> 찜 테이블 명
+db.Accounts.belongsToMany(db.Products, { through: db.Wishes, foreignKey: 'account_id' });
 
 
 
@@ -115,7 +127,13 @@ db.Replies.belongsTo(db.Products,{foreignKey: { name: 'product_id'}, targetKey:'
 db.Products.hasMany(db.Replies,{foreignKey: { name: 'product_id'}, sourceKey:'id'});
 
 //account
-db.Accounts.belongsTo(db.Ratings,{foreignKey: { name: 'rating_id'}, targetKey:'id'});
-db.Ratings.hasMany(db.Accounts,{foreignKey: { name: 'rating_id'}, sourceKey:'id'});
+db.Accounts.belongsTo(db.Ratings,{foreignKey: { name: 'rating_id',defaultValue:1}, targetKey:'id'});
+db.Ratings.hasMany(db.Accounts,{foreignKey: { name: 'rating_id',defaultValue:1}, sourceKey:'id'});
+
+
+//250103 누리) wishes
+db.Wishes.belongsTo(db.Accounts, { foreignKey: 'account_id', targetKey: 'id'});
+db.Wishes.belongsTo(db.Products, { foreignKey : 'product_id', targetKey : 'id'});
+
 
 module.exports = db;

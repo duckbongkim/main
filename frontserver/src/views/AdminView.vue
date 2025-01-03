@@ -1,7 +1,7 @@
 <template>
 <div>
   <Sidebar />
-  <div>
+  <div class="container">
     <router-view />
   </div>
 
@@ -24,10 +24,21 @@ export default{
   },
   setup(){},
   created(){},
-  mounted(){},
+  mounted(){
+    
+  },
   unmounted(){},
-  methods:{},
+  methods:{
+    
+  },
   watch:{}
 }
 </script>
 
+<style scoped>
+.container{
+  margin-left: 250px;
+  margin-top: 20px;
+  width: 100%;
+}
+</style>

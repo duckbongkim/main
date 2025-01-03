@@ -1,6 +1,9 @@
 <template>
 <div>
-    <h1>사용자 추가 넣을 자리</h1>
+    <div class=header-container>
+        <h1>Manage Users</h1>
+        <button class="btn btn-primary" @click="goToMenu('/admin/addAccount')">사용자 추가</button>
+    </div>
     <div class='manage-users-container'>
         <table class="table">
             <thead>
@@ -44,7 +47,7 @@
                     <td>{{user.delete_time}}</td>
                     <td>{{user.super_admin ? '관리자' : '사용자'}}</td>
                     <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="modifyUser(user)">수정</button></td>
-                    <td><button class="btn btn-danger">삭제</button></td>
+                    <td><button class="btn btn-danger" @click="deleteUser(user)">삭제</button></td>
                 </tr>
             </tbody>
         </table>
@@ -158,6 +161,9 @@ export default{
     },
     unmounted(){},
     methods:{
+        goToMenu(path){
+                this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
+        },
         async getUsers(){
             try{
                 const response = await axios.get('http://localhost:3000/admin/users');
@@ -207,9 +213,15 @@ export default{
 </script>
 
 <style scoped>
-.manage-users-container{
-    margin-top: 20px;
-    margin-left:250px;
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-container h1 {
+    margin: 0;
 }
 
 .btn {
