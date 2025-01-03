@@ -49,11 +49,11 @@
             <li><a class="dropdown-item" @click="goToMenu('/html')">로얄 오크 하이볼</a></li>
             <li><a class="dropdown-item" @click="goToMenu('/attribute')">고베 쿄류치 하이볼</a></li>
             <li><p class="inner-title">위스키</p></li>
-            <li><a class="dropdown-item" @click="goToMenu('/class')">잭 다니엘스 테네시 허니</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/list')">탈리스만</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/input')">에반 윌리엄스 블랙</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/tt')">라벨 5</a></li>
-            <li><a class="dropdown-item" @click="goToMenu('/CBS')">제임슨 스탠다드</a></li>
+            <li><a class="dropdown-item" @click="goToMenu('/liqueur')">잭 다니엘스 테네시 허니</a></li>
+            <li><a class="dropdown-item" @click="goToMenu('/liqueur/whisky')">탈리스만</a></li>
+            <li><a class="dropdown-item" @click="goToMenu('/liqueur/highball')">에반 윌리엄스 블랙</a></li>
+            <li><a class="dropdown-item" @click="goToMenu('/liqueur/wine')">라벨 5</a></li>
+            <li><a class="dropdown-item" @click="goToMenu('/liqueur/traditional')">제임슨 스탠다드</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
