@@ -4,21 +4,19 @@
   <div class="clear">
 
     <header>
-      <button class="login-button" @click="getaccount('/login')">로그인</button>
+      <button class="login-button" @click="goToMenu('/login')">로그인</button>
     </header>
-
     <header>
-      <button class="basket-button" @click="$getaccount('/basket')">장바구니</button>
+      <button class="basket-button" @click="goToMenu('/basket')">장바구니</button>
     </header>    
-
     <header>
-      <button class="createAccount-button" @click="getaccount('/createAccount')">회원가입</button>
-    </header>    
+      <button class="createAccount-button" @click="goToMenu('/createAccount')">회원가입</button>
+    </header>
+    <header>
+      <button class="createAccount-button" @click="goToMenu('/mypage')">마이페이지</button>
+    </header>      
 
 
-      <button class="login-button" @click="$router.push('/login')">로그인</button>
-      <button class="login-button" @click="$router.push('/createAccount')">회원가입(임시로 만든 버튼, 우진씨가 버튼 만들면 그걸루 변경)</button>
-      <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
        
 
   </div>
