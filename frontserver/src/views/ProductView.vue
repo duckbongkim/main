@@ -215,23 +215,35 @@ export default{
 
                 //const userId = this.session.userId;
                 const userId = this.dummy.userid;
-                console.log(`######################################################${userId}`)
                 const userWish = {
                     userId,
                     product_Id : this.selectedProduct.id,
                 };
-                await axios.post(`http://localhost:3000/orders/wish/`, userWish);
+                
+                const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
+                if(response.status == 201) {
+                    console.log(response.data.message);
+                }
+
+
+
 
                 // 2. 찜에 추가되었습니다.
                 const GotoWish = confirm("찜가실?");
                 if(GotoWish) {
-                await this.$router.push('/orders');               
+                    const response = await this.$router.push('/orders');   
                     /// frontserver/src/router/index.js 에 라우터 추가 
                 } else {
                     alert("상품이 찜에 추가됐다.");
                 }
             } catch(err) {
+                //찜에 중복된 상품이 들어갈 경우(409) 에러처리
+                // 에러가 있는지, 그 에러의 status가 409인지
+                if(err.response && err.response.status == 409){
+                    alert(err.response.data.message);
+                } else {
                 console.error(err);
+                }
             }
         },
 
