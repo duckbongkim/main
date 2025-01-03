@@ -5,6 +5,7 @@ import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
 import test from '../components/layout/test.vue'; // nav바 주류리스트로 이동하는지 테스트 입니다.
+import OrderView from '../views/OrderView.vue';
 
 
 
@@ -86,7 +87,6 @@ const routes = [
       },
       {
         path:'cart/',
-
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProductLocations.vue')
       },
     ]
