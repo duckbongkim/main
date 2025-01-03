@@ -18,7 +18,7 @@
 
       <!-- 소셜 로그인 버튼 -->
       <div class="social-login">
-        <button class="kakao-btn">카카오 로그인</button>
+        <button @click="kakaoLogin" class="kakao-btn">카카오 로그인</button>
         <button class="naver-btn">네이버 로그인</button>
       </div>
 
@@ -79,9 +79,13 @@ export default{
                 console.error(error);
             }
         },
+        kakaoLogin(){
+            window.location.href = 'http://localhost:3000/auth/kakao'; //소셜 로그인은 토큰 받으러 해당 페이지로 이동해야 하기 때문에 axios요청을 보내면 안됌.
+        },
         async logout() {
             try {
-                const response = await axios.post('http://localhost:3000/auth/logout',{},{withCredentials:true});
+               
+                const response = await axios.post('http://localhost:3000/auth/logout',{},{withCredentials:true}); //빈 오브젝트 파라미터를 꼭 넣어줘야함. post요청을 파라미터 3개를 받아야 해서 2개만 넣으면 세션 역 직렬화가 이상하게 되는 등의 문제가 생김.
                 console.log("response",response);
                 if (response.status === 200) {
                     this.isLoggedIn = false;
