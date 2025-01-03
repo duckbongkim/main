@@ -9,7 +9,7 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active test">
-          <img src="img\곰표.jpg" class="d-block w-100" alt="01">
+            <img src="img\곰표.jpg" class="d-block w-100" alt="01">
         </div>
         <div class="carousel-item test">
           <img src="img\청하.jpg" class="d-block w-100" alt="02">
@@ -143,42 +143,6 @@
       </div>
     </div>
 
-    <!-- 싼 가격대 추천 -->
-    <!-- <div class="promotion">
-
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2021 뉴이어, 스타벅스와 함께 즐겁고 활기차게 시작하세요!" />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="기간 내 스타벅스 카드 e-Gift를 3만원 이상 선물 시, 아메리카노 e-쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="뉴이어 푸드와 제조 음료를 세트로 구매 시, 뉴이어 음료 BOGO(1+1) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="신년 MD 상품 포함 3만원 이상 구매 고객께 아메리카노(톨사이즈) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2017 DIGITAL LUCKY DRAW 100% 당첨의 행운을 드립니다!" />
-            <a href="javascript:void(0)" class="btn btn-primary">자세히 보기</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="swiper-pagination"></div>
-      <div class="swiper-prev swiper-button">
-        <span class="material-icons arrow_back">arrow_back_ios</span>
-      </div>
-      <div class="swiper-next swiper-button">
-        <span class="material-icons arrow_forward">arrow_forward_ios</span>
-      </div>
-    </div> -->
     <div class="promotion">
       <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -254,6 +218,12 @@
       </ul>
     </section>
 
+
+
+
+
+
+
 </div>
 </template>
 
@@ -309,7 +279,6 @@ export default{
           console.error(err)
         }
       },
-
       goProducts(product_id){ // 1월1일(동진) 상품 클릭시 해당 상품의 아이디를 가지고 이동되는 메소드
         this.$router.push(`/products/${product_id}`)
     },
