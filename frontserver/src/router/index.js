@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
+import MypageView from '../views/MypageView.vue'
 import test from '../components/layout/test.vue'; // nav바 주류리스트로 이동하는지 테스트 입니다.
 
 
@@ -85,6 +86,12 @@ const routes = [
       },
     ]
   },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: MypageView
+  }, // 마이페이지 view 추가
+
   {
     path: '/orders',
     name: 'orders',
