@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
 
 //상품 검색 (검색창에 검색할때 사용할 기능)
 router.get('/search', (req, res) => {
-  const { product_name, product_description, product_kind } = req.query;
+  const { product_name, product_description, drink_type, product_kind } = req.query;
   let query = 'SELECT * FROM products WHERE 1=1'; 
 
   // 검색 조건에 따른 쿼리에 추가작성
@@ -51,6 +51,9 @@ router.get('/search', (req, res) => {
   if (product_description) {
     query += ` AND product_description LIKE ?`; 
   }
+  if (drink_type) {
+    query += ` AND drink_type LIKE ?`;
+  }
   if (product_kind) {
     query += ` AND product_kind LIKE ?`;
   }
@@ -59,6 +62,7 @@ router.get('/search', (req, res) => {
   const values = [];
   if (product_name) values.push(`%${product_name}%`);
   if (product_description) values.push(`%${product_description}%`);
+  if (drink_type) values.push(`%${drink_type}%`);
   if (product_kind) values.push(`%${product_kind}%`);
 
   // 쿼리 실행
@@ -72,12 +76,12 @@ router.get('/search', (req, res) => {
 })
 
 //품목별 상품 조회 
-router.get('/:product_kind', async (req, res) => {
-  const { product_kind } = req.params;  
-  const query = 'SELECT * FROM products WHERE product_kind = ?';  
+router.get('/:drink_type', async (req, res) => {
+  const { drink_type } = req.params;  
+  const query = 'SELECT * FROM products WHERE drink_type = ?';  
   
   try {
-    const [results] = await productList.promise().query(query, [product_kind]);
+    const [results] = await productList.promise().query(query, [drink_type]);
     res.json(results); 
   } catch (err) {
     console.error('상품 목록 조회 실패:', err);
@@ -88,4 +92,3 @@ router.get('/:product_kind', async (req, res) => {
 
 module.exports = router;
 
-// 데이터가 빈값으로 들어옴...
