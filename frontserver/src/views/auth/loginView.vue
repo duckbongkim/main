@@ -19,7 +19,7 @@
       <!-- 소셜 로그인 버튼 -->
       <div class="social-login">
         <button @click="kakaoLogin" class="kakao-btn">카카오 로그인</button>
-        <button class="naver-btn">네이버 로그인</button>
+        <button @click="naverLogin" class="naver-btn">네이버 로그인</button>
       </div>
 
       <!-- 회원가입 링크 -->
@@ -81,6 +81,9 @@ export default{
         },
         kakaoLogin(){
             window.location.href = 'http://localhost:3000/auth/kakao'; //소셜 로그인은 토큰 받으러 해당 페이지로 이동해야 하기 때문에 axios요청을 보내면 안됌.
+        },
+        naverLogin(){
+            window.location.href = 'http://localhost:3000/auth/naver';
         },
         async logout() {
             try {
