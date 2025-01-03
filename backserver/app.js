@@ -62,10 +62,10 @@ app.use(passport.session());
 
 
 //라우터 
-app.use('/',indexRouter);
-app.use('/admin',adminRouter);
+app.use('/',indexRouter); //mainPage Router
+app.use('/admin',adminRouter); //adminPage Router
 app.use('/products',productRouter);// 1월1일 productRouter 추가
-app.use('/login',loginRouter);
+app.use('/auth',loginRouter); //loginRouter
 app.use('/class',listRouter);
 app.use('/orders',orderRouter);// 1월2일 orderRouter 추가 (누리)
 

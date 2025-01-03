@@ -26,6 +26,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "createAccount" webpackPrefetch:true*/ '../views/auth/createAccountView.vue')
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "login" webpackPrefetch:true*/ '../views/auth/loginView.vue')
+  },
+  {
     path: '/admin',
     name: 'admin',
     component: AdminView,
@@ -82,7 +87,6 @@ const routes = [
       },
       {
         path:'cart/',
-
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProductLocations.vue')
       },
     ]

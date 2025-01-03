@@ -27,10 +27,7 @@ passport.use(new LocalStrategy({ //passport-local 객체 생성, 이렇게 만�
         }
 
         //비밀번호 검증
-        console.log('password',password);
         const hash = await crypto(password);
-        console.log('hash',hash);
-        console.log('user.password',user.password);
         if(user.password != hash){
             return done(null,false,{message:'비밀번호가 일치하지 않음'});
         }
@@ -60,7 +57,7 @@ passport.deserializeUser(async (id,done)=>{//세션에 저장된 데이터를 �
 });
 
 exports.localLogin = async (req,res,next)=>{ //여기서 받은 데이터를 
-    console.log(req.body);
+    console.log("localLogin req.body",req.body);
     passport.authenticate('local',(authError,user,info)=>{//여기서 우리가 만든 local이라는 로그인 인증 방식으로 가서 확인 후에 done에 있는 파라미터가 여기에(authError,user,info) 똑같이 들어옴.
                                 //passport 를 통한 로그인. 첫번째 인자는 전략(우리가 만들어줘야 함. 예를 들어 암호화 등을 어떻게 처리했는지 적용해 줘야함.), 두번째 인자는 콜���함수()
         console.log('login user',user);

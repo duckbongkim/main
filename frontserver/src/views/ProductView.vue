@@ -82,28 +82,11 @@
                 <p>{{pro.product_price}}원</p>
             </a>
 
-            
-
-        
-
-    </div>
-
-
         </div>
-
-    </section>
-
-
-
-
-
-
-
+    </div>
+</section>
 
 <productInfoVue :product="selectedProduct"/>
-
-
-
 </div>
 </template>
 
