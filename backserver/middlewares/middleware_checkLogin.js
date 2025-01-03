@@ -1,11 +1,13 @@
-exports.isLoggedIn = (req,res,next)=>{
-    if(req.isAuthenticated()){//passport에서 제공하는 메서드. 로그인 돼있으면 true리턴.
+exports.isLoggedIn = (req, res, next) => {
+    if (req.isAuthenticated()) {
         next();
+    } else {
+        console.log("세션 정보:", req.session);
+        console.log("인증 상태:", req.isAuthenticated());
+        console.log("사용자 정보:", req.user);
+        res.status(403).json({message: 'need login'});
     }
-    else{//login이 안돼있는 경우.
-        res.status(403).send('need login');
-    }
-}
+};
 exports.isNotLoggedIn = (req,res,next)=>{
     if(!req.isAuthenticated()){
         next();
