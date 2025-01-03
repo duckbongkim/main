@@ -3,11 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
-import test from '../components/layout/test.vue'; // nav바 주류리스트로 이동하는지 테스트 입니다.
-import OrderView from '../views/OrderView.vue'; // oderView 추가 (25,1,2 동진)
-import myPageView from '../views/MyPageView.vue'; // myPageView 추가 (25,1,2 동진)
-
-
+import MypageView from '../views/MypageView.vue'
+import OrderView from '../views/OrderView.vue';
+import productList from '../components/list/productList.vue';
 
 const routes = [
   {
@@ -21,9 +19,26 @@ const routes = [
     component: ProductView
   }, 
   {
-    path: '/createAccount', //products에서 products/:product_id로 변경 (25,1,1 동진)
+    path: '/createAccount', 
     name: 'createAccount',
     component: () => import(/* webpackChunkName: "createAccount" webpackPrefetch:true*/ '../views/auth/createAccountView.vue')
+  },
+  {
+
+    path: '/liqueur', // 상품리스트 임시용
+    name: 'liqueur',
+    component: productList
+  },
+  {
+    path: '/liqueur/:drink_type', // 상품리스트 임시용
+    name: 'drink_type',
+    component: productList,
+    props: true
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "login" webpackPrefetch:true*/ '../views/auth/loginView.vue')
   },
   {
     path: '/admin',
@@ -82,11 +97,16 @@ const routes = [
       },
       {
         path:'cart/',
-
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProductLocations.vue')
       },
     ]
   },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: MypageView
+  }, // 마이페이지 view 추가
+
   {
     path: '/orders',
     name: 'orders',
@@ -114,17 +134,28 @@ const routes = [
 
   // 2025-01-02 김우진 nav바에서 주류사이트로 이동이 가능하게 components에 test를 만들어서 연결 시켰습니다.성공!!
   {
-  path: '/layout',
-  name: 'layout',
-  component: test,
-  children:[
-    {
-      path:'/test',
-      name:'test',
-      component: () => import(/* webpackChunkName: "about" */ '../components/layout/test.vue')
-  
-    },
-  ]
+    path:'/liqueur',
+    name:'liqueur',
+    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/liqueur.vue')
+
+  },
+  {
+    path:'/whiskey',
+    name:'whiskey',
+    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/whiskey.vue')
+
+  },
+  {
+    path:'/wine',
+    name:'wine',
+    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/wine.vue')
+
+  },
+  {
+    path:'/traditional',
+    name:'traditional',
+    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
+
   },
   {
     path: '/mypage',
@@ -132,6 +163,49 @@ const routes = [
     component: myPageView
   },
   
+  // 2025-01-03 김우진 여기는 etc상품 이동 라우터 입니다.
+  {
+    path:'/glass',
+    name:'glass',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/glass.vue')
+
+  },
+  {
+    path:'/holder',
+    name:'holder',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/holder.vue')
+
+  },
+  {
+    path:'/opener',
+    name:'opener',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/opener.vue')
+
+  },
+  {
+    path:'/ontherocks',
+    name:'ontherocks',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/ontherocks.vue')
+
+  },
+  {
+    path:'/straight',
+    name:'straight',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/straight.vue')
+
+  },
+  {
+    path:'/decanter',
+    name:'decanter',
+    component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
+
+  },
+
+
+
+
+
+
   // {
   //   path: '/about',
   //   name: 'about',
