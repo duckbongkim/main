@@ -151,12 +151,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
 
   },
-  {
-    path: '/mypage',
-    name: 'mypage',
-    component: myPageView
-  },
-  
   // 2025-01-03 김우진 여기는 etc상품 이동 라우터 입니다.
   {
     path:'/glass',
