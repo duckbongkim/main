@@ -26,7 +26,7 @@
         <section class="middle-content2"> <!--  -->
             <div class="middle-div2">
                 <p>배송지 관리</p>
-                <p></p>
+                <p>얼레벌레</p>
             </div>
         </section>
     </div>
