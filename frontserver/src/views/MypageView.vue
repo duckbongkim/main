@@ -1,54 +1,58 @@
 <template>
-<div>
-    <div class="container">
-
-        <section class="top-content"> 
-            <div class="div1">
-              <p>{{user.nickname}}</p> 
-              <span>내 정보 수정</span>
-            </div> <!-- 유저 의 닉네님 이메일이 보여주는 구역-->
-
-            <div class="div2">
-            <p>등급</p>
-            <p>적립금</p>    
-            </div> <!-- 유저의 등급과 적립금을 보여주는 구역-->
-        </section>
-
-        <section class="middle-content"> <!-- 주문목록 찜목록 이동할수 있는 링크 버튼들  -->
-            <div class="middle-div1">
-                <p>주문목록</p>
-                <p>찜</p>
-                <p>내가 쓴 게시글 조회</p>
-                <p>최근 본 상품</p>
-            </div> 
-        </section>
-
-        <section class="middle-content2"> <!--  -->
-            <div class="middle-div2">
-                <p>배송지 관리</p>
-                <p>얼레벌레</p>
-            </div>
-        </section>
+  <div class="mypage-container">
+    <!-- User Info Section -->
+    <div class="user-info">
+      <div class="user-details">
+        <div>
+          <h2>{{ user.nickname }} 님은 {{ rating.rating_name }} 등급 입니다.</h2>
+          <button class="edit-btn">내 정보 수정</button>
+        </div>
+      </div>
+      <div class="user-balance">
+        <h3 >적립금</h3>
+        <p >{{ user.ratingPoint }}원</p>
+      </div>
     </div>
-</div>
+
+    <!-- Icon Menu Section -->
+    <div class="icon-menu">
+      <div class="menu-item" @click="$router.push('/mypage/orderList')">주문배송</div>
+      <div class="menu-item">찜한상품</div>
+      <div class="menu-item">장바구니</div>
+      <div class="menu-item" @click="$router.push('/mypage/postList')">내 게시글 보기</div>
+      <div class="menu-item">최근본상품</div>
+    </div>
+
+    <!-- Recommended Products -->
+    <div class="recommend-section">
+      <router-view />
+    </div>
+
+    <!-- Regular Purchase Section -->
+    <div class="regular-purchase">
+    </div>
+  </div>
+
 </template>
+
 <script>
 import axios from 'axios'
 export default{ 
     name:'',
-    components:{},
+    components:{
+    },
     data(){
         return{
-            user:{
-                nickname:'',
-                email:''
-                }
+            user:{},
+            rating:{},
+           
         };
     },
     setup(){},
     created(){},
     mounted(){
         this.getUser()
+        this.getRating()
     },
     unmounted(){},
     methods:{
@@ -64,64 +68,135 @@ export default{
                 console.error(err)
                 }  
             }
-         }
+         },
+
+         async getRating(){
+            try{
+                const res = await axios.get(`http://localhost:3000/profile/ratings`,{withCredentials:true})
+                this.rating = res.data
+                this.rating = this.rating.find((rating)=>rating.id === this.user.rating_id)
+                console.log('유저 등급',this.rating)
+            }catch(err){
+                console.error(err)
+            }
+         },
+         
         }
     }
     
 </script>
 
 <style scoped>
-.container {
-    width: 100%;
-    margin: 0 auto;
+
+.mypage-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.top-content {
-    width: 60%;
-    display: flex;
-    justify-content: center;
-    gap: 5%;
-    margin:30px auto 0 auto;
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: calc(12px + 0.5vw); /* 텍스트 크기: 화면 크기에 따라 조정 */
 }
 
-.div1 {
-    width: 50%;
-    height: 100px;
-    float: left;
-    border-radius: 10px;
-   
-}
-.div2 {
-    background-color: yellow;
-    width: 50%;
-    height: 100px;
-    border-radius: 10px;
- 
+.user-details {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-.middle-content {
-    width: 60%;
-    margin: 30px auto 0 auto;
-    border-radius: 10px;
+.profile-img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
 }
 
-.middle-div1 {
-    height: 150px;
-    width: 100%;
-    background-color: yellow;
-    border-radius: 10px;
+.edit-btn {
+  background: #0073e6;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: calc(10px + 0.3vw); /* 텍스트 크기: 버튼 텍스트도 조정 */
 }
 
-.middle-content2 {
-    width: 60%;
-    margin: 30px auto 0 auto;
+.user-balance {
+  text-align: right;
 }
 
-.middle-div2 {
-    width: 100%;
-    height: 250px;
-    background-color: black;
-    border-radius: 10px;
+
+.icon-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  text-align: center;
+  font-size: calc(10px + 0.4vw);
 }
 
+.menu-item {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 8px;
+    cursor: pointer;
+}
+
+
+.recommend-section {
+  background: yellow;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: calc(11px + 0.5vw); 
+}
+
+.recommend-categories {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.product-slider {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+}
+
+.product-card {
+  flex: 0 0 auto;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: calc(10px + 0.4vw); 
+}
+
+
+.regular-purchase {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: calc(11px + 0.5vw); 
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.product-card {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: calc(10px + 0.4vw); 
+}
 </style>
