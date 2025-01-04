@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
-import MypageView from '../views/MypageView.vue'
+import MypageView from '../views/MyPageView.vue'
 import OrderView from '../views/OrderView.vue';
 import productList from '../components/list/productList.vue';
 
