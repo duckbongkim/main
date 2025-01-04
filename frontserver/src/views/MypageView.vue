@@ -1,17 +1,28 @@
 <template>
+  
   <div class="mypage-container">
     <!-- User Info Section -->
     <div class="user-info">
       <div class="user-details">
         <div>
-          <h2>{{ user.nickname }} 님은 {{ rating.rating_name }} 등급 입니다.</h2>
+          <h3>{{ user.nickname }} 님 반갑습니다.</h3>
           <button class="edit-btn">내 정보 수정</button>
         </div>
       </div>
-      <div class="user-balance">
-        <h3 >적립금</h3>
-        <p >{{ user.ratingPoint }}원</p>
-      </div>
+
+    <div class="user-balance">
+        
+        <div class="balance-item">
+            <h4 class="rating_name">등급</h4>
+            <p>{{ rating.rating_name }}</p>
+        </div>
+        <hr class="balance-line">
+        <div class="balance-item">
+            <h4>적립금</h4>
+            <p class="ratingPoint">{{ user.ratingPoint }}원</p>
+        </div>
+    </div>
+    
     </div>
 
     <!-- Icon Menu Section -->
@@ -98,39 +109,79 @@ export default{
 }
 
 
+
 .user-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
-  font-size: calc(12px + 0.5vw); /* 텍스트 크기: 화면 크기에 따라 조정 */
+  font-size: calc(12px + 0.5vw); 
+  gap: 20px;
+}
+
+.user-details,
+.user-balance {
+  flex: 1; 
+  text-align: center; 
 }
 
 .user-details {
   display: flex;
-  align-items: center;
-  gap: 15px;
+  flex-direction: column;
+  align-items: flex-start; 
+  gap: 10px; 
+  text-align: left;
 }
 
-.profile-img {
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
+.user-details div {
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+
+.user-details h3 {
+  margin: 0; 
+  line-height: 1.2; 
 }
 
 .edit-btn {
   background: #0073e6;
   color: white;
-  padding: 8px 12px;
+  padding: 6px 10px; 
   border: none;
   border-radius: 4px;
-  font-size: calc(10px + 0.3vw); /* 텍스트 크기: 버튼 텍스트도 조정 */
+  font-size: calc(10px + 0.3vw);
+  margin: 0; 
+  display: inline-block; 
+  height: auto; 
 }
 
 .user-balance {
+  display: flex;
+  flex-direction: column; 
+}
+
+.balance-item {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.balance-item h4 {
+  margin: 0; 
+}
+
+
+.balance-item p {
+  margin: 0; 
   text-align: right;
+  font-weight: 700;
+}
+
+.balance-line {
+  border-bottom: 1px solid #ccc; 
+  margin: 10px 0 10px 0;
 }
 
 
