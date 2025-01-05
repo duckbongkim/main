@@ -27,11 +27,11 @@
 
     <!-- Icon Menu Section -->
     <div class="icon-menu">
-      <div class="menu-item" @click="$router.push('/mypage/orderList')">주문배송</div>
-      <div class="menu-item">찜한상품</div>
-      <div class="menu-item">장바구니</div>
+      <div class="menu-item" @click="$router.push('/mypage/orderList')">주문/배송</div>
+      <div class="menu-item">찜 리스트</div>
       <div class="menu-item" @click="$router.push('/mypage/postList')">내 게시글 보기</div>
-      <div class="menu-item">최근본상품</div>
+      <div class="menu-item">문의 내역</div>
+      <div class="menu-item">최근 본 상품</div>
     </div>
 
     <!-- Recommended Products -->
@@ -118,6 +118,7 @@ export default{
   border-radius: 8px;
   font-size: calc(12px + 0.5vw); 
   gap: 20px;
+  margin: 50px 0 50px 0;
 }
 
 .user-details,
@@ -146,7 +147,6 @@ export default{
 }
 
 .edit-btn {
-  background: #0073e6;
   color: white;
   padding: 6px 10px; 
   border: none;
@@ -159,7 +159,8 @@ export default{
 
 .user-balance {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
+  margin: 50px 0 50px 0;
 }
 
 .balance-item {
@@ -206,6 +207,7 @@ export default{
   padding: 20px;
   border-radius: 8px;
   font-size: calc(11px + 0.5vw); 
+  margin: 30px 0 50px 0;
 }
 
 .recommend-categories {
