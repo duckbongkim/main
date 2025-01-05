@@ -22,7 +22,9 @@ export default{
     },
     setup(){},
     created(){},
-    mounted(){},
+    mounted(){
+        
+    },
     unmounted(){},
     methods:{}
 }

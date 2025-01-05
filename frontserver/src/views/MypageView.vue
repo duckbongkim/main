@@ -11,7 +11,6 @@
       </div>
 
     <div class="user-balance">
-        
         <div class="balance-item">
             <h4 class="rating_name">등급</h4>
             <p>{{ rating.rating_name }}</p>
@@ -27,16 +26,26 @@
 
     <!-- Icon Menu Section -->
     <div class="icon-menu">
-      <div class="menu-item" @click="$router.push('/mypage/orderList')">주문/배송</div>
-      <div class="menu-item">찜 리스트</div>
-      <div class="menu-item" @click="$router.push('/mypage/postList')">내 게시글 보기</div>
-      <div class="menu-item">문의 내역</div>
-      <div class="menu-item">최근 본 상품</div>
+      <div class="menu-item" @click="goOrder">나의 쇼핑 내역</div> <!-- 1월5일 수정 동진 -->
+      <div class="menu-item" @click="$router.push('/postlist')">내 게시글 보기</div>
+      <div class="menu-item" @click="$router.push('/QnAlist')">문의 내역</div>
+      <!-- <div class="menu-item">최근 본 상품</div> -->
     </div>
 
     <!-- Recommended Products -->
-    <div class="recommend-section">
+    <!-- <div class="recommend-section">
       <router-view />
+    </div> -->
+
+    <div class="frequent-purchase-section">
+      <h2>최근 본 상품</h2>
+      <div class="frequent-items">
+        <div v-for="item in frequentItems" :key="item.id" class="frequent-item">
+          <img :src="item.image" alt="상품 이미지" />
+          <p>{{ item.name }}</p>
+          <p>{{ item.price }}원</p>
+        </div>
+      </div>
     </div>
 
     <!-- Regular Purchase Section -->
@@ -56,6 +65,14 @@ export default{
         return{
             user:{},
             rating:{},
+
+            frequentItems: [
+              { id: 1, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
+              { id: 2, name: '상품 E', price: 4500, image: 'https://example.com/image5.jpg' },
+              { id: 3, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
+              { id: 4, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
+              { id: 5, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
+            ],
            
         };
     },
@@ -91,6 +108,18 @@ export default{
                 console.error(err)
             }
          },
+
+        // 유저 정보를 url에 표기 안돼도록 보내는 post 작성 1월5일 동진
+         async goOrder(){
+          try{
+            await axios.post('http://localhost:3000/orders',{email:this.user.email},{withCredentials: true});
+            this.$router.push('/orders');
+          }catch(err){
+            console.error(err)
+          }
+         },
+        
+
          
         }
     }
@@ -192,6 +221,9 @@ export default{
   gap: 10px;
   text-align: center;
   font-size: calc(10px + 0.4vw);
+  padding: 30px 0 30px 0;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 .menu-item {
@@ -199,6 +231,39 @@ export default{
   padding: 10px;
   border-radius: 8px;
     cursor: pointer;
+}
+
+.frequent-purchase-section{
+  margin-top: 100px;
+}
+
+.frequent-items {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.frequent-item {
+  margin-right: 10px;
+  text-align: center;
+}
+
+.frequent-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.frequent-item p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.frequent-purchase-section a {
+  font-size: 12px;
+  color: blue;
+  text-decoration: underline;
 }
 
 

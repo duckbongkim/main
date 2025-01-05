@@ -8,6 +8,32 @@ const { Wishes } = require ('../models/model_index');
 
 // http://localhost:8080/orders
 
+
+//마이 페이지 post 를 받아오는 라우터 작성 1월5일 동진
+router.post('/', async(req,res,next)=>{
+    try{
+        const {email,nickname,ratingPoint} = req.body // 마이페이지에서 post로 보낸 data 를 파싱
+        // 파싱한 data 를 req.session.user 객체에 저장하여 세션에 유지
+        req.session.user = {email,nickname,ratingPoint}; 
+        res.status(200).json({message:'유저 정보 저장 완료'})
+    }catch(err){
+        console.error(err)
+    }
+})
+
+//오더뷰 에서 유저 정보를 받아오는 get 라우터 작성 1월 5일 동진
+router.get('/',async(req,res,next)=>{
+    try{
+        //세션에 저장된 유저 정보를 가져와 해당 변수에 저장
+        const sessionUser = req.session.user;
+        // Accounts 테이블에서 세션에 저장된 email 기준으로 유저 정보를 조회
+        const user = await Accounts.findOne({where:{email:sessionUser.email}})
+        res.status(200).json(user)
+    }catch(err){
+        console.error(err)
+    }
+})
+
 router
 .post('/wish', async (req, res, next) =>{
     const {userId, product_Id} = req.body;
