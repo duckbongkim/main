@@ -101,8 +101,7 @@ export default{
          async getRating(){
             try{
                 const res = await axios.get(`http://localhost:3000/profile/ratings`,{withCredentials:true})
-                this.rating = res.data
-                this.rating = this.rating.find((rating)=>rating.id === this.user.rating_id)
+                this.rating = res.data.find((rating)=>rating.id === this.user.rating_id)
                 console.log('유저 등급',this.rating)
             }catch(err){
                 console.error(err)
