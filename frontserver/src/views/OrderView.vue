@@ -13,7 +13,7 @@
     <div class="user-balance">
         <div class="balance-item">
             <h4 class="rating_name">등급</h4>
-            <p>다이아몬드</p>
+            <p>{{rating.rating_name}}</p>
         </div>
         <hr class="balance-line">
         <div class="balance-item">
@@ -62,7 +62,8 @@ export default{
     data(){
         return{
             dummy : {userId : 22},
-            user:{} // 유저 데이터를 받아올수있도록 data 에 작성 1월5일 동진
+            user:{}, // 유저 데이터를 받아올수있도록 data 에 작성 1월5일 동진
+            rating:{}
             
 
         };
@@ -71,6 +72,7 @@ export default{
     created(){},
     mounted(){
       this.getUserData(); // getuserdata 를 마운트에 작성 1월 5일 동진
+      this.getRating();
       },
     unmounted(){},
     methods:{
@@ -94,6 +96,15 @@ export default{
           this.user = res.data
           console.log('user',res)
         }catch(err){
+          console.error(err)
+        }
+      },
+      // 유저의 레이팅 등급을 받아오는 get 작성 1월 5일 동진
+      async getRating(){
+        try{
+          const res = await axios.get('http://localhost:3000/profile/ratings',{withCredentials:true})
+          this.rating = res.data.find((rating)=>rating.id === this.user.rating_id)
+        }catch(err) {
           console.error(err)
         }
       }
