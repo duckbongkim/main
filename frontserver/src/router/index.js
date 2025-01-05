@@ -6,6 +6,8 @@ import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
 import OrderView from '../views/OrderView.vue';
 import productList from '../components/list/productList.vue';
+import PostListView from '../views/PostListView.vue'
+
 
 const routes = [
   {
@@ -22,6 +24,19 @@ const routes = [
     path: '/createAccount', 
     name: 'createAccount',
     component: () => import(/* webpackChunkName: "createAccount" webpackPrefetch:true*/ '../views/auth/createAccountView.vue')
+  },
+  {
+    path: '/postlist',
+    name: 'postlist',
+    component: PostListView,
+    children: [
+      {
+        path: ':post_kind', 
+        name: 'postlistKind', 
+        component: () => import('../components/post/boardlist.vue'),
+        props: true, 
+      }
+    ]
   },
   {
 
@@ -195,7 +210,8 @@ const routes = [
     name:'decanter',
     component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
 
-  },
+  },  
+
 
 
 
