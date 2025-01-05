@@ -42,7 +42,7 @@ export default{
             user:{
                 nickname:'',
                 email:''
-                }
+            }
         };
     },
     setup(){},

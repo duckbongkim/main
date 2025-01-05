@@ -18,6 +18,7 @@ const listRouter = require('./routers/router_list.js');
 const loginRouter = require('./routers/router_login.js');
 const orderRouter = require('./routers/router_orders.js');// 1월2일 orderRouter 추가 (누리)
 const profileRouter = require('./routers/router_profile.js');
+const postRouter = require('./routers/router_post.js');
 
 
 //서번 생성
@@ -64,11 +65,11 @@ app.use(passport.session());
 app.use('/',indexRouter); //mainPage Router
 app.use('/admin',adminRouter); //adminPage Router
 app.use('/products',productRouter);// 1월1일 productRouter 추가
-app.use('/login',loginRouter);
+app.use('/auth',loginRouter);
 app.use('/liqueur',listRouter);
 app.use('/orders',orderRouter);// 1월2일 orderRouter 추가 (누리)
 app.use('/profile',profileRouter);
-
+app.use('/post',postRouter);
 
 
 
