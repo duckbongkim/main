@@ -98,7 +98,24 @@ const routes = [
   {
     path: '/mypage',
     name: 'mypage',
-    component: MypageView
+    component: MypageView,
+    children:[
+      {
+        path:'',
+        name:'defaultOrderList',
+        component: () => import(/* webpackChunkName: "mypage" */ '../components/mypageLayout/orderList.vue')
+      },
+      {
+        path:'postList', // 마이페이지 컴포넌트 추가 1월 4일 동진
+        name:'postList',
+        component: () => import(/* webpackChunkName: "mypage" */ '../components/mypageLayout/postList.vue')
+      },
+      {
+        path:'orderList', // 마이페이지 자식컴포넌트 추가 1월 4일 동진
+        name:'orderList',
+        component: () => import(/* webpackChunkName: "mypage" */ '../components/mypageLayout/orderList.vue')
+      }
+    ]
   }, // 마이페이지 view 추가
 
   {
@@ -108,7 +125,6 @@ const routes = [
     children:[
       {
         path:'/cart',
-
         name:'cart',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userCart.vue')
       },
@@ -152,7 +168,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
 
   },
-  
   // 2025-01-03 김우진 여기는 etc상품 이동 라우터 입니다.
   {
     path:'/glass',

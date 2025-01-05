@@ -64,7 +64,7 @@ app.use(passport.session());
 app.use('/',indexRouter); //mainPage Router
 app.use('/admin',adminRouter); //adminPage Router
 app.use('/products',productRouter);// 1월1일 productRouter 추가
-app.use('/login',loginRouter);
+app.use('/auth',loginRouter); // << 1월4일 /login -> /auth 로 변경 (동진)
 app.use('/liqueur',listRouter);
 app.use('/orders',orderRouter);// 1월2일 orderRouter 추가 (누리)
 app.use('/profile',profileRouter);
