@@ -38,6 +38,11 @@ const routes = [
         name: 'postlistKind', 
         component: () => import('../components/post/boardlist.vue'),
         props: true, 
+      },
+      {
+        path: '',
+        name: 'post_all',
+        component: () => import('../components/post/postAll.vue')
       }
     ]
   },
