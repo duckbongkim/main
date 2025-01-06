@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
 const {getUsers,modifyUser,deleteUser,addAccount} = require('../controllers/admin/controller_account.js');
 const {getProducts,modifyProduct,deleteProduct,addProduct,getSpecificProduct,getProductLocations,getSupplyFactories,uploadDescriptionImage,uploadProductImage} = require('../controllers/admin/controller_product.js');
 const {descriptionUpload,productUpload} = require('../middlewares/middlewares_imgUpload.js');

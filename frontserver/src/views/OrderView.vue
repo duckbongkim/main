@@ -62,11 +62,11 @@ export default{
     data(){
         return{
 
-            dummy : {userId : 22},
+            dummy : {userId : 102},
             user:{}, // 유저 데이터를 받아올수있도록 data 에 작성 1월5일 동진
-            rating:{
-        }
-        }
+            rating:{},
+        };
+
     },
     setup(){},
     created(){},
@@ -109,7 +109,7 @@ export default{
         }
       }
         
-    },
+    }
 }
 
 

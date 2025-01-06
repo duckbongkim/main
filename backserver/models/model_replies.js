@@ -21,6 +21,10 @@ class Replies extends Sequelize.Model {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 defaultValue: 0,
+            },
+            reply_reply_id:{
+                type: Sequelize.INTEGER,
+                allowNull: true,
             }
         },{
             sequelize,

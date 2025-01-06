@@ -59,6 +59,21 @@ const routes = [
     props: true
   },
   {
+    path: '/post/post_detail/:id',
+    name: 'post_detail',
+    component: () => import(/* webpackChunkName: "post_detail" */ '../views/post/postDetailView.vue')
+  },
+  {
+    path: '/post/addPost',
+    name: 'addPost',
+    component: () => import(/* webpackChunkName: "addPost" */ '../views/post/AddOrModifyPostView.vue')
+  },
+  {
+    path: '/post/modifyPost/:id',
+    name: 'modifyPost',
+    component: () => import(/* webpackChunkName: "modifyPost" */ '../views/post/AddOrModifyPostView.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "login", webpackPrefetch: true */ '../views/auth/loginView.vue')
@@ -208,6 +223,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
 
   },  
+
 
 
 
