@@ -18,7 +18,7 @@
       <button class="login-button" @click="$router.push('/createAccount')">회원가입</button>
       <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
       <button @click="$router.push('/mypage')">마이페이지</button>
-      <button @click="$router.push('/post/post_detail/2')">게시물 상세 페이지 테스트 버튼</button>
+      <button @click="$router.push('/post/post_detail/3')">게시물 상세 페이지 테스트 버튼</button>
       <button @click="$router.push('/post/addPost')">게시물 추가 페이지 테스트 버튼</button>         
   </div>
     
