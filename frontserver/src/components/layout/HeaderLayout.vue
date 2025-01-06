@@ -62,7 +62,7 @@
         </li>
           <!-- 커뮤니티 -->
           <li class="nav-item">
-            <a class="nav-link" @click="goToMenu('/test')">커뮤니티</a>
+            <a class="nav-link" @click="goToMenu('/postlist')">커뮤니티</a>
           </li>
       </ul>
     </div>
