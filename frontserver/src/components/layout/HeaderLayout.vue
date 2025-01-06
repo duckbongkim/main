@@ -42,8 +42,8 @@
 
             <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
             <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
-            <li><a class="inner-title" @click="goToMenu('/whiskey')">위스키</a></li>      
-            <li><a class="inner-title" @click="goToMenu('/traditional')">동양주류</a></li>               
+            <li><a class="inner-title" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>      
+            <li><a class="inner-title" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>               
           </ul>           
         </li>
         
