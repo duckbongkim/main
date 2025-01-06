@@ -51,7 +51,7 @@ export default {
     async boardList(){
       const postKind= this.$route.params.post_kind;
       try {
-        const response = await axios.get(`http://localhost:3000/post_list/${post_Kind}`);
+        const response = await axios.get(`http://localhost:3000/post/post_list/${postKind}`);
         this.posts = response.data;
       } catch (error){
         console.error('게시물을 가져오는데 실패했습니다.', error)
