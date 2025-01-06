@@ -66,7 +66,7 @@ export default{
             user:{
                 nickname:'',
                 email:''
-            }
+            },
             rating:{},
             frequentItems: [
               { id: 1, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
