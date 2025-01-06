@@ -10,6 +10,7 @@
                     <header class="mb-4">
                         <!-- Post title-->
                         <h1 class="fw-bolder mb-1">{{postDetail.title}}</h1>
+                        
                     </header>
                     <!-- Preview image figure-->
                     <figure class="mb-4"><img class="img-fluid rounded" :src="`${postDetail.post_image}`" alt="..." /></figure>
@@ -17,6 +18,13 @@
                     <section class="mb-5">
                         <p class="fs-5 mb-4">{{postDetail.post_content}}</p>
                     </section>
+                    <!-- 좋아요 버튼 추가 -->
+                        <div class="d-flex align-items-center gap-2">
+                            <button class="btn btn-outline-primary d-flex align-items-center gap-2" @click="toggleLike">
+                                <i class="bi bi-hand-thumbs-up-fill"></i>
+                                <span>좋아요 {{ postDetail.like_count }}</span>
+                            </button>
+                        </div>
                 </article>
                 <!-- Comments section-->
                 <section class="mb-5">
@@ -37,6 +45,13 @@
                                         <div style="text-align: left;">
                                             <div class="fw-bold">{{ reply.Account.nickname || '익명' }}</div>
                                             <p class="mb-0">{{ reply.reply_content }}</p>
+                                            <!-- 좋아요 아이콘 및 수 -->
+                                            <button 
+                                                class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2" 
+                                                @click="addReplyLike(reply.id)">
+                                                <i class="bi bi-hand-thumbs-up"></i>
+                                                <span>{{ reply.like_count || 0 }}</span>
+                                            </button>
                                         </div>
                                         <div v-show="reply.Account.email === user.email">
                                             <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#modifyReplyModal" @click="modifyReply(reply.id)">수정</button>
@@ -62,6 +77,13 @@
                                                     <div style="text-align: left;">
                                                         <div class="fw-bold">{{ re_reply.Account.nickname || '익명' }}</div>
                                                         <p class="mb-0">{{ re_reply.reply_content }}</p>
+                                                        <!-- 좋아요 아이콘 및 수 -->
+                                                        <button 
+                                                            class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2" 
+                                                            @click="addReplyLike(re_reply.id)">
+                                                            <i class="bi bi-hand-thumbs-up"></i>
+                                                            <span>{{ re_reply.like_count || 0 }}</span>
+                                                        </button>
                                                     </div>
                                                     <div v-show="re_reply.Account.email === user.email">
                                                         <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#modifyReplyModal" @click="modifyReply(re_reply.id)">수정</button>
@@ -115,6 +137,8 @@
             </div>
         </div>
     </div>
+
+    
     <!-- 댓글 수정 모달 -->
     <!-- Modal -->
     <div class="modal fade" id="modifyReplyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -143,7 +167,12 @@ import axios from 'axios';
 export default{ 
     name:'',
     components:{},
-    computed:{},
+    computed:{
+        addLikeCount(){
+            this.postDetail.like_count++;
+        },
+        
+    },
     data(){
         return{
             postId: null,
@@ -172,7 +201,6 @@ export default{
             },
             modifyReplyContent: '',
             selectedReplyId: null,
-            
         };
     },
     setup(){},
@@ -276,8 +304,62 @@ export default{
             }catch(error){
                 console.log("댓글 수정 실패",error);
             }
-        }
+        },
+        async toggleLike() {
+            try {
+                const response = await axios.post(`http://localhost:3000/post/post_like/${this.postId}`, {}, {withCredentials: true});
+                this.addLikeCount();
+            } catch (error) {
+                if (error.response?.status === 401 || error.response?.status === 403) {
+                    alert("로그인 후 이용해주세요.");
+                }
+                else if(error.response?.status === 400){
+                    alert(error.response.data.message);
+                }
+                console.error("좋아요 처리 실패:", error);
+            }
+        },
+        async addReplyLike(reply_id) {
+            try {
+                const response = await axios.post(`http://localhost:3000/post/reply_like/${reply_id}`, {}, {withCredentials: true});
+                const updatedReply = this.replyList.find(reply => reply.id === reply_id);
+                if (updatedReply) {
+                    updatedReply.like_count = response.data.like_count; // 서버에서 반환된 좋아요 수로 업데이트
+                }
+            } catch (error) {
+                if (error.response?.status === 401 || error.response?.status === 403) {
+                    alert("로그인 후 이용해주세요.");
+                } 
+                else if(error.response?.status === 400){
+                    alert(error.response.data.message);
+                }
+                else {
+                    console.error("댓글 좋아요 처리 실패:", error);
+                }
+            }
+        },
     },
     watch:{}
 }
 </script>
+
+<style scoped>
+.btn-outline-primary.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.btn-outline-primary:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+.btn-outline-primary:active {
+    transform: scale(0.95);
+}
+
+/* 댓글 좋아요 버튼에 하단 마진 추가 */
+.btn-outline-primary.btn-sm {
+    margin: 6px 0 10px 0;
+}
+</style>

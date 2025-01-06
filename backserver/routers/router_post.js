@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {getPosts,getSpecificKindPostList,selectedPost,getSpecificPostReplyList,deletePost,uploadPostImage,modifyPost,addPost} = require('../controllers/post/controller_post');
-const {addReply,deleteReply,modifyReply} = require('../controllers/reply/controller_reply');
+const {getPosts,getSpecificKindPostList,selectedPost,getSpecificPostReplyList,deletePost,uploadPostImage,modifyPost,addPost,addPostLike} = require('../controllers/post/controller_post');
+const {addReply,deleteReply,modifyReply,addReplyLike} = require('../controllers/reply/controller_reply');
 const {isLoggedIn} = require('../middlewares/middleware_checkLogin');
 const {postUpload} = require('../middlewares/middlewares_imgUpload');
 
@@ -14,6 +14,11 @@ router.get('/post_list/:post_kind',getSpecificKindPostList);
 
 //특정 게시글 조회
 router.get('/post_detail/:id',selectedPost);
+
+//특정 게시글 좋아요 추가
+router.post('/post_like/:post_id',isLoggedIn,addPostLike);
+
+
 
 
 
@@ -31,6 +36,9 @@ router.post('/upload/postImg',postUpload.single('image'),uploadPostImage);
 
 //특정 게시글의 댓글 조회
 router.get('/reply_list/:id',getSpecificPostReplyList);
+
+//특정 댓글 좋아요 추가
+router.post('/reply_like/:reply_id',isLoggedIn,addReplyLike);
 
 //특정 게시글의 댓글 수정
 router.patch('/reply_modify/:reply_id',isLoggedIn,modifyReply);
