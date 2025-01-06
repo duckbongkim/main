@@ -68,8 +68,8 @@ export default{
     setup(){},
     created(){},
     mounted(){
-      this.getUserData(); // getuserdata 를 마운트에 작성 1월 5일 동진
-      this.getRating();
+      //this.getUserData(); // getuserdata 를 마운트에 작성 1월 5일 동진
+      //this.getRating();
       },
     unmounted(){},
     methods:{

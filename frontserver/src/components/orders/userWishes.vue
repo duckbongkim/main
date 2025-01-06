@@ -1,7 +1,5 @@
 <template>
     <div>
-
-
         <div class="wish-content">
             <h1>찜 목록</h1>
             <table class="table wish-table">
@@ -50,7 +48,7 @@ export default{
     unmounted(){},
     methods:{
 
-        // 위시리스트 불러오기 (R)
+        // Wish READ
         async getWishList() {
             try{
                 //const userId = this.session.userId;
@@ -60,13 +58,13 @@ export default{
                 const response = await axios.get(`http://localhost:3000/orders/wish/${this.userid}`); 
                                                                         // get 요청보낼때는 data 말고 params로 보내자
                 this.wishedProducts = response.data;
-                console.log(this.wishedProducts)
+                //console.log(this.wishedProducts)
             } catch(err){
                 console.error(err);
             }
         },
 
-        //위시리스트에서 제품 삭제 (D)
+        //Wish DELETE
         async deleteProduct(product) {
             try{
                 const deleteWish = confirm("해당 제품을 찜에서 삭제하실거에요?");
@@ -89,7 +87,7 @@ export default{
             }
         },
 
-        // 위시리스트 제품 장바구니에 추가하기 1/6
+        // Wish CREATE 1/6
         async addCart(product){
             try{
                 // accountid, productid 보내주기
@@ -97,8 +95,9 @@ export default{
                 const userOrder = {
                     userid,
                     product_id : product.id,
+                    quantity : 0,
                 }
-                await axios.post(`http://localhost:3000/carts/`, userOrder);
+                await axios.post(`http://localhost:3000/orders/cart`, userOrder);
 
                 // 장바구니 갈래?
                 const goToCart = confirm("장바구니로 이동하실래요?");
