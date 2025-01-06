@@ -35,6 +35,7 @@ exports.passportSetting = ()=>{
             return done(error);
         }
     }));
+
     passport.use( new KakaoStrategy({
         clientID: process.env.KAKAO_CLIENT_ID,
         callbackURL: process.env.KAKAO_REDIRECT_URI,
@@ -64,8 +65,8 @@ exports.passportSetting = ()=>{
             console.error(error);
             return done(error);
         }
-    })
-    );
+    }));
+
     passport.use(new NaverStrategy({
         clientID: process.env.NAVER_CLIENT_ID,
         clientSecret: process.env.NAVER_CLIENT_SECRET,

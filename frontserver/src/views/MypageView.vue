@@ -63,9 +63,11 @@ export default{
     },
     data(){
         return{
-            user:{},
+            user:{
+                nickname:'',
+                email:''
+            },
             rating:{},
-
             frequentItems: [
               { id: 1, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
               { id: 2, name: '상품 E', price: 4500, image: 'https://example.com/image5.jpg' },
@@ -74,6 +76,7 @@ export default{
               { id: 5, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
             ],
            
+
         };
     },
     setup(){},

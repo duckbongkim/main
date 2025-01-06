@@ -37,10 +37,9 @@ router.get('/',async(req,res,next)=>{
     }
 })
 
-router
-.post('/wish', async (req, res, next) =>{
+// 위시 DB 에 product data 추가 (C)
+router.post('/wish', async (req, res, next) =>{
     const {userId, product_Id} = req.body;
-    
     try {
     //FK값이 해당 테이블에 데이터 있는지 확인
         const user = await Accounts.findByPk(userId);
