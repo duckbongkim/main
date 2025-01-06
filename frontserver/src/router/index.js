@@ -4,7 +4,7 @@ import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
-import OrderView from '../views/OrderView.vue';
+import OrderView from '../views/OrderView.vue'
 import productList from '../components/list/productList.vue';
 import PostListView from '../views/PostListView.vue'
 
