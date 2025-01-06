@@ -1,6 +1,7 @@
 <template>
     <div>
 
+
         <div class="wish-content">
             <h1>찜 목록</h1>
             <table class="table wish-table">
@@ -25,6 +26,7 @@
             </table>
         </div>
 
+
     </div>
 </template>
 
@@ -36,6 +38,7 @@ export default{
     components:{},
     data(){
         return{
+
             userWishList:[
                 {
                     id:1,
@@ -62,6 +65,7 @@ export default{
                     product_price: 200000,
                 },
             ],
+
             userid: 0,
         };
     },
@@ -76,11 +80,12 @@ export default{
             try{
                 //const userId = this.session.userId;
                 this.userid = this.$route.params.userId;
-                console.log(`################프론트userId:${userId}`);
+                console.log(`################프론트userid:${this.userid}`);
                 // 로그인된 유저가 가지고있는 찜 리스트만 불러온다. 
-                const response = await axios.get(`http://localhost:3000/orders/wish/${userId}`); 
+                const response = await axios.get(`http://localhost:3000/orders/wish/${this.userid}`); 
                                                                         // get 요청보낼때는 data 말고 params로 보내자
-                this.userWishList = response.data;
+                this.wishedProducts = response.data;
+                console.log(this.wishedProducts)
             } catch(err){
                 console.error(err);
             }
@@ -88,18 +93,25 @@ export default{
 
         async deleteProduct(product) {
             try{
+                const deleteWish = confirm("해당 제품을 찜에서 삭제하실거에요?");
+                
+                //'취소' 누르면 함수 바로 종료
+                if(!deleteWish){return;}
+                console.log(`################Product선택된거:${JSON.stringify(product.id)}`);
                 const response = await axios.delete(`http://localhost:3000/orders/wish/${product.id}`)
+
+                // 삭제에 성공하면 위시리스트 다시 받아오지 말고 그냥 기존의 위시리스트에서 삭제항목만 빼고 보여준다.       
                 if (response.status === 200) {
-                    // 삭제에 성공하면 위시리스트 다시 받아오지 말고 그냥 기존의 위시리스트에서 삭제항목만 빼고 보여준다.
-                    this.userWishList = this.userWishList.filter(w => w.id !== product.id);
+                    alert("찜에서 삭제되었다");
+                    this.wishedProducts = this.wishedProducts.filter(w => w.id !== product.id);
                 }
                 console.log(response);
+
             }catch(error){
                 alert("찜 삭제 실패");
                 console.log("찜 삭제 실패", error);
             }
         }
-
     }
 }
 

@@ -4,7 +4,8 @@ const multer = require('multer');
 const Accounts = require ('../models/model_accounts');
 const Carts = require ('../models/model_buckets');
 const Products = require ('../models/model_products');
-const { Wishes } = require ('../models/model_index');
+const Wishes = require ('../models/model_wishes');
+//const { Wishes } = require ('../models/model_index');
 
 // http://localhost:8080/orders
 
@@ -39,10 +40,12 @@ router.get('/',async(req,res,next)=>{
 router
 .post('/wish', async (req, res, next) =>{
     const {userId, product_Id} = req.body;
+    
     try {
     //FK값이 해당 테이블에 데이터 있는지 확인
         const user = await Accounts.findByPk(userId);
         const targetProduct = await Products.findByPk(product_Id);
+        console.log(`######################백 라우터.포스트.userId : ${user}, product_Id: ${targetProduct}`)
         if(!user || !targetProduct) {
             return res.status(404).json({message:"없는 유저거나 없는 상품임"})
         }
@@ -73,13 +76,20 @@ router
 })
 
 // 사용자 위시리스트 data 찾아서 프론트로 던져
-router.get('/wish/:userId', async(req, res, next) => {
+router.get('/wish/:userid', async (req, res, next) => {
     try{
-        const {userId} = req.params;
-        console.log(`################userId:${userId}`);
-        const userWishes = await Wishes.findAll({where : {account_id : userId}});
-            console.log(`################위시리스트:${userWishes}`);
-        res.status(200).json(userWishes);
+        const {userid} = req.params;
+
+        // userid에 해당하는 wishes 객체 모두 불러오기
+        const userWishes = await Wishes.findAll({where : {account_id : userid}});
+           
+        // 모든 Wishes 객체와 연계된 product객체를 찾기. (map 함수 :각 배열의 요소에 함수를 적용하여 새로운 배열 반환.)
+        const productPromises = userWishes.map(async (userWish) => {
+            return await Products.findOne({where : {id : userWish.product_id}}) 
+        })
+        //ProductPromises는 (findOne은 비동기함수) promise 상태를 반환(pending, fulfilled, rejected중 하나.)
+        const wishedProducts = await Promise.all(productPromises); //promise.all() 함수는 각 Promise가 해결될 때까지 기다리고 이행 후 결괏값을 가져옴.
+        res.status(200).json(wishedProducts); 
 
     } catch(err){
         console.error(err);
@@ -87,6 +97,16 @@ router.get('/wish/:userId', async(req, res, next) => {
     }
 })
 
+router.delete('/wish/:productid', async (req, res, next) => {
+    try {
+        const {productid} = req.params;
+        const result = await Wishes.destroy({where : {product_id : productid}});
+        res.status(200).json(result);
+    }catch(err) {
+        console.error(err);
+        next(err);
+    }
+})
 
 router.post('/cart', async(req, res, next) => {
 // userId, product_Id, quantity 받았는지 확인
