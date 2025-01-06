@@ -38,6 +38,11 @@ const routes = [
         name: 'postlistKind', 
         component: () => import('../components/post/boardlist.vue'),
         props: true, 
+      },
+      {
+        path: '',
+        name: 'post_all',
+        component: () => import('../components/post/postAll.vue')
       }
     ]
   },
@@ -137,7 +142,7 @@ const routes = [
     component: OrderView,
     children:[
       {
-        path:'/cart',
+        path:'/cart/:userId',
         name:'cart',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userCart.vue')
       },
