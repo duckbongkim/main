@@ -142,7 +142,7 @@ const routes = [
     component: OrderView,
     children:[
       {
-        path:'/cart',
+        path:'/cart/:userId',
         name:'cart',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userCart.vue')
       },
