@@ -28,7 +28,7 @@
                                     <textarea ref="replyTextarea" v-model="sendReply.reply_content" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
                                     <button type="submit" class="btn btn-primary align-self-stretch">댓글 작성</button>
                                 </div>
-                            </form>
+                            </form> 
                             <!-- Comment with nested comments-->
                             <div v-for="reply in replyList.filter(reply => reply.reply_reply_id === null)" :key="reply.id" class="d-flex mb-4">
                                 <!-- Parent comment-->
@@ -39,7 +39,7 @@
                                             <p class="mb-0">{{ reply.reply_content }}</p>
                                         </div>
                                         <div v-show="reply.Account.email === user.email">
-                                            <button class="btn btn-sm btn-outline-secondary me-1" @click="modifyReply(reply.id)">수정</button>
+                                            <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#modifyReplyModal" @click="modifyReply(reply.id)">수정</button>
                                             <button class="btn btn-sm btn-outline-danger" @click="deleteReply(reply.id)">삭제</button>
                                         </div>
                                     </div>
@@ -48,7 +48,7 @@
                                     <div class="ms-3">
                                         <!-- 대댓글 버튼 -->
                                         <div class="d-flex">
-                                            <i class="fas fa-comments" data-bs-toggle="collapse" :data-bs-target="'#reply-' + reply.id" aria-expanded="false" aria-controls="reply" style="cursor: pointer; font-size: 1.2em; color: #adb5bd;"></i>
+                                            <i class="fas fa-comments" data-bs-toggle="collapse" :data-bs-parent="replyAccordion" :data-bs-target="'#reply-' + reply.id" aria-expanded="false" aria-controls="reply" style="cursor: pointer; font-size: 1.2em; color: #adb5bd;"></i>
                                         </div>
                                         <div :id="'reply-' + reply.id" class="collapse mt-4" style=" background-color: #f8f9fa; padding: 5px; border-radius: 5px;">
                                             <form class="mb-4" @submit.prevent="addReply(reply.id)">
@@ -64,13 +64,15 @@
                                                         <p class="mb-0">{{ re_reply.reply_content }}</p>
                                                     </div>
                                                     <div v-show="re_reply.Account.email === user.email">
-                                                        <button class="btn btn-sm btn-outline-secondary me-1" @click="modifyReply(re_reply.id)">수정</button>
+                                                        <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#modifyReplyModal" @click="modifyReply(re_reply.id)">수정</button>
                                                         <button class="btn btn-sm btn-outline-danger" @click="deleteReply(re_reply.id)">삭제</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    
                                 </div>
                             </div>
                         </div>
@@ -113,6 +115,25 @@
             </div>
         </div>
     </div>
+    <!-- 댓글 수정 모달 -->
+    <!-- Modal -->
+    <div class="modal fade" id="modifyReplyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">댓글 수정</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" v-model="modifyReplyContent" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="modifyReplySubmit(selectedReplyId)">Modify</button>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
 </template>
 
@@ -149,6 +170,9 @@ export default{
                 reply_reply_content:'',
                 reply_reply_id:null,
             },
+            modifyReplyContent: '',
+            selectedReplyId: null,
+            
         };
     },
     setup(){},
@@ -239,6 +263,18 @@ export default{
                 this.getReplyList();
             }catch(error){
                 console.log("댓글 삭제 실패",error);
+            }
+        },
+        async modifyReply(reply_id){
+            this.modifyReplyContent = this.replyList.find(reply => reply.id === reply_id).reply_content;
+            this.selectedReplyId = reply_id;
+        },
+        async modifyReplySubmit(reply_id){
+            try{
+                await axios.patch(`http://localhost:3000/post/reply_modify/${reply_id}`,{reply_content:this.modifyReplyContent},{withCredentials:true});
+                this.getReplyList();
+            }catch(error){
+                console.log("댓글 수정 실패",error);
             }
         }
     },

@@ -23,6 +23,19 @@ exports.addReply = async (req,res,next)=>{
     }
 }
 
+exports.modifyReply = async (req,res,next)=>{
+    try{
+        const reply_id = req.params.reply_id;
+        const reply_content = req.body.reply_content;
+        const updated_at = new Date();
+        await Replies.update({reply_content,updated_at},{where:{id:reply_id}});
+        res.status(200).json({message:"댓글 수정 완료"});
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+}
+
 exports.deleteReply = async (req,res,next)=>{
     try{
         const reply_id = req.params.reply_id;
