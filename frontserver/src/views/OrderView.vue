@@ -66,12 +66,13 @@ export default{
             user:{}, // 유저 데이터를 받아올수있도록 data 에 작성 1월5일 동진
             rating:{},
         };
+
     },
     setup(){},
     created(){},
     mounted(){
-      this.getUserData(); // getuserdata 를 마운트에 작성 1월 5일 동진
-      this.getRating();
+      //this.getUserData(); // getuserdata 를 마운트에 작성 1월 5일 동진
+      //this.getRating();
       },
     unmounted(){},
     methods:{
@@ -110,6 +111,7 @@ export default{
         
     }
 }
+
 
 </script>
 
