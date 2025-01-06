@@ -13,9 +13,9 @@ const Wishes = require ('../models/model_wishes');
 //마이 페이지 post 를 받아오는 라우터 작성 1월5일 동진
 router.post('/', async(req,res,next)=>{
     try{
-        const {email,nickname,ratingPoint,rating_id} = req.body // 마이페이지에서 post로 보낸 data 를 파싱
+        const {id,email,nickname,ratingPoint,rating_id} = req.body // 마이페이지에서 post로 보낸 data 를 파싱
         // 파싱한 data 를 req.session.user 객체에 저장하여 세션에 유지
-        req.session.user = {email,nickname,ratingPoint,rating_id}; 
+        req.session.user = {id,email,nickname,ratingPoint,rating_id}; 
         res.status(200).json({message:'유저 정보 저장 완료'})
     }catch(err){
         console.error(err)

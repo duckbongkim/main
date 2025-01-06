@@ -39,32 +39,7 @@ export default{
     data(){
         return{
 
-            userWishList:[
-                {
-                    id:1,
-                    product_image:'https://dohkqc1a6ll6k.cloudfront.net/eyJidWNrZXQiOiJ3aW5lZ3JhcGgtcHJvZHVjdGlvbiIsImtleSI6IndpbmVzL2JpXzM1OTYucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7ImZpdCI6ImNvbnRhaW4iLCJ3aWR0aCI6MzIwfX19?signature=631f156fdec9aea6f0bcaaa18e1cbfe13f0a24a20308fd1f02f1803ad3069a95',
-                    product_name:'돔페리뇽',
-                    product_price: 200000,
-                },
-                {
-                    id:2,
-                    product_image:'https://dohkqc1a6ll6k.cloudfront.net/eyJidWNrZXQiOiJ3aW5lZ3JhcGgtcHJvZHVjdGlvbiIsImtleSI6IndpbmVzL2JpXzM1OTYucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7ImZpdCI6ImNvbnRhaW4iLCJ3aWR0aCI6MzIwfX19?signature=631f156fdec9aea6f0bcaaa18e1cbfe13f0a24a20308fd1f02f1803ad3069a95',
-                    product_name:'돔페리뇽',
-                    product_price: 200000,
-                },
-                {
-                    id:3,
-                    product_image:'https://dohkqc1a6ll6k.cloudfront.net/eyJidWNrZXQiOiJ3aW5lZ3JhcGgtcHJvZHVjdGlvbiIsImtleSI6IndpbmVzL2JpXzM1OTYucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7ImZpdCI6ImNvbnRhaW4iLCJ3aWR0aCI6MzIwfX19?signature=631f156fdec9aea6f0bcaaa18e1cbfe13f0a24a20308fd1f02f1803ad3069a95',
-                    product_name:'돔페리뇽',
-                    product_price: 200000,
-                },
-                {
-                    id:4,
-                    product_image:'https://dohkqc1a6ll6k.cloudfront.net/eyJidWNrZXQiOiJ3aW5lZ3JhcGgtcHJvZHVjdGlvbiIsImtleSI6IndpbmVzL2JpXzM1OTYucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7ImZpdCI6ImNvbnRhaW4iLCJ3aWR0aCI6MzIwfX19?signature=631f156fdec9aea6f0bcaaa18e1cbfe13f0a24a20308fd1f02f1803ad3069a95',
-                    product_name:'돔페리뇽',
-                    product_price: 200000,
-                },
-            ],
+            wishedProducts:[],
 
             userid: 0,
         };
