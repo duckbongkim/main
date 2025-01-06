@@ -122,8 +122,8 @@ export default{
             product_id: null,
             orderQuantity : 1,
             dummy: {
-                userid: 23,
 
+                userid: 22,
             }
             
         };
