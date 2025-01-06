@@ -12,14 +12,20 @@
     <header>
       <button class="createAccount-button" @click="getaccount('/createAccount')">회원가입</button>
     </header>     -->
-  
+
   <div class="clear">
-      <button class="login-button" @click="$router.push('/login')">로그인</button>
-      <button class="login-button" @click="$router.push('/createAccount')">회원가입</button>
-      <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
-      <button @click="$router.push('/mypage')">마이페이지</button>
+    <!-- 이걸 살린다 -->
+    <!-- 로그인 상태가 아니면 로그인, 회원가입 버튼 표시 -->
+    <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/login')">로그인</button>
+    <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/createAccount')">회원가입</button>
+    <!-- 로그인 상태이면 로그아웃 버튼 표시 -->
+    <button class="login-button" v-show="isLoggedIn" @click="logout">로그아웃</button>
+    <!-- 장바구니, 마이페이지 버튼은 로그인 여부와 상관없이 항상 표시 -->
+    <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
+    <button @click="$router.push('/mypage')">마이페이지</button>
       <button @click="$router.push('/post/post_detail/3')">게시물 상세 페이지 테스트 버튼</button>
       <button @click="$router.push('/post/addPost')">게시물 추가 페이지 테스트 버튼</button>         
+
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
@@ -83,6 +89,13 @@ import axios from 'axios';
       }
     },
     methods :{
+      // 로그아웃 처리 함수
+      logout() {
+        this.isLoggedIn = false;
+      // 로그아웃 시 추가적인 로직(예: 세션/쿠키 삭제 등)을 처리할 수 있음
+        this.$router.push('/login');
+      },
+
       async getaccount(){
       try{
         const response = await axios.get(`http://localhost:3000/${router}`);
@@ -91,6 +104,7 @@ import axios from 'axios';
       }catch(err){
         console.error(err);
       }
+      
     },
 
     goToMenu(path){
