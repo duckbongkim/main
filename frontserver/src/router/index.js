@@ -153,7 +153,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userWishes.vue')
       },
       {
-        path:'/order',
+        path:'/order/:userId',
         name:'order',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/makeOrder.vue')
       },
