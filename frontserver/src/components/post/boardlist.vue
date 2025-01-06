@@ -96,32 +96,18 @@ export default {
         this.isCreateFormVisible = false;
       }
     },
-    boardList() {
-    const dummyData = [
-      { id: 1, title: '1 번째 게시글', content: '이것은 첫 번째 게시글입니다.', postKind: 'free' ,imageUrl: 'https://via.placeholder.com/100' },
-      { id: 2, title: '2 번째 게시글', content: '8 번째 게시글 내용입니다.', postKind: 'free', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 3, title: '3 번째 게시글', content: '6 번째 게시글 내용입니다.', postKind: 'review', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 4, title: '4 번째 게시글', content: '7 번째 게시글 내용입니다.', postKind: 'review', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 5, title: '5 번째 게시글', content: '5 번째 게시글 내용입니다.', postKind: 'free', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 6, title: '6 번째 게시글', content: '4 번째 게시글 내용입니다.', postKind: 'inquiry', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 7, title: '7 번째 게시글', content: '3 번째 게시글 내용입니다.', postKind: 'report', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 8, title: '8 번째 게시글', content: '2 번째 게시글 내용입니다.', postKind: 'report', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 9, title: '9 번째 게시글', content: '1 번째 게시글 내용입니다.', postKind: 'free', imageUrl: 'https://via.placeholder.com/100' },
-    ];
-  const postKind = this.$route.params.post_kind;
-  this.posts = dummyData.filter(post => post.postKind === postKind);
-  },
+ 
 
     
-    // async boardList(){
-    //   const postKind= this.$route.params.post_kind;
-    //   try {
-    //     const response = await axios.get(`http://localhost:3000/postlist/${postKind}`);
-    //     this.posts = response.data;
-    //   } catch (error){
-    //     console.error('게시물을 가져오는데 실패했습니다.', error)
-    //   }
-    // },
+  async boardList(){
+      const postKind= this.$route.params.post_kind;
+      try {
+        const response = await axios.get(`http://localhost:3000/post/post_list/${postKind}`);
+        this.posts = response.data;
+      } catch (error){
+        console.error('게시물을 가져오는데 실패했습니다.', error)
+      }
+    },
   },
   watch:{
     '$route.params.post_kind':'boardList'

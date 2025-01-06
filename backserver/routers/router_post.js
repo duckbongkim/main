@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {getPosts,getSpecificKindPostList,selectedPost,getSpecificPostReplyList,deletePost,uploadPostImage,modifyPost,addPost} = require('../controllers/post/controller_post');
+const {addReply,deleteReply} = require('../controllers/reply/controller_reply');
 const {isLoggedIn} = require('../middlewares/middleware_checkLogin');
 const {postUpload} = require('../middlewares/middlewares_imgUpload');
 
@@ -28,5 +29,11 @@ router.delete('/delete/:id',isLoggedIn,deletePost);
 
 //게시글 이미지 업로드
 router.post('/upload/postImg',postUpload.single('image'),uploadPostImage);
+
+//특정 게시글에 댓글 추가
+router.post('/reply_add/:id',isLoggedIn,addReply);
+
+//특정 게시글에 댓글 삭제
+router.delete('/reply_delete/:reply_id',isLoggedIn,deleteReply);
 
 module.exports = router;
