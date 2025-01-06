@@ -149,7 +149,7 @@ export default{
   font-size: calc(12px + 0.5vw); 
   gap: 20px;
   margin: 50px 0 50px 0;
-  background-color: rgb(254, 245, 231);
+  background-color: rgb(249,249,249);
 }
 
 .user-details,
@@ -180,8 +180,8 @@ export default{
 }
 
 .edit-btn {
-  color: rgb(255, 255, 255);
-  background-color:rgb(120, 85, 50) ;
+  color: #000;
+  background-color:rgb(254, 245, 231) ;
   padding: 6px 10px; 
   border: none;
   border-radius: 4px;
@@ -237,12 +237,12 @@ export default{
   font-size: calc(10px + 0.4vw);
   padding: 30px 30px 30px 30px;
   border-radius: 10px;
-  background-color: rgb(254, 245, 231);
+  background-color: rgb(249,249,249);
 }
 
 .menu-item {
-  color: rgb(255, 255, 255);
-  background-color:rgb(120, 85, 50) ;
+  color: #000;
+  background-color:rgb(254, 245, 231) ;
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
