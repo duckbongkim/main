@@ -109,19 +109,7 @@ router.delete('/wish/:productid', async (req, res, next) => {
     }
 })
 
-//Cart DELETE
-router.delete('cart/:cartedProduct_id', async (req, res, next) =>{
-    try{
-        const {cartedProduct_id} = req.params; 
-        console.log(`##################cartedProduct_id${cartedProduct_id}`)
-        const result = await Carts.destroy({where : {id : cartedProduct_id}});
-        res.status(200).json(result);
-
-    }catch(err) {
-        console.error(err);
-        next(err);
-    }
-})
+//Cart UPDATE
 
 //Cart CREATE
 router.post('/cart', async(req, res, next) => {
@@ -161,6 +149,22 @@ router.get('/cart/:userid', async(req, res, next) => {
         next(err);
     }
 })
+
+//Cart DELETE
+router.delete('/cart/:cartedProduct_id', async (req, res, next) =>{
+    try{
+        const {cartedProduct_id} = req.params; 
+        console.log(`##################cartedProduct_id${cartedProduct_id}`)
+        const result = await Carts.destroy({where : {id : cartedProduct_id}});
+        res.status(200).json(result);
+
+    }catch(err) {
+        console.error(err);
+        next(err);
+    }
+})
+
+
 
 
 module.exports = router;

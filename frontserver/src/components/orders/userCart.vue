@@ -40,9 +40,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <tbody>###모든 합계금액 다 합친 값 ###원</tbody>
-                        <tbody>###배송비###원</tbody>
-                        <tbody>###모든 합계금액 다 합친 값 + 배송비### 원</tbody>
+                        <tb>###모든 합계금액 다 합친 값 ###원</tb>
+                        <tb>###배송비###원</tb>
+                        <tb>###모든 합계금액 다 합친 값 + 배송비### 원</tb>
                     </tr>
                 </tbody>
             </table>
@@ -97,9 +97,7 @@ export default{
             try{
                 const deleteCart = confirm("해당 제품을 장바구니에서 삭제하시겠습니까?");
                 if(!deleteCart){return;}
-                
                 const response = await axios.delete(`http://localhost:3000/orders/cart/${cartedProduct_id}`);
-                console.log(`######################response:${response}`);
                 if (response.status === 200) {
                     alert("찜에서 삭제되었다");
                     this.cartedProducts = this.cartedProducts.filter(c => c.id !== cartedProduct_id);
