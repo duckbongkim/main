@@ -7,6 +7,7 @@ import MypageView from '../views/MypageView.vue'
 import OrderView from '../views/OrderView.vue'
 import productList from '../components/list/productList.vue';
 import PostListView from '../views/PostListView.vue'
+import testView from '../views/testView.vue'
 
 
 
@@ -222,7 +223,13 @@ const routes = [
     name:'decanter',
     component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
 
-  },  
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: testView
+  }, // startbootstrap 테스트 위해 1월 5일 동진
+
 
 
 

@@ -142,42 +142,45 @@
       </div>
     </div>
 
-   
-    <!-- 비싼 가격대 추천 -->
-    <div class="promotion">
-        <div class="swiper-container" ref="swiperContainer">
+
+
+    <section>
+      <h2>비싼 가격순</h2>
+
+      <div class="promotion">
+        <!-- Swiper 컨테이너 -->
+        <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="item in mainData.expensive" :key="item.id" @click="goProducts(item.id)">
+            <!-- v-for로 동적으로 슬라이드 생성 -->
+            <div
+              class="swiper-slide"
+              v-for="item in mainData.expensive"
+              :key="item.id"
+              @click="goProducts(item.id)"
+            >
               <img :src="item.product_image" alt="Product Image" />
               <p>{{ item.product_description }}</p>
-              <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
-
-
-
-
-
+              <strong>{{ item.product_name }} -</strong>
+              <strong>{{ item.product_price }}원</strong>
             </div>
           </div>
         </div>
-
-
-        <!-- 이전 버튼 -->
 
         <!-- 페이지네이션 -->
         <div class="swiper-pagination"></div>
 
         <!-- 이전/다음 버튼 -->
-
         <div class="swiper-prev swiper-button">
           <span class="material-icons arrow_back">arrow_back_ios</span>
         </div>
-
-        <!-- 다음 버튼 -->
         <div class="swiper-next swiper-button">
           <span class="material-icons arrow_forward">arrow_forward_ios</span>
         </div>
       </div>
     </section>   
+
+
+
 
 
 
@@ -238,13 +241,20 @@
       </ul>
     </section>
 
+
+
+
+
+
+
 </div>
 </template>
 
 
 <script>
 import axios from 'axios';
-import Swiper from 'swiper'; // Swiper import (Vue에서는 컴포넌트로 불러와야 함)
+
+
 
 export default{ 
     name:'',
@@ -252,7 +262,6 @@ export default{
     computed:{},
     data(){
         return{
-          swiperInstance: null,
           mainData:{
             expensive:[],
             cheap:[],
@@ -262,12 +271,13 @@ export default{
           bestSeller:{
             
           },
+
+
         };
     },
     setup(){},
     created(){},
     mounted(){
-
     // Swiper 초기화
     const Swiper = window.Swiper; // Swiper.js CDN이 로드된 경우
     new Swiper(".swiper-container", {
@@ -283,6 +293,8 @@ export default{
       },
       loop: true,
     });
+
+
       this.getmain();
 
       new Swiper('.swiper-container', {
@@ -295,11 +307,7 @@ export default{
     });
     
   },
-    updated() {
-      if (this.swiperInstance) {
-        this.swiperInstance.update();
-      }
-    },
+    
     unmounted(){},
     methods:{
       async getmain(){
@@ -314,31 +322,30 @@ export default{
       goProducts(product_id){ // 1월1일(동진) 상품 클릭시 해당 상품의 아이디를 가지고 이동되는 메소드
         this.$router.push(`/products/${product_id}`)
     },
-      initializeSwiper() {
-      this.swiperInstance = new Swiper(this.$refs.swiperContainer, {
-        slidesPerView: 1,
-        spaceBetween: 10,
-        loop: true, //// 루프 모드 (선택 사항)
-          navigation: {
-            nextEl: '.swiper-next',
-            prevEl: '.swiper-prev',
-          },
+ initializeSwiper() {
+      // Swiper 인스턴스 초기화
+      this.swiperInstance = new Swiper('.swiper-container', {
+        loop: true, // 무한 루프
         pagination: {
           el: '.swiper-pagination',
-          clickable: true
+          clickable: true,
         },
-        on: {
-          init: () => {
-            console.log('Swiper initialized');
-          },
-          slideChange: () => {
-            console.log('Slide changed');
-          }
-        }
+        navigation: {
+          nextEl: '.swiper-next',
+          prevEl: '.swiper-prev',
+        },
+        autoplay: {
+          delay: 2500, // 2.5초마다 자동으로 슬라이드
+          disableOnInteraction: false, // 사용자 인터랙션 후에도 autoplay 유지
+        },
       });
     },
+  
+  },
+ 
+
   }
-}
+
 </script>
 
 <style>
@@ -359,87 +366,73 @@ export default{
 
   /* 추천 기능*/
   /*PROMOTION*/
-  /* 기본 스타일 */
   .promotion {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: #f6f5ef;
+    width: auto;
     height: 693px;
+    background-color: #f6f5ef;
+    position: relative;
     overflow: hidden;
     transition: height .4s;
   }
-
   .promotion.hide {
     height: 0;
   }
 
-  .swiper-container {
-    width: 100%;
-    overflow: hidden;
+  .promotion .swiper-container {
+    /* 819px 슬라이드 3개와 그 사이 여백 10px씩 = 2477px */
+    width: calc(819px * 3 + 20px);
+    height: 553px;
     position: absolute;
     top: 40px;
     left: 50%;
-    margin-left: -50%; /* Swiper를 가운데 정렬 */
-    height: 553px;
-    display: flex;
-    transition: transform 0.5s ease;
+    margin-left: calc((819px * 3 + 20px) / -2);
+  }
+  /* .promotion .swiper-slide {
+    position: relative;
+    opacity: .5;
+    transition: opacity 1s;
+  } */
+  .promotion .swiper-slide-active {
+    opacity: 1;
   }
 
-  .swiper-wrapper {
-    display: flex;
-  }
-
-  /* 상품 슬라이드 내부 */
-  .swiper-slide {
-    flex: 0 0 100%;
-    text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
-    position: relative;  /* 위치를 설정할 수 있도록 추가 */
-  }
-
-  /* 이미지 스타일 */
-  .swiper-slide img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-
-  /* '자세히 보기' 버튼 스타일 */
-  .swiper-slide .btn {
+  
+  .promotion .swiper-slide .btn {
     width: 130px;
-    margin: 10px auto 0;  /* 위쪽 마진을 줘서 이미지 아래에 위치하도록 함 */
-    position: relative;  /* 버튼의 위치를 상대적으로 설정 */
-    display: block; /* 버튼을 블록 요소로 설정하여 가운데 정렬 */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
   }
-
-  .swiper-pagination {
-    text-align: center;
-    margin-top: 10px;
+  .promotion .swiper-pagination {
+    bottom: 40px;
+    left: 0;
+    right: 0;
     z-index: 0;
   }
-
-  .swiper-pagination .swiper-pagination-bullet {
+  .promotion .swiper-pagination .swiper-pagination-bullet {
     background-color: black;
+  
     width: 13px;
     height: 12px;
     margin-right: 6px;
     outline: none;
   }
-
-  .swiper-pagination .swiper-pagination-bullet:last-child {
+  .promotion .swiper-pagination .swiper-pagination-bullet:last-child {
     margin-right: 0;
   }
-
-  /* 이전/다음 버튼 */
-  .swiper-prev, .swiper-next {
+  
+  .promotion .swiper-prev,
+  .promotion .swiper-next {
     width: 42px;
     height: 42px;
+    outline: none;
     border: 2px solid #333;
     border-radius: 50%;
     position: absolute;
+    /* Swiper Container 높이의 절반만큼 끌어올림 /
+    /* 버튼 높이의 절반만큼 추가로 끌어올림 */
     top: 300px;
     z-index: 1;
     cursor: pointer;
@@ -448,34 +441,32 @@ export default{
     align-items: center;
     transition: .4s;
   }
-
-  .swiper-prev {
+  .promotion .swiper-prev {
     left: 50%;
     margin-left: -480px;
   }
-
-  .swiper-next {
+  .promotion .swiper-next {
     right: 50%;
     margin-right: -480px;
   }
-
-  .swiper-prev:hover,
-  .swiper-next:hover {
+  .promotion .swiper-prev:hover,
+  .promotion .swiper-next:hover {
     background-color: #333;
     color: #fff;
   }
-
-  /* 아이콘 조정 */
-  .material-icons {
-    font-size: 24px;
-    color: #333;
+  .swiper-button {
+    position: relative;
+  }
+  .arrow_back{
+    position: absolute;
+    left: 25%;
+    right: 0;
+  }
+  .arrow_forward{
+    position: absolute;
+    right: 15%;
   }
 
-  .material-icons:hover {
-    color: #000;
-  }
-
-  /* 상품 목록 */
   .product-list {
     display: flex;
     flex-wrap: wrap;
@@ -487,7 +478,6 @@ export default{
     list-style: none;
     cursor: pointer;
   }
-
 
 
  /* 기본 스타일 */
