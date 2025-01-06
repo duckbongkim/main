@@ -97,9 +97,7 @@ export default{
             try{
                 const deleteCart = confirm("해당 제품을 장바구니에서 삭제하시겠습니까?");
                 if(!deleteCart){return;}
-                
                 const response = await axios.delete(`http://localhost:3000/orders/cart/${cartedProduct_id}`);
-                console.log(`######################response:${response}`);
                 if (response.status === 200) {
                     alert("찜에서 삭제되었다");
                     this.cartedProducts = this.cartedProducts.filter(c => c.id !== cartedProduct_id);

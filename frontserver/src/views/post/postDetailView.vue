@@ -23,13 +23,26 @@
                     <div class="card bg-light">
                         <div class="card-body">
                             <!-- Comment form-->
-                            <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                            <form class="mb-4" @submit.prevent="addReply(null)">
+                                <div class="d-flex gap-2">
+                                    <textarea ref="replyTextarea" v-model="sendReply.reply_content" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <button type="submit" class="btn btn-primary align-self-stretch">댓글 작성</button>
+                                </div>
+                            </form>
                             <!-- Comment with nested comments-->
                             <div v-for="reply in replyList.filter(reply => reply.reply_reply_id === null)" :key="reply.id" class="d-flex mb-4">
                                 <!-- Parent comment-->
-                                <div class="ms-3">
-                                    <div class="fw-bold">{{ reply.Account.nickname || '익명' }}</div>
-                                    <p>{{ reply.reply_content }}</p>
+                                <div class="ms-3" style="width: 90%;">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div style="text-align: left;">
+                                            <div class="fw-bold">{{ reply.Account.nickname || '익명' }}</div>
+                                            <p class="mb-0">{{ reply.reply_content }}</p>
+                                        </div>
+                                        <div v-show="reply.Account.email === user.email">
+                                            <button class="btn btn-sm btn-outline-secondary me-1" @click="modifyReply(reply.id)">수정</button>
+                                            <button class="btn btn-sm btn-outline-danger" @click="deleteReply(reply.id)">삭제</button>
+                                        </div>
+                                    </div>
                                 
                                 
                                     <div class="ms-3">
@@ -38,10 +51,22 @@
                                             <i class="fas fa-comments" data-bs-toggle="collapse" :data-bs-target="'#reply-' + reply.id" aria-expanded="false" aria-controls="reply" style="cursor: pointer; font-size: 1.2em; color: #adb5bd;"></i>
                                         </div>
                                         <div :id="'reply-' + reply.id" class="collapse mt-4" style=" background-color: #f8f9fa; padding: 5px; border-radius: 5px;">
-                                            <div v-for="re_reply in replyList.filter(rr => rr.reply_reply_id === reply.id)" :key="re_reply.id" class="d-flex">
-                                                <div class="ms-3">
-                                                    <div class="fw-bold">{{re_reply.Account.nickname || '익명'}}</div>
-                                                    <p>{{re_reply.reply_content}}</p>
+                                            <form class="mb-4" @submit.prevent="addReply(reply.id)">
+                                                <div class="d-flex gap-2">
+                                                    <input type="text" ref="replyreplyTextarea" v-model="sendReply.reply_reply_content" class="form-control" placeholder="댓글을 입력하세요...">
+                                                    <button type="submit" class="btn btn-primary align-self-stretch">댓글 작성</button>
+                                                </div>
+                                            </form>
+                                            <div v-for="re_reply in replyList.filter(rr => rr.reply_reply_id === reply.id)" :key="re_reply.id" class="d-flex" style="width: 90%;">
+                                                <div class="d-flex justify-content-between align-items-start w-100">
+                                                    <div style="text-align: left;">
+                                                        <div class="fw-bold">{{ re_reply.Account.nickname || '익명' }}</div>
+                                                        <p class="mb-0">{{ re_reply.reply_content }}</p>
+                                                    </div>
+                                                    <div v-show="re_reply.Account.email === user.email">
+                                                        <button class="btn btn-sm btn-outline-secondary me-1" @click="modifyReply(re_reply.id)">수정</button>
+                                                        <button class="btn btn-sm btn-outline-danger" @click="deleteReply(re_reply.id)">삭제</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -118,7 +143,12 @@ export default{
             user:{
                 nickname:'',
                 email:''
-            }
+            },
+            sendReply:{
+                reply_content:'',
+                reply_reply_content:'',
+                reply_reply_id:null,
+            },
         };
     },
     setup(){},
@@ -165,6 +195,50 @@ export default{
                     console.error("삭제 중 오류 발생:", error);
                     alert("삭제에 실패했습니다.");
                 }
+            }
+        },
+        async addReply(reply_id){
+            console.log("reply_id",reply_id);
+            if(this.sendReply.reply_content === '' && this.sendReply.reply_reply_content === ''){
+                alert("댓글을 입력해주세요.");
+                if(this.sendReply.reply_reply_content === ''){
+                    this.$nextTick(() => {
+                        this.$refs.replyTextarea.focus();
+                    });
+                }else{
+                    this.$nextTick(() => {
+                        this.$refs.replyreplyTextarea.focus();
+                    });
+                }
+                return;
+            }
+            if(reply_id){
+                this.sendReply.reply_reply_id = reply_id;
+            }
+            try{
+                const response = await axios.post(`http://localhost:3000/post/reply_add/${this.postId}`,this.sendReply,{withCredentials:true});
+                this.sendReply = {
+                    reply_content:'',
+                    reply_reply_content:'',
+                    reply_reply_id:null,
+                };
+                this.getReplyList();
+            }catch(error){
+                if(error.response.status === 401 || error.response.status === 403){
+                    alert("로그인 후 이용해주세요.");
+                    this.$nextTick(() => {
+                        this.$refs.replyTextarea.focus();
+                    });
+                }
+                console.log("댓글 작성 실패",error);
+            }
+        },
+        async deleteReply(reply_id){
+            try{
+                await axios.delete(`http://localhost:3000/post/reply_delete/${reply_id}`,{withCredentials:true});
+                this.getReplyList();
+            }catch(error){
+                console.log("댓글 삭제 실패",error);
             }
         }
     },
