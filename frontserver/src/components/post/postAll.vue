@@ -37,7 +37,7 @@ export default {
   methods:{
     async AllPosts(){
         try {
-            const response = await axios.get('http://localhost:3000/postlist');
+            const response = await axios.get('http://localhost:3000/post/post_list');
             this.posts = response.data; 
         } catch (error) {
             console.error('전체 게시물을 가져오는데 실패했습니다.', error);
