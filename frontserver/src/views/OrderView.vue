@@ -35,7 +35,7 @@
                 <a @click="goOrder(dummy.userId)"> 주문목록 </a>
             </li>
             <li>
-                <a href="#">취소/환불 목록</a>
+                <a @click="goRefund()">취소/환불 목록</a>
             </li>
         </ul>
 
