@@ -136,7 +136,7 @@ export default{
   font-size: calc(12px + 0.5vw); 
   gap: 20px;
   margin: 50px 0 50px 0;
-  background-color: rgb(254, 245, 231);
+  background-color: rgb(249, 249, 249);
 }
 
 .user-details,
@@ -164,17 +164,6 @@ export default{
   color: black;
 }
 
-.edit-btn {
-  color: rgb(255, 255, 255);
-  background-color:rgb(120, 85, 50) ;
-  padding: 6px 10px; 
-  border: none;
-  border-radius: 4px;
-  font-size: calc(10px + 0.3vw);
-  margin-top: 20px; 
-  display: inline-block; 
-  height: auto; 
-}
 
 .user-balance {
   display: flex;
@@ -221,7 +210,7 @@ export default{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     padding: 30px 30px;
-    background-color: rgb(254,245,231);
+    background-color: rgb(249,249,249);
     border-radius: 10px;
     gap: 10px;
     
@@ -230,7 +219,7 @@ export default{
 .order-list-ul li {
     list-style: none;
     padding: 10px;
-    background-color: rgb(120,85,50);
+    background-color: rgb(254,245,231);
     border-radius: 10px;
 }
 
@@ -239,7 +228,7 @@ export default{
     cursor: pointer;
     display: block;
     text-decoration: none;
-    color: #fff
+    color: #000;
 }
 
 .order-list-com {
