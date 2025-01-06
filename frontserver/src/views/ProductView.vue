@@ -123,7 +123,7 @@ export default{
             orderQuantity : 1,
             dummy: {
 
-                userid: 22,
+                userid: 42,
             }
             
         };
@@ -192,12 +192,10 @@ export default{
         async addWish() {
             try {
                 //1. selectedProduct.id 를 likes DB에 추가
-
                     //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
                     //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
-
-                //const userId = this.session.userId;
                 const userId = this.dummy.userid;
+                //const userId = this.session.userId;
                 const userWish = {
                     userId,
                     product_Id : this.selectedProduct.id,
@@ -208,10 +206,7 @@ export default{
                     console.log(response.data.message);
                 }
 
-
-
-
-                // 2. 찜에 추가되었습니다.
+                // 2. 찜리스트로 보내주기
                 const GotoWish = confirm("찜가실?");
                 if(GotoWish) {
                     const response = await this.$router.push('/orders');   

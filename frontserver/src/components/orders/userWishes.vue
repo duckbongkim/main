@@ -15,11 +15,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="product in userWishList" :key="product.id">
+                    <tr v-for="product in wishedProducts" :key="product.id">
                         <td><img :src="product.product_image" class="product-img"></td>
                         <td>{{product.product_name}}</td>
                         <td>{{product.product_price}}원</td>
-                        <td><button>장바구니 추가</button></td>
+                        <td><button @click="addCart(product)">장바구니 추가</button></td>
                         <td><button @click="deleteProduct(product)">삭제</button></td>
                     </tr>
                 </tbody>
@@ -38,34 +38,7 @@ export default{
     components:{},
     data(){
         return{
-
-            userWishList:[
-                {
-                    id:1,
-                    product_image:'https://dohkqc1a6ll6k.cloudfront.net/eyJidWNrZXQiOiJ3aW5lZ3JhcGgtcHJvZHVjdGlvbiIsImtleSI6IndpbmVzL2JpXzM1OTYucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7ImZpdCI6ImNvbnRhaW4iLCJ3aWR0aCI6MzIwfX19?signature=631f156fdec9aea6f0bcaaa18e1cbfe13f0a24a20308fd1f02f1803ad3069a95',
-                    product_name:'돔페리뇽',
-                    product_price: 200000,
-                },
-                {
-                    id:2,
-                    product_image:'https://dohkqc1a6ll6k.cloudfront.net/eyJidWNrZXQiOiJ3aW5lZ3JhcGgtcHJvZHVjdGlvbiIsImtleSI6IndpbmVzL2JpXzM1OTYucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7ImZpdCI6ImNvbnRhaW4iLCJ3aWR0aCI6MzIwfX19?signature=631f156fdec9aea6f0bcaaa18e1cbfe13f0a24a20308fd1f02f1803ad3069a95',
-                    product_name:'돔페리뇽',
-                    product_price: 200000,
-                },
-                {
-                    id:3,
-                    product_image:'https://dohkqc1a6ll6k.cloudfront.net/eyJidWNrZXQiOiJ3aW5lZ3JhcGgtcHJvZHVjdGlvbiIsImtleSI6IndpbmVzL2JpXzM1OTYucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7ImZpdCI6ImNvbnRhaW4iLCJ3aWR0aCI6MzIwfX19?signature=631f156fdec9aea6f0bcaaa18e1cbfe13f0a24a20308fd1f02f1803ad3069a95',
-                    product_name:'돔페리뇽',
-                    product_price: 200000,
-                },
-                {
-                    id:4,
-                    product_image:'https://dohkqc1a6ll6k.cloudfront.net/eyJidWNrZXQiOiJ3aW5lZ3JhcGgtcHJvZHVjdGlvbiIsImtleSI6IndpbmVzL2JpXzM1OTYucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7ImZpdCI6ImNvbnRhaW4iLCJ3aWR0aCI6MzIwfX19?signature=631f156fdec9aea6f0bcaaa18e1cbfe13f0a24a20308fd1f02f1803ad3069a95',
-                    product_name:'돔페리뇽',
-                    product_price: 200000,
-                },
-            ],
-
+            wishedProducts:[],
             userid: 0,
         };
     },
@@ -76,6 +49,8 @@ export default{
     },
     unmounted(){},
     methods:{
+
+        // 위시리스트 불러오기 (R)
         async getWishList() {
             try{
                 //const userId = this.session.userId;
@@ -91,6 +66,7 @@ export default{
             }
         },
 
+        //위시리스트에서 제품 삭제 (D)
         async deleteProduct(product) {
             try{
                 const deleteWish = confirm("해당 제품을 찜에서 삭제하실거에요?");
@@ -110,6 +86,31 @@ export default{
             }catch(error){
                 alert("찜 삭제 실패");
                 console.log("찜 삭제 실패", error);
+            }
+        },
+
+        // 위시리스트 제품 장바구니에 추가하기 1/6
+        async addCart(product){
+            try{
+                // accountid, productid 보내주기
+                this.userid = this.$route.params.userId;
+                const userOrder = {
+                    userid,
+                    product_id : product.id,
+                }
+                await axios.post(`http://localhost:3000/carts/`, userOrder);
+
+                // 장바구니 갈래?
+                const goToCart = confirm("장바구니로 이동하실래요?");
+                if(goToCart) {
+                    this.$router.push('/cart');
+                }else{
+                    aleart("상품이 장바구니에 추가됐다.");
+                }
+
+            }catch(err){
+                alert("장바구니 추가 실패");
+                console.error(err)
             }
         }
     }
