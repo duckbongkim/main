@@ -69,11 +69,11 @@ export default{
 
     },
     setup(){},
-    created(){},
-    mounted(){
-      //this.getUserData(); // getuserdata 를 마운트에 작성 1월 5일 동진
-      //this.getRating();
-      },
+    created(){
+      this.getUserData(); // getuserdata 를 마운트에 작성 1월 6일 동진
+      this.getRating();
+    },
+    mounted(){},
     unmounted(){},
     methods:{
 
@@ -218,11 +218,12 @@ export default{
 }
 
 .order-list-ul{
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     padding: 30px 30px;
     background-color: rgb(254,245,231);
     border-radius: 10px;
+    gap: 10px;
     
 }
 
@@ -230,7 +231,7 @@ export default{
     list-style: none;
     padding: 10px;
     background-color: rgb(120,85,50);
-    
+    border-radius: 10px;
 }
 
 .order-list-ul li a {
