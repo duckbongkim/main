@@ -134,27 +134,6 @@
       </div>
 
       <div class="swiper-pagination"></div>
-
-      <div class="swiper-prev swiper-button">
-        <span class="material-icons arrow_back">arrow_back_ios</span>
-      </div>
-      <div class="swiper-next swiper-button">
-        <span class="material-icons arrow_forward">arrow_forward_ios</span>
-      </div>
-    </div>
-
-    <div class="promotion">
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <!-- v-for로 동적으로 슬라이드 생성 -->
-          <div class="swiper-slide" v-for="(item, index) in main" :key="index">
-            <img :src="item.imgSrc" :alt="item.altText" />
-            <a href="javascript:void(0)" class="btn">{{ mainData }}</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="swiper-pagination"></div>
         <div class="swiper-prev swiper-button">
           <span class="material-icons arrow_back">arrow_back_ios</span>
         </div>
@@ -162,6 +141,50 @@
           <span class="material-icons arrow_forward">arrow_forward_ios</span>
       </div>
     </div>
+
+
+
+    <section>
+      <h2>비싼 가격순</h2>
+
+      <div class="promotion">
+        <!-- Swiper 컨테이너 -->
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <!-- v-for로 동적으로 슬라이드 생성 -->
+            <div
+              class="swiper-slide"
+              v-for="item in mainData.expensive"
+              :key="item.id"
+              @click="goProducts(item.id)"
+            >
+              <img :src="item.product_image" alt="Product Image" />
+              <p>{{ item.product_description }}</p>
+              <strong>{{ item.product_name }} -</strong>
+              <strong>{{ item.product_price }}원</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="swiper-pagination"></div>
+
+        <!-- 이전/다음 버튼 -->
+        <div class="swiper-prev swiper-button">
+          <span class="material-icons arrow_back">arrow_back_ios</span>
+        </div>
+        <div class="swiper-next swiper-button">
+          <span class="material-icons arrow_forward">arrow_forward_ios</span>
+        </div>
+      </div>
+    </section>   
+
+
+
+
+
+
+
 
     <section>
       <h2>비싼 가격순</h2>
@@ -253,7 +276,21 @@ export default{
     setup(){},
     created(){},
     mounted(){
-
+    // Swiper 초기화
+    const Swiper = window.Swiper; // Swiper.js CDN이 로드된 경우
+    new Swiper(".swiper-container", {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-next",
+        prevEl: ".swiper-prev",
+      },
+      loop: true,
+    });
 
 
       this.getmain();
@@ -417,5 +454,67 @@ export default{
     list-style: none;
     cursor: pointer;
   }
+
+
+ /* 기본 스타일 */
+.promotion {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.swiper-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.swiper-wrapper {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.swiper-slide {
+  flex: 0 0 100%;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.swiper-slide img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.swiper-pagination {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.swiper-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.swiper-prev {
+  left: 10px;
+}
+
+.swiper-next {
+  right: 10px;
+}
+
+.material-icons {
+  font-size: 24px;
+  color: #333;
+}
+
+.material-icons:hover {
+  color: #000;
+}
 
 </style>
