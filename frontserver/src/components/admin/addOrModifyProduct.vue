@@ -120,7 +120,7 @@ export default{
         if(this.$route.params.id){
             this.isModify = true;
             const productID = this.$route.params.id;
-            axios.get(`http://localhost:3000/admin/products/${productID}`)
+            axios.get(`http://localhost:3000/admin/products/${productID}`,{withCredentials:true})
             .then(response => {
                 console.log(response);
                 this.product = response.data;

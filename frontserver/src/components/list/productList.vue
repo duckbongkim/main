@@ -7,6 +7,19 @@
         <p>{{ product.drink_type }}</p>
         <p>{{ product.product_price }}</p>
       </div>
+    <div>
+    <h1>상품 검색</h1>
+    <div>
+      <input v-model="searchQuery" placeholder="상품 검색" @input="fetchProducts" />
+    </div>
+    
+    <h2>상품 목록</h2>
+    <ul>
+      <li v-for="product in filteredProducts" :key="product.id">
+        {{ product.product_name }} - {{ product.product_description }} - {{ product.drink_type }} - {{ product.product_kind }}
+      </li>
+    </ul>
+  </div>
   </div>
 </template>
 

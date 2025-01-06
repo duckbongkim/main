@@ -122,8 +122,8 @@ export default{
             product_id: null,
             orderQuantity : 1,
             dummy: {
-                userid: 41,
 
+                userid: 102,
             }
             
         };
@@ -153,7 +153,7 @@ export default{
 
         // axios 요청 메소드
 
-        // Product 정보 가져오기
+        // Product info READ
         async getProducts() {
             try {
                 //도메인 요청, 돌아오는 response 잡기
@@ -188,16 +188,14 @@ export default{
             }
         },
         
-
+        // wish CREATE
         async addWish() {
             try {
                 //1. selectedProduct.id 를 likes DB에 추가
-
                     //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
                     //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
-
-                //const userId = this.session.userId;
                 const userId = this.dummy.userid;
+                //const userId = this.session.userId;
                 const userWish = {
                     userId,
                     product_Id : this.selectedProduct.id,
@@ -208,10 +206,7 @@ export default{
                     console.log(response.data.message);
                 }
 
-
-
-
-                // 2. 찜에 추가되었습니다.
+                // 2. 찜리스트로 보내주기
                 const GotoWish = confirm("찜가실?");
                 if(GotoWish) {
                     const response = await this.$router.push('/orders');   
@@ -230,11 +225,12 @@ export default{
             }
         },
 
+        // Cart CREATE
         async addCarts() {
             try{
 
             // 1. selectedProduct.id 와 orderQuantity 를 carts DB에 추가.
-                //세션에서 userid를, data에서 productid와 orderQ를를 따와 params으로 만들기.
+                //세션에서 userid를, data에서 productid와 orderQ를 따와 params으로 만들기.
                 //const userId = this.session.userId;
                 const userId = this.dummy.userid;
                 const userOrder = {
@@ -242,16 +238,26 @@ export default{
                     product_Id :this.selectedProduct.id,
                     quantity : this.orderQuantity, 
                 }
-                await axios.post(`http://localhost:3000/carts/`, userOrder);
+                console.log(`################userorder${JSON.stringify(userOrder)}`);
+
+                // data를 req.body로 백에 보내고, res받아 완료 메세지 띄우기
+                const response = await axios.post(`http://localhost:3000/orders/cart`, userOrder);
+
 
                 // "장바구니 갈래? y/n"
-                const GotoCart = confirm("장바구니가실?");
-                if(GotoCart) {
-                    this.$router.push('/cart');              
+                if(response) {
+                    const GotoCart = confirm(response.data.message);
+                    if(GotoCart) {
+                        this.$router.push(`/cart/${userId}`);              
                     /// frontserver/src/router/index.js 에 라우터 추가 
                 } else {
                     alert("상품이 장바구니에 추가됐다.");
                 }
+                }else{
+                    console.error(err);
+                }
+
+                
             }catch(err){
                 console.error(err);
             }

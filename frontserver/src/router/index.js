@@ -6,6 +6,10 @@ import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
 import OrderView from '../views/OrderView.vue'
 import productList from '../components/list/productList.vue';
+import PostListView from '../views/PostListView.vue'
+
+
+
 
 const routes = [
   {
@@ -21,7 +25,26 @@ const routes = [
   {
     path: '/createAccount', 
     name: 'createAccount',
-    component: () => import(/* webpackChunkName: "createAccount" webpackPrefetch:true*/ '../views/auth/createAccountView.vue')
+        //250103 누리) ',' 추가. chunkname이랑 prefetch 사이에 ',' 있어야 오류 안남
+    component: () => import(/* webpackChunkName: "createAccount", webpackPrefetch: true */ '../views/auth/createAccountView.vue')
+  },
+  {
+    path: '/postlist',
+    name: 'postlist',
+    component: PostListView,
+    children: [
+      {
+        path: ':post_kind', 
+        name: 'postlistKind', 
+        component: () => import('../components/post/boardlist.vue'),
+        props: true, 
+      },
+      {
+        path: '',
+        name: 'post_all',
+        component: () => import('../components/post/postAll.vue')
+      }
+    ]
   },
   {
 
@@ -36,9 +59,24 @@ const routes = [
     props: true
   },
   {
+    path: '/post/post_detail/:id',
+    name: 'post_detail',
+    component: () => import(/* webpackChunkName: "post_detail" */ '../views/post/postDetailView.vue')
+  },
+  {
+    path: '/post/addPost',
+    name: 'addPost',
+    component: () => import(/* webpackChunkName: "addPost" */ '../views/post/AddOrModifyPostView.vue')
+  },
+  {
+    path: '/post/modifyPost/:id',
+    name: 'modifyPost',
+    component: () => import(/* webpackChunkName: "modifyPost" */ '../views/post/AddOrModifyPostView.vue')
+  },
+  {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" webpackPrefetch:true*/ '../views/auth/loginView.vue')
+    component: () => import(/* webpackChunkName: "login", webpackPrefetch: true */ '../views/auth/loginView.vue')
   },
   {
     path: '/admin',
@@ -64,15 +102,6 @@ const routes = [
         path:'products/',
         component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
       },
-      {
-        path:'products/',
-        component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProducts.vue')
-      },
-      {
-        path:'manageProducts/', //products에서 manageProducts로 변경 (241230 누리)
-        name:'manageProducts',
-        component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
-      },      
       {
         path:'addAccount/',
         name:'addAccount',
@@ -104,7 +133,7 @@ const routes = [
   {
     path: '/mypage',
     name: 'mypage',
-    component: MypageView
+    component: MypageView,
   }, // 마이페이지 view 추가
 
   {
@@ -113,13 +142,12 @@ const routes = [
     component: OrderView,
     children:[
       {
-        path:'/cart',
-
+        path:'/cart/:userId',
         name:'cart',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userCart.vue')
       },
       {
-        path:'/wish',
+        path:'/wish/:userId',
         name:'wish',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userWishes.vue')
       },
@@ -158,7 +186,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
 
   },
-  
   // 2025-01-03 김우진 여기는 etc상품 이동 라우터 입니다.
   {
     path:'/glass',
@@ -195,7 +222,9 @@ const routes = [
     name:'decanter',
     component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
 
-  },
+  },  
+
+
 
 
 
