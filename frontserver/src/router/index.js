@@ -8,6 +8,7 @@ import OrderView from '../views/OrderView.vue'
 import productList from '../components/list/productList.vue';
 import PostListView from '../views/PostListView.vue'
 import testView from '../views/testView.vue'
+import modifyUser from '../views/ModifyUserView.vue';
 
 
 
@@ -136,6 +137,11 @@ const routes = [
     name: 'mypage',
     component: MypageView,
   }, // 마이페이지 view 추가
+  {
+    path:'/modify',
+    name:'modify',
+    component: modifyUser // 1월7일 유저 정보 수정 페이지 추가 동진
+  },
 
   {
     path: '/orders',

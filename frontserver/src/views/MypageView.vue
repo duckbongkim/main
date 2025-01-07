@@ -6,7 +6,7 @@
       <div class="user-details">
         <div>
           <h3><span>{{ user.nickname }}</span> 님 은 <span>{{rating.rating_name}}</span> 등급입니다.</h3>
-          <button class="edit-btn">내 정보 수정</button>
+          <button type="submit" class="edit-btn" @click="modify">내 정보 수정</button>
         </div>
       </div>
 
@@ -90,7 +90,6 @@ export default{
             try{
                 const res = await axios.get(`http://localhost:3000/profile`,{withCredentials:true})
                 this.user = res.data
-                console.log(res)
             }catch(err){
                 if (err.status===403) {
                 alert('로그인이 필요함')
@@ -104,7 +103,6 @@ export default{
             try{
                 const res = await axios.get(`http://localhost:3000/profile/ratings`,{withCredentials:true})
                 this.rating = res.data.find((rating)=>rating.id === this.user.rating_id)
-                console.log('유저 등급',this.rating)
             }catch(err){
                 console.error(err)
             }
@@ -119,7 +117,16 @@ export default{
             console.error(err)
           }
          },
-        
+
+      async modify() {
+        try {
+            await axios.post('http://localhost:3000/modify',{email:this.user.email},{withCredentials: true})
+            this.$router.push('/modify')
+          } catch (err) {
+              console.error(err);
+          }
+        } // 1월7일 유저 페이지로 유저 정보를 보내는 post 작성 동진
+
 
          
         }

@@ -114,7 +114,7 @@ export default{
     goToMenu(path){
     this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
         },
-      }
+      
       handleSearch() {
       this.$router.push({
         path: '/liqueur',
@@ -122,8 +122,8 @@ export default{
       });
     },
     }
-    
-}
+}  
+
 </script>
 
 <style scoped>
