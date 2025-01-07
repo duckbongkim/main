@@ -113,17 +113,17 @@ db.Postes.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'i
 db.Accounts.hasMany(db.Postes,{foreignKey: { name: 'account_id'}, sourceKey:'id'});
 
 //Likes
-db.Likes.belongsTo(db.Postes,{foreignKey: { name: 'post_id'}, targetKey:'id'});
+db.Likes.belongsTo(db.Postes,{foreignKey: { name: 'post_id'}, targetKey:'id',onDelete: 'CASCADE'});
 db.Postes.hasMany(db.Likes,{foreignKey: { name: 'post_id'}, sourceKey:'id'});
-db.Likes.belongsTo(db.Replies,{foreignKey: { name: 'reply_id'}, targetKey:'id'});
+db.Likes.belongsTo(db.Replies,{foreignKey: { name: 'reply_id'}, targetKey:'id',onDelete: 'CASCADE'});
 db.Replies.hasMany(db.Likes,{foreignKey: { name: 'reply_id'}, sourceKey:'id'});
 
 //Replies
-db.Replies.belongsTo(db.Postes,{foreignKey: { name: 'post_id'}, targetKey:'id'});
+db.Replies.belongsTo(db.Postes,{foreignKey: { name: 'post_id'}, targetKey:'id',onDelete: 'CASCADE'}); //post_id 삭제시 댓글도 삭제 추가
 db.Postes.hasMany(db.Replies,{foreignKey: { name: 'post_id'}, sourceKey:'id'});
-db.Replies.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'id'});
+db.Replies.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'id',onDelete: 'CASCADE'}); //account_id 삭제시 댓글도 삭제 추가
 db.Accounts.hasMany(db.Replies,{foreignKey: { name: 'account_id'}, sourceKey:'id'});
-db.Replies.belongsTo(db.Products,{foreignKey: { name: 'product_id'}, targetKey:'id'});
+db.Replies.belongsTo(db.Products,{foreignKey: { name: 'product_id'}, targetKey:'id',onDelete: 'SET NULL'}); //product_id 삭제시 댓글의 product_id 를 NULL로 설정 추가
 db.Products.hasMany(db.Replies,{foreignKey: { name: 'product_id'}, sourceKey:'id'});
 
 //account
