@@ -55,11 +55,25 @@ exports.deleteUser = async(req,res,next)=>{
 exports.addAccount = async(req,res,next)=>{
     try{
         const account = req.body;
-        const existUser = await Accounts.findOne({where:{email:account.email}});
-        if(existUser){
-            return res.json({message:'이미 가입된 이메일입니다.'});
-        }
         
+        // 이메일 중복 체크
+        const existEmail = await Accounts.findOne({where:{email:account.email}});
+        if(existEmail){
+            return res.status(400).json({message:'이미 가입된 이메일입니다.'});
+        }
+
+        // 닉네임 중복 체크
+        const existNickname = await Accounts.findOne({where:{nickname:account.nickname}});
+        if(existNickname){
+            return res.status(400).json({message:'이미 사용 중인 닉네임입니다.'});
+        }
+
+        // 전화번호 중복 체크
+        const existPhone = await Accounts.findOne({where:{phone_number:account.phone_number}});
+        if(existPhone){
+            return res.status(400).json({message:'이미 등록된 전화번호입니다.'});
+        }
+
         if(!account.created_at){
             account.created_at = new Date();
         }
@@ -78,3 +92,18 @@ exports.addAccount = async(req,res,next)=>{
         next(error);
     }
 };
+
+exports.dropOutUser = async(req,res,next)=>{
+    try{
+        const user = req.user.email;
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 14); // 현재 날짜에 14일을 추가
+        await Accounts.update({delete_time: futureDate},{where:{email:user}});
+        res.status(200).json({message:'회원 탈퇴가 완료되었습니다. 14일 후 완전 삭제됩니다.'});
+    }
+    catch(error){
+        console.log("회원 탈퇴에 실패했습니다.",error);
+        next(error);
+    }
+    
+}

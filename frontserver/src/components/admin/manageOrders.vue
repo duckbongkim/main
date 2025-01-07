@@ -18,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="order in orders" :key="order.id">
+            <tr v-for="order in paginatedOrders" :key="order.id">
                 <td>{{ order.id }}</td>
                 <td>{{ order.account_id }}</td>
                 <td>{{ order.Account.email }}</td>
@@ -33,6 +33,20 @@
             </tr>
         </tbody>
     </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
+            </li>
+            <li class="page-item" v-for="page in displayedPages" :key="page" :class="{ active: page === currentPage }">
+                <a class="page-link" href="#" @click.prevent="currentPage = page">{{ page }}</a>
+            </li>
+            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                <a class="page-link" href="#" @click.prevent="currentPage++">다음</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 </template>
 
@@ -40,9 +54,33 @@
 <script>
 import axios from 'axios';
 export default{ 
-    name:'',
+    name:'manageOrders',
     components:{},
-    computed:{},
+    computed:{
+        paginatedOrders() {//페이지 별로 나오는 데이터 정해주는 함수
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.orders.slice(start, end);
+        },
+        totalPages() {//총 페이지 수 정해주는 함수
+            return Math.ceil(this.orders.length / this.itemsPerPage);
+        },
+        displayedPages() {//페이지 버튼 목록 정해주는 함수
+            const pages = [];
+            let start = Math.max(1, this.currentPage - 1);
+            let end = Math.min(this.totalPages, start + 2);
+            
+            if (end > this.totalPages) {
+                start = Math.max(1, this.totalPages - 2);
+                end = this.totalPages;
+            }
+
+            for (let i = start; i <= end; i++) {
+                pages.push(i);
+            }
+            return pages;
+        }
+    },
     data(){
         return{
             orders:[]
@@ -92,5 +130,45 @@ export default{
 
 .order-table tr:hover {
     background-color: #f5f5f5;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.page-link {
+    color: #007bff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-link:active {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #1976d2;
+}
+
+.page-link:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.page-item.active .page-link {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #1976d2;
+    font-weight: bold;
+}
+
+.page-link:hover {
+    background-color: #f5f9ff;
+    border-color: #90caf9;
+    color: #1976d2;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #f8f9fa;
 }
 </style>

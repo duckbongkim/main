@@ -30,16 +30,27 @@ export default {
   props: ['drink_type'],
   data() {
     return {
+
       products: [],  
       searchQuery: '',  
       filteredProducts: [], 
       noResultsMessage: '',  
+
     };
   },
   mounted() {
     this.fetchProductsByType(this.drink_type);  
   },
   watch: {
+    '$route.query.search'(newSearch) {
+      if (newSearch) {
+        this.fetchProducts().then(() => {
+          this.filterProductsBySearch(newSearch);
+        });
+      } else {
+        this.fetchProducts();
+      }
+    },
     drink_type(newDrinkType) {
       this.fetchProductsByType(newDrinkType);  
     },
@@ -77,6 +88,16 @@ export default {
         }
       }
     },
+
+    // 검색어로 상품 필터링하는 새로운 메소드
+    filterProductsBySearch(searchQuery) {
+      const query = searchQuery.toLowerCase();
+      this.products = this.products.filter(product => 
+        product.product_name.toLowerCase().includes(query) ||
+        product.product_description.toLowerCase().includes(query) ||
+        product.drink_type.toLowerCase().includes(query)
+      );
+    }
   },
 };
 </script>
