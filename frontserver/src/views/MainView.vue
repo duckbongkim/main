@@ -158,7 +158,6 @@
         <div class="swiper-prev swiper-button">
           <span class="material-icons arrow_back">arrow_back_ios</span>
         </div>
-
         <!-- 다음 버튼 -->
         <div class="swiper-next swiper-button">
           <span class="material-icons arrow_forward">arrow_forward_ios</span>
@@ -250,7 +249,7 @@ export default{
     setup(){},
     created(){},
     mounted(){
-      // swiper 설정
+      // swiper 설정 
       this.initializeSwiper();
       window.addEventListener('resize', () => {
         if (this.swiperInstance) {
