@@ -171,6 +171,14 @@ export default{
         addLikeCount(){
             this.postDetail.like_count++;
         },
+        updateReplyLikeCount(reply_id){
+            return (replyId) => {
+            const reply = this.replyList.find(reply => reply.id === replyId);
+            if (reply) {
+                reply.like_count += 1;
+            }
+        };
+        }
         
     },
     data(){
@@ -322,10 +330,7 @@ export default{
         async addReplyLike(reply_id) {
             try {
                 const response = await axios.post(`http://localhost:3000/post/reply_like/${reply_id}`, {}, {withCredentials: true});
-                const updatedReply = this.replyList.find(reply => reply.id === reply_id);
-                if (updatedReply) {
-                    updatedReply.like_count = response.data.like_count; // 서버에서 반환된 좋아요 수로 업데이트
-                }
+                this.updateReplyLikeCount(reply_id);
             } catch (error) {
                 if (error.response?.status === 401 || error.response?.status === 403) {
                     alert("로그인 후 이용해주세요.");
