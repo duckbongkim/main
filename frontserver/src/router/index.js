@@ -95,12 +95,13 @@ const routes = [
         component: () => import(/* webpackChunkName: "manageUsers" */ '../components/admin/manageUsers.vue')
       },
       {
-        path:'orders/',
-        name:'orders',
+        path:'manageOrders/',
+        name:'manageOrders',
         component: () => import(/* webpackChunkName: "manageOrders" */ '../components/admin/manageOrders.vue')
       },
       {
         path:'products/',
+        name:'products',
         component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
       },
       {
@@ -110,7 +111,7 @@ const routes = [
       },
       {
 
-        path:'ModifyProduct/:id',
+        path:'modifyProduct/:id',
         component: () => import(/* webpackChunkName: "addOrModifyProduct" */ '../components/admin/addOrModifyProduct.vue')
       },
       {

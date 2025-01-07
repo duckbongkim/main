@@ -10,6 +10,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const passportSetting = require('./methods/passportSetting.js');
+const schedule = require('node-schedule');
+const { Op } = require('sequelize');
 //router import
 const indexRouter = require('./routers/router_index.js');
 const adminRouter = require('./routers/router_admin.js');
@@ -20,6 +22,8 @@ const orderRouter = require('./routers/router_orders.js');// 1월2일 orderRoute
 const profileRouter = require('./routers/router_profile.js');
 const postRouter = require('./routers/router_post.js');
 
+const Accounts = require('./models/model_accounts.js');
+
 
 //서번 생성
 const app = express();
@@ -29,6 +33,24 @@ app.set('port',process.env.PORT);
 sequelize.sync({force:false})
 .then(()=>{
     console.log('데이터베이스 연결 성공');
+    // 매일 오전 11시에 실행되는 스케줄러
+    schedule.scheduleJob('0 11 * * *', async () => {
+        try {
+            // 탈퇴 회원 삭제
+            const currentDate = new Date();
+            await Accounts.destroy({
+                where: {
+                    delete_date: {
+                        [Op.lt]: currentDate
+                    }
+                }
+            });
+            
+            console.log('만료된 데이터 삭제 완료');
+        } catch (error) {
+            console.error('스케줄러 실행 중 오류 발생:', error);
+        }
+    });
 })
 .catch((error)=>{
     console.log('데이터베이스 연결 실패');

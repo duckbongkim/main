@@ -8,7 +8,7 @@
       <!-- 이메일/비밀번호 폼 -->
       <form class="login-form" @submit.prevent="localLogin">
         <div class="form-group">
-          <input ref="emailInput" type="email" placeholder="이메일" class="form-input" v-model="loginFrom.email" required/>
+          <input  type="email" placeholder="이메일" class="form-input" v-model="loginFrom.email" required/>
         </div>
         <div class="form-group">
           <input type="password" placeholder="비밀번호" class="form-input" v-model="loginFrom.password" required/>
@@ -71,10 +71,10 @@ export default{
             try{
                 const response = await axios.post('http://localhost:3000/auth',this.loginFrom,{withCredentials:true});
                 if(response.status === 200){
-                    alert('로그인 성공');
                     this.loginFrom.email = '';
                     this.loginFrom.password = '';
                     this.checkLogin();
+                    this.$router.push('/');
                 }
             }catch(error){
                 if(error.response.status === 401){
