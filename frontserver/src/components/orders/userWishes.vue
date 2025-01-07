@@ -5,8 +5,7 @@
             <table class="table wish-table">
                 <thead>
                     <tr>
-                        <th>상품 이미지</th>
-                        <th>상품이름</th>
+                        <th>상품명</th>
                         <th>가격</th>
                         <th>장바구니 추가</th>
                         <th>삭제</th>
@@ -14,11 +13,11 @@
                 </thead>
                 <tbody>
                     <tr v-for="product in wishedProducts" :key="product.id">
-                        <td><img :src="product.product_image" class="product-img"></td>
-                        <td>{{product.product_name}}</td>
+                        <td><img :src="product.product_image" class="product-img">
+                            {{product.product_name}}</td>
                         <td>{{product.product_price}}원</td>
                         <td><button @click="addCart(product)">장바구니 추가</button></td>
-                        <td><button @click="deleteProduct(product)">삭제</button></td>
+                        <td><v-btn @click="deleteProduct(product)">삭제</v-btn></td>
                     </tr>
                 </tbody>
             </table>
@@ -129,23 +128,27 @@ export default{
     text-align: center;
 }
 
-
-
 .wish-table th{
     text-align: center;
     vertical-align: middle;
-    padding: 10px;
-    background-color: #f5f5f5; 
     font-weight: bold;
-    padding: 10px;
+    background-color: rgb(249,249,249); 
 }
 
 .wish-table td {
     text-align: center;
     vertical-align: middle;
     font-weight: 500;
-    font-size: 1.4em;
+    font-size: 1rem;
     padding: 20px 0;
+}
+
+.wish-table td button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color:rgb(254,245,231);
+    color: #000;
+    border: none;
 }
 
 

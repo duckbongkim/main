@@ -97,6 +97,22 @@ router.get('/wish/:userid', async (req, res, next) => {
     }
 })
 
+// Order post
+router.get('/orderingProducts/:productIds', async(req, res,next) => {
+    try{
+        const productIds = req.params;
+        console.log(`##############productIds${JSON.stringify(productIds)}`)
+        const productPromises = productIds.map(async (product) => {
+            return await Products.findOnd({where : {id : product}});
+        })
+        const orderingProducts = await Promise.all(productPromises);
+        res.status(200).json(orderingProducts);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+})
+
 // Wishes DELETE
 router.delete('/wish/:productid', async (req, res, next) => {
     try {
@@ -115,7 +131,7 @@ router.delete('/wish/:productid', async (req, res, next) => {
 router.post('/cart', async(req, res, next) => {
     // userId, product_Id, quantity 받았는지 확인
     const {userId, product_Id, quantity} = req.body;
-  
+    console.log(`##########################userId${userId},product_Id ${product_Id},quantity${quantity}`)
     try{
         //FK값이 해당 테이블에 데이터 있는지 확인
         const user = await Accounts.findByPk(userId);

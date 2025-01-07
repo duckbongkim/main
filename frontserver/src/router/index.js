@@ -4,9 +4,10 @@ import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
-import OrderView from '../views/OrderView.vue';
+import OrderView from '../views/OrderView.vue'
 import productList from '../components/list/productList.vue';
 import PostListView from '../views/PostListView.vue'
+import testView from '../views/testView.vue'
 
 
 
@@ -153,7 +154,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userWishes.vue')
       },
       {
-        path:'/order',
+        path:'/order/:userId',
         name:'order',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/makeOrder.vue')
       },
@@ -223,7 +224,13 @@ const routes = [
     name:'decanter',
     component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
 
-  },  
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: testView
+  }, // startbootstrap 테스트 위해 1월 5일 동진
+
 
 
 
