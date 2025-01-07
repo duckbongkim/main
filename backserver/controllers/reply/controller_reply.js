@@ -1,5 +1,23 @@
 const Replies = require('../../models/model_replies');
 const Accounts = require('../../models/model_accounts');
+const Likes = require('../../models/model_likes');
+
+exports.addReplyLike = async (req,res,next)=>{
+    try{
+        const {reply_id} = req.params;
+        const reply = await Replies.findOne({where:{id:reply_id}});
+        const allLikers = await Likes.findAll({where:{reply_id}});
+        if(allLikers.some(liker=>liker.who_liked === req.user.email)){
+            res.status(400).json({message:"이미 좋아요를 누르셨습니다."});
+        }
+        await Likes.create({who_liked:req.user.email,reply_id:reply_id});
+        await Replies.update({ like_count: reply.like_count + 1 },{ where: { id:reply_id } });
+        res.status(200).json({likeCount:reply.like_count});
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+}
 
 exports.addReply = async (req,res,next)=>{
     try{
@@ -22,6 +40,8 @@ exports.addReply = async (req,res,next)=>{
         next(error);
     }
 }
+
+
 
 exports.modifyReply = async (req,res,next)=>{
     try{
@@ -47,3 +67,4 @@ exports.deleteReply = async (req,res,next)=>{
         next(error);
     }
 }
+
