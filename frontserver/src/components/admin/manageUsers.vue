@@ -207,15 +207,24 @@ export default{
         },
         async getUsers(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/users');
+                const response = await axios.get('http://localhost:3000/admin/users',{withCredentials:true});
                 this.users = response.data.users;
                 this.ratings = response.data.ratings;
                 console.log(this.users);
                 console.log(this.ratings);
             }
             catch(error){
-                alert('사용자 목록을 불러오는데 실패했습니다.');
-                console.log("사용자 목록을 불러오는데 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('사용자 목록을 불러오는데 실패했습니다. : ',error);
+                }
             }
         },
         modifyUser(user){
@@ -224,28 +233,46 @@ export default{
         async submitModifyUser(){
             try{
                 const userIndex = this.users.findIndex(user => user.id === this.editingUser.id);
-                const response = await axios.patch(`http://localhost:3000/admin/users`,this.editingUser);
+                const response = await axios.patch(`http://localhost:3000/admin/users`,this.editingUser,{withCredentials:true});
                 if (response.status === 200) {
                     this.users[userIndex] = { ...this.editingUser };
                 }
                 console.log(response);
             }
             catch(error){
-                alert('사용자 수정에 실패했습니다.');
-                console.log("사용자 수정에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('사용자 수정에 실패했습니다. : ',error);
+                }
             }
         },
         async deleteUser(user){
             try{
-                const response = await axios.delete(`http://localhost:3000/admin/users/${user.id}`);
+                const response = await axios.delete(`http://localhost:3000/admin/users/${user.id}`,{withCredentials:true});
                 if (response.status === 200) {
                     this.users = this.users.filter(u => u.id !== user.id);
                 }
                 console.log(response);
             }
             catch(error){
-                alert('사용자 삭제에 실패했습니다.');
-                console.log("사용자 삭제에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('사용자 삭제에 실패했습니다. : ',error);
+                }
             }
         }
     },

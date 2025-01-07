@@ -95,11 +95,21 @@ export default{
     methods:{
         async getOrders(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/orders');
+                const response = await axios.get('http://localhost:3000/admin/orders',{withCredentials:true});
                 this.orders = response.data;
                 console.log("주문 목록 응답",response);
             }catch(error){
-                console.error("주문 목록 조회 오류",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('주문 목록 조회에 실패했습니다. : ',error);
+                }
             }
         }
     },
