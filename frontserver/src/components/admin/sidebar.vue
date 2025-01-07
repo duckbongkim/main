@@ -27,7 +27,7 @@
                 <a class="nav-link" @click="goToMenu('/admin/manageOrders')">-주문 목록</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" @click="goToMenu('/admin/products')">-상품 목록</a>
+                <a class="nav-link" @click="goToMenu('/admin/manageProducts')">-상품 목록</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" @click="goToMenu('/admin/supplyFactories')">-공급처 관리</a>

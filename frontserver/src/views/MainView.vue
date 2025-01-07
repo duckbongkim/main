@@ -1,5 +1,6 @@
 <template>
 <div>
+  <div>
     <!-- 광고형 슬라이드 -->
     <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark">
       <div class="carousel-indicators">
@@ -143,7 +144,7 @@
     </div>
    
     <!-- 비싼 가격대 추천 -->
-    <!-- <div class="promotion">
+    <div class="promotion">
         <div class="swiper-container" ref="swiperContainer">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="item in mainData.expensive" :key="item.id" @click="goProducts(item.id)">
@@ -152,40 +153,20 @@
               <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
             </div>
           </div>
-        </div> -->
+        </div>
 
         <!-- 이전 버튼 -->
-        <!-- <div class="swiper-prev swiper-button">
+        <div class="swiper-prev swiper-button">
           <span class="material-icons arrow_back">arrow_back_ios</span>
-        </div> -->
+        </div>
 
         <!-- 다음 버튼 -->
-        <!-- <div class="swiper-next swiper-button">
+        <div class="swiper-next swiper-button">
           <span class="material-icons arrow_forward">arrow_forward_ios</span>
         </div>
-      </div> -->
+      </div>
 
-        <div class="promotion">
-          <div class="swiper-container" ref="swiperContainer">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="item in mainData.expensive" :key="item.id">
-                <img :src="item.product_image" alt="Product Image" />
-                <p>{{ item.product_description }}</p>
-                <strong>{{ item.product_name }} -</strong>
-                <strong>{{ item.product_price }}원</strong>
-              </div>
-            </div>
-            <!-- Pagination -->
-            <div class="swiper-pagination"></div>
-            <!-- 이전 버튼 -->
-            <div class="swiper-prev">
-              <span class="material-icons">arrow_back_ios</span>
-            </div>
-            <!-- 다음 버튼 -->
-            <div class="swiper-next">
-              <span class="material-icons">arrow_forward_ios</span>
-            </div>
-          </div>
+        
         </div>
 
 

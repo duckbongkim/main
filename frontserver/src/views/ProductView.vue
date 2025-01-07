@@ -160,6 +160,7 @@ export default{
                 this.product_id = this.$route.params.product_id;
                 //console.log(this.product_id)
                 const response = await axios.get(`http://localhost:3000/products/${this.product_id}`);
+                console.log(response)
                 // product_id에 해당하는 제품 data object를 받아온다.
                 //console.log(response)
                 this.selectedProduct = response.data ; 

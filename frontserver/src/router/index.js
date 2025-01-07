@@ -106,8 +106,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "manageOrders" */ '../components/admin/manageOrders.vue')
       },
       {
-        path:'products/',
-        name:'products',
+        path:'manageProducts/',
+        name:'manageProducts',
         component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
       },
       {
