@@ -21,13 +21,9 @@ const loginRouter = require('./routers/router_login.js');
 const orderRouter = require('./routers/router_orders.js');// 1월2일 orderRouter 추가 (누리)
 const profileRouter = require('./routers/router_profile.js');
 const postRouter = require('./routers/router_post.js');
-<<<<<<< HEAD
 const modifyRouter = require('./routers/router_modiuser.js') // 1월7일 유저 정보 수정 router 추가
-=======
-
 const Accounts = require('./models/model_accounts.js');
 
->>>>>>> 3fb3059f6ceedfb0bf765642ec836002c6ac221c
 
 //서번 생성
 const app = express();
