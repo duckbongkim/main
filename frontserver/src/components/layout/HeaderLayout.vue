@@ -2,6 +2,10 @@
 <div>
 
   <div class="clear">
+      <button class="login-button" @click="$router.push('/login')">로그인</button>
+      <button class="login-button" @click="$router.push('/createAccount')">회원가입</button>
+      <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
+
       <!-- 임시 검색창 -->
       <div class="search-form">
         <input 
@@ -32,6 +36,7 @@
       환영합니다!
     </div>
 
+
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
@@ -56,8 +61,8 @@
 
             <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
             <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
-            <li><a class="inner-title" @click="goToMenu('/whiskey')">위스키</a></li>      
-            <li><a class="inner-title" @click="goToMenu('/traditional')">동양주류</a></li>               
+            <li><a class="inner-title" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>      
+            <li><a class="inner-title" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>               
           </ul>           
         </li>
         
@@ -76,7 +81,7 @@
         </li>
           <!-- 커뮤니티 -->
           <li class="nav-item">
-            <a class="nav-link" @click="goToMenu('/test')">커뮤니티</a>
+            <a class="nav-link" @click="goToMenu('/postlist')">커뮤니티</a>
           </li>
       </ul>
     </div>
@@ -98,6 +103,7 @@ export default{
       }
     },
     methods :{
+
     // 로그아웃 처리 함수 여기부터 logout까지 2025-01-07
       async checkLogin() {
           try {
@@ -138,16 +144,17 @@ export default{
           }
         },
 
+
       async getaccount(){
       try{
         const response = await axios.get(`http://localhost:3000/${router}`);
         this.account = response.data;
         console.log(response);
-      }catch(err){
-        console.error(err);
-      }
-      
-    },
+        }catch(err){
+          console.error(err);
+        }
+      },
+
 
     goToMenu(path){
     this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
@@ -156,7 +163,6 @@ export default{
     mounted() {
       this.checkLogin(); // 컴포넌트 로드시 로그인 상태 확인
     } ,
-    
     handleSearch() {
     this.$router.push({
       path: '/liqueur',

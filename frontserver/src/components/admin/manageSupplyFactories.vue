@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="factory in factories" :key="factory.id">
+                <tr v-for="factory in paginatedFactories" :key="factory.id">
                     <td>{{factory.id}}</td>
                     <td>{{factory.factory_name}}</td>
                     <td>{{factory.factory_location}}</td>
@@ -103,6 +103,21 @@
         </div>
     </div>          
     
+    <!-- 페이지네이션 추가 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
+            </li>
+            <li class="page-item" v-for="page in displayedPages" :key="page" :class="{ active: page === currentPage }">
+                <a class="page-link" href="#" @click.prevent="currentPage = page">{{ page }}</a>
+            </li>
+            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                <a class="page-link" href="#" @click.prevent="currentPage++">다음</a>
+            </li>
+        </ul>
+    </nav>
+    
 </div>
 </template>
 
@@ -112,12 +127,38 @@ import axios from 'axios';
 export default{ 
     name:'',
     components:{},
-    computed:{},
+    computed:{
+        paginatedFactories() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.factories.slice(start, end);
+        },
+        totalPages() {
+            return Math.ceil(this.factories.length / this.itemsPerPage);
+        },
+        displayedPages() {
+            const pages = [];
+            let start = Math.max(1, this.currentPage - 1);
+            let end = Math.min(this.totalPages, start + 2);
+            
+            if (end > this.totalPages) {
+                start = Math.max(1, this.totalPages - 2);
+                end = this.totalPages;
+            }
+
+            for (let i = start; i <= end; i++) {
+                pages.push(i);
+            }
+            return pages;
+        }
+    },
     data(){
         return{
             factories:[],
             newFactory:{},
             editingFactory:{},
+            currentPage: 1,
+            itemsPerPage: 15
         };
     },
     setup(){},
@@ -178,5 +219,45 @@ export default{
 
 .modal-body form {
     text-align: left;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.page-link {
+    color: #007bff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-link:active {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #1976d2;
+}
+
+.page-link:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.page-item.active .page-link {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #1976d2;
+    font-weight: bold;
+}
+
+.page-link:hover {
+    background-color: #f5f9ff;
+    border-color: #90caf9;
+    color: #1976d2;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #f8f9fa;
 }
 </style>
