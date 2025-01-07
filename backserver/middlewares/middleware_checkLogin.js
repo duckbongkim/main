@@ -18,6 +18,7 @@ exports.isNotLoggedIn = (req,res,next)=>{
 exports.isAdmin = async (req,res,next)=>{
     try{
         if(!req.isAuthenticated()){
+            
             res.status(402).json({message:'need login'});
         }
         const account = await Accounts.findOne({where:{email:req.user.email}});

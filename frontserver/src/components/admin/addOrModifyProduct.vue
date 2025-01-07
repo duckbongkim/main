@@ -138,7 +138,7 @@ export default{
     methods:{
         async getProductLocations(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/products/locations');
+                const response = await axios.get('http://localhost:3000/admin/products/locations',{withCredentials:true});
                 this.productLocations = response.data;
                 console.log("productLocations",response);
             }
@@ -158,7 +158,7 @@ export default{
         },
         async getSupplyFactories(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories');
+                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories',{withCredentials:true});
                 this.supplyFactories = response.data;
                 console.log("supplyFactories",response);
             }
@@ -197,7 +197,8 @@ export default{
                 const response = await axios.post('http://localhost:3000/admin/upload/descriptionImg', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
-                    }
+                    },
+                    withCredentials:true
                 });
                 this.product.product_description_img = response.data.imageUrl;
                 console.log("product.product_description_img",this.product.product_description_img);
@@ -227,7 +228,8 @@ export default{
                 const response = await axios.post('http://localhost:3000/admin/upload/productImg', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
-                    }
+                    },
+                    withCredentials:true
                 });
                 this.product.product_image = response.data.imageUrl;
                 console.log("product.product_image",this.product.product_image);
@@ -250,7 +252,7 @@ export default{
         //상품 추가
         async AddProduct(){
             try{
-                const response = await axios.post('http://localhost:3000/admin/addProduct', this.product);
+                const response = await axios.post('http://localhost:3000/admin/addProduct', this.product,{withCredentials:true});
                 console.log("상품 추가 응답",response);
                 this.product = {};
             }
@@ -272,7 +274,7 @@ export default{
         //상품 수정
         async ModifyProduct(){
             try{
-                const response = await axios.patch('http://localhost:3000/admin/modifyProduct', this.product);
+                const response = await axios.patch('http://localhost:3000/admin/modifyProduct', this.product,{withCredentials:true});
                 console.log("상품 수정 응답",response);
             }
             catch(error){

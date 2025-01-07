@@ -116,7 +116,7 @@ export default{
         },
         async getProducts(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/products');
+                const response = await axios.get('http://localhost:3000/admin/products',{withCredentials:true});
                 this.products = response.data;
             }
             catch(error){
@@ -138,7 +138,7 @@ export default{
         },
         async deleteProduct(product){
             try{
-                const response = await axios.delete(`http://localhost:3000/admin/products/${product.id}`);
+                const response = await axios.delete(`http://localhost:3000/admin/products/${product.id}`,{withCredentials:true});
                 if (response.status === 200) {
                     this.products = this.products.filter(p => p.id !== product.id);
                 }

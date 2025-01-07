@@ -175,7 +175,7 @@ export default{
         },
         async getSupplyFactories(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories');
+                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories',{withCredentials:true});
                 this.factories = response.data;
             }
             catch(error){
@@ -197,7 +197,7 @@ export default{
         },
         async submitModifyFactory(){
             try{
-                const response = await axios.patch('http://localhost:3000/admin/modifySupplyFactory',this.editingFactory);
+                const response = await axios.patch('http://localhost:3000/admin/modifySupplyFactory',this.editingFactory,{withCredentials:true});
                 this.getSupplyFactories();
             }
             catch(error){
@@ -216,7 +216,7 @@ export default{
         },
         async deleteFactory(factory){
             try{
-                const response = await axios.delete(`http://localhost:3000/admin/deleteSupplyFactory/${factory.id}`);
+                const response = await axios.delete(`http://localhost:3000/admin/deleteSupplyFactory/${factory.id}`,{withCredentials:true});
                 if (response.status === 200) {
                     this.factories = this.factories.filter(fac => fac.id !== factory.id);
                 }
@@ -237,7 +237,7 @@ export default{
         },
         async submitAddFactory(){
             try{
-                const response = await axios.post('http://localhost:3000/admin/addSupplyFactory',this.newFactory);
+                const response = await axios.post('http://localhost:3000/admin/addSupplyFactory',this.newFactory,{withCredentials:true});
                 this.factories.push(response.data);
                 this.newFactory = {};
                 this.getSupplyFactories();

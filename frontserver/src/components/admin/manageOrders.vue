@@ -95,7 +95,7 @@ export default{
     methods:{
         async getOrders(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/orders');
+                const response = await axios.get('http://localhost:3000/admin/orders',{withCredentials:true});
                 this.orders = response.data;
                 console.log("주문 목록 응답",response);
             }catch(error){

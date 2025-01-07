@@ -207,7 +207,7 @@ export default{
         },
         async getUsers(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/users');
+                const response = await axios.get('http://localhost:3000/admin/users',{withCredentials:true});
                 this.users = response.data.users;
                 this.ratings = response.data.ratings;
                 console.log(this.users);
@@ -233,7 +233,7 @@ export default{
         async submitModifyUser(){
             try{
                 const userIndex = this.users.findIndex(user => user.id === this.editingUser.id);
-                const response = await axios.patch(`http://localhost:3000/admin/users`,this.editingUser);
+                const response = await axios.patch(`http://localhost:3000/admin/users`,this.editingUser,{withCredentials:true});
                 if (response.status === 200) {
                     this.users[userIndex] = { ...this.editingUser };
                 }
@@ -255,7 +255,7 @@ export default{
         },
         async deleteUser(user){
             try{
-                const response = await axios.delete(`http://localhost:3000/admin/users/${user.id}`);
+                const response = await axios.delete(`http://localhost:3000/admin/users/${user.id}`,{withCredentials:true});
                 if (response.status === 200) {
                     this.users = this.users.filter(u => u.id !== user.id);
                 }
