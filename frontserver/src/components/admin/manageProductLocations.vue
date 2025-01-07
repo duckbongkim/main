@@ -143,7 +143,6 @@ export default{
     },
     setup(){},
     created(){
-        
     },
     mounted(){
         this.getProductLocations();
@@ -154,27 +153,86 @@ export default{
             this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
         },
         async getProductLocations(){
-            const response = await axios.get('http://localhost:3000/admin/products/locations');
-            this.locations = response.data;
+            try{
+                const response = await axios.get('http://localhost:3000/admin/products/locations');
+                this.locations = response.data;
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('원산지 목록 조회에 실패했습니다. : ',error);
+                }
+            }
         },
         async modifyLocation(location){
             this.editingLocation = { ...location };
         },
         async submitModifyLocation(){
-            const response = await axios.patch('http://localhost:3000/admin/modifyProductLocation',this.editingLocation);
-            this.getProductLocations();
+            try{
+                const response = await axios.patch('http://localhost:3000/admin/modifyProductLocation',this.editingLocation);
+                this.getProductLocations();
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('원산지 수정에 실패했습니다. : ',error);
+                }
+            }
         },
         async deleteLocation(location){
-            const response = await axios.delete(`http://localhost:3000/admin/deleteProductLocation/${location.id}`);
-            this.locations = this.locations.filter(loc => loc.id !== location.id);
+            try{
+                const response = await axios.delete(`http://localhost:3000/admin/deleteProductLocation/${location.id}`);
+                this.locations = this.locations.filter(loc => loc.id !== location.id);
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('원산지 삭제에 실패했습니다. : ',error);
+                }
+            }
         },
         async submitAddLocation(){
-            const response = await axios.post('http://localhost:3000/admin/addProductLocation',this.newLocation);
-            this.locations.push(response.data);
-            this.newLocation = {};
-            this.getProductLocations();
+            try{
+                const response = await axios.post('http://localhost:3000/admin/addProductLocation',this.newLocation);
+                this.locations.push(response.data);
+                this.newLocation = {};
+                this.getProductLocations();
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('원산지 추가에 실패했습니다. : ',error);
+                }
+            }
         }
-        
     },
     watch:{}
 }

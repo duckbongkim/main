@@ -214,8 +214,17 @@ export default{
                 console.log(this.ratings);
             }
             catch(error){
-                alert('사용자 목록을 불러오는데 실패했습니다.');
-                console.log("사용자 목록을 불러오는데 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('사용자 목록을 불러오는데 실패했습니다. : ',error);
+                }
             }
         },
         modifyUser(user){
@@ -231,8 +240,17 @@ export default{
                 console.log(response);
             }
             catch(error){
-                alert('사용자 수정에 실패했습니다.');
-                console.log("사용자 수정에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('사용자 수정에 실패했습니다. : ',error);
+                }
             }
         },
         async deleteUser(user){
@@ -244,8 +262,17 @@ export default{
                 console.log(response);
             }
             catch(error){
-                alert('사용자 삭제에 실패했습니다.');
-                console.log("사용자 삭제에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('사용자 삭제에 실패했습니다. : ',error);
+                }
             }
         }
     },

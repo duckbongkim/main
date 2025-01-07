@@ -174,25 +174,87 @@ export default{
             this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
         },
         async getSupplyFactories(){
-            const response = await axios.get('http://localhost:3000/admin/products/supplyFactories');
-            this.factories = response.data;
+            try{
+                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories');
+                this.factories = response.data;
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 목록을 불러오는데 실패했습니다. : ',error);
+                }
+            }
         },
         async modifyFactory(factory){
             this.editingFactory = { ...factory };
         },
         async submitModifyFactory(){
-            const response = await axios.patch('http://localhost:3000/admin/modifySupplyFactory',this.editingFactory);
-            this.getSupplyFactories();
+            try{
+                const response = await axios.patch('http://localhost:3000/admin/modifySupplyFactory',this.editingFactory);
+                this.getSupplyFactories();
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 수정에 실패했습니다. : ',error);
+                }
+            }
         },
         async deleteFactory(factory){
-            const response = await axios.delete(`http://localhost:3000/admin/deleteSupplyFactory/${factory.id}`);
-            this.factories = this.factories.filter(fac => fac.id !== factory.id);
+            try{
+                const response = await axios.delete(`http://localhost:3000/admin/deleteSupplyFactory/${factory.id}`);
+                if (response.status === 200) {
+                    this.factories = this.factories.filter(fac => fac.id !== factory.id);
+                }
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 삭제에 실패했습니다. : ',error);
+                }
+            }
         },
         async submitAddFactory(){
-            const response = await axios.post('http://localhost:3000/admin/addSupplyFactory',this.newFactory);
-            this.factories.push(response.data);
-            this.newFactory = {};
-            this.getSupplyFactories();
+            try{
+                const response = await axios.post('http://localhost:3000/admin/addSupplyFactory',this.newFactory);
+                this.factories.push(response.data);
+                this.newFactory = {};
+                this.getSupplyFactories();
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 추가에 실패했습니다. : ',error);
+                }
+            }
         }
         
     },

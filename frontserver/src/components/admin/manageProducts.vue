@@ -120,8 +120,17 @@ export default{
                 this.products = response.data;
             }
             catch(error){
-                alert('상품 목록을 불러오는데 실패했습니다.');
-                console.log("상품 목록을 불러오는데 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 목록을 불러오는데 실패했습니다. : ',error);
+                }
             }
         },
         modifyProduct(productID){
@@ -136,8 +145,17 @@ export default{
                 console.log(response);
             }
             catch(error){
-                alert('상품 삭제에 실패했습니다.');
-                console.log("상품 삭제에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 삭제에 실패했습니다. : ',error);
+                }
             }
         }
     },

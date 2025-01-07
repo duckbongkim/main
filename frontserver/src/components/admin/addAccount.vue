@@ -157,20 +157,30 @@ export default{
                 console.log(this.dataForAddAccount);
                 const response = await axios.post('http://localhost:3000/admin/addAccount',this.dataForAddAccount);
                 this.dataForAddAccount = {
-                name:'',
-                nickname:'',
-                email:'',
-                password:'',
-                address:'',
-                addressDetail:'',
-                addressNumber:'',
-                birth:'',
-                phone_number:'',
+                    name:'',
+                    nickname:'',
+                    email:'',
+                    password:'',
+                    address:'',
+                    addressDetail:'',
+                    addressNumber:'',
+                    birth:'',
+                    phone_number:'',
                 }
                 console.log(response);
             }
             catch(error){
-                alert('회원 추가에 실패했습니다. : ',error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('회원 추가에 실패했습니다. : ',error);
+                }
                 console.log("회원 추가에 실패했습니다.",error);
             }
         }

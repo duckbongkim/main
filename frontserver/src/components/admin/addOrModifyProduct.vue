@@ -143,7 +143,17 @@ export default{
                 console.log("productLocations",response);
             }
             catch(error){
-                console.log("상품 원산지 조회에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 원산지 조회에 실패했습니다. : ',error);
+                }
             }
         },
         async getSupplyFactories(){
@@ -153,7 +163,17 @@ export default{
                 console.log("supplyFactories",response);
             }
             catch(error){
-                console.log("상품 공급처 조회에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 공급처 조회에 실패했습니다. : ',error);
+                }
             }
         },
 
@@ -183,7 +203,17 @@ export default{
                 console.log("product.product_description_img",this.product.product_description_img);
                 console.log("이미지 업로드 응답",response);
             } catch (error) {
-                console.error('이미지 업로드 실패:', error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 설명 이미지 업로드에 실패했습니다. : ',error);
+                }
             }
         },
         async uploadProductImage() {
@@ -203,7 +233,17 @@ export default{
                 console.log("product.product_image",this.product.product_image);
                 console.log("이미지 업로드 응답",response);
             } catch (error) {
-                console.error('이미지 업로드 실패:', error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 이미지 업로드에 실패했습니다. : ',error);
+                }
             }
         },
 
@@ -215,8 +255,17 @@ export default{
                 this.product = {};
             }
             catch(error){
-                console.log("상품 추가 실패",error);
-                
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 추가에 실패했습니다. : ',error);
+                }
             }
 
         },
@@ -227,8 +276,17 @@ export default{
                 console.log("상품 수정 응답",response);
             }
             catch(error){
-                console.log("상품 수정 실패",error);
-                
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 수정에 실패했습니다. : ',error);
+                }
             }
         },
     },
