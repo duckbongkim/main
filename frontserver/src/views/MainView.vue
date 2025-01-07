@@ -292,7 +292,7 @@ export default{
       this.swiperInstance = new Swiper(this.$refs.swiperContainer, {
         slidesPerView: 1,
         spaceBetween: 10,
-        loop: true, //// 루프 모드 (선택 사항)
+        loop: true, //// 루프 모드 (선택 사항) 2025-01-07
           navigation: {
             nextEl: '.swiper-next',
             prevEl: '.swiper-prev',
