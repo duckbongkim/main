@@ -2,6 +2,21 @@
 <div>
 
   <div class="clear">
+      <!-- 임시 검색창 -->
+      <div class="search-form">
+        <input 
+          v-model="searchQuery" 
+          type="text" 
+          placeholder="검색어를 입력하세요"
+        >
+        <button @click="handleSearch">검색</button>
+      </div>
+
+      <button @click="$router.push('/mypage')">마이페이지</button>
+      <button @click="$router.push('/post/post_detail/3')">게시물 상세 페이지 테스트 버튼</button>
+      <button @click="$router.push('/post/addPost')">게시물 추가 페이지 테스트 버튼</button>
+
+
     <!-- 로그인 상태가 아니면 로그인, 회원가입 버튼 표시 -->
     <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/login')">로그인</button>
     <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/createAccount')">회원가입</button>
@@ -13,9 +28,10 @@
     <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
     <button @click="$router.push('/mypage')">마이페이지</button>
     <!-- 로그인 상태에서 우측 상단에 환영 메시지 표시 -->
-    <div class="welcome-message" v-if="isLoggedIn">
+    <div class="welcome-message" v-show="isLoggedIn">
       환영합니다!
     </div>
+
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
@@ -71,8 +87,10 @@
 
 <script>
 import axios from 'axios';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-    export default{
+export default{
     data(){
       return {
         account: [],
@@ -137,8 +155,18 @@ import axios from 'axios';
       },
     mounted() {
       this.checkLogin(); // 컴포넌트 로드시 로그인 상태 확인
-    }      
+    } ,
+    
+    handleSearch() {
+    this.$router.push({
+      path: '/liqueur',
+      query: { search: this.searchQuery }
+    });
+  },
+
   }
+
+
 </script>
 
 <style scoped>

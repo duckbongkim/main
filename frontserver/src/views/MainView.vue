@@ -143,7 +143,7 @@
     </div>
    
     <!-- 비싼 가격대 추천 -->
-    <div class="promotion">
+    <!-- <div class="promotion">
         <div class="swiper-container" ref="swiperContainer">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="item in mainData.expensive" :key="item.id" @click="goProducts(item.id)">
@@ -152,17 +152,45 @@
               <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- 이전 버튼 -->
-        <div class="swiper-prev swiper-button">
+        <!-- <div class="swiper-prev swiper-button">
           <span class="material-icons arrow_back">arrow_back_ios</span>
-        </div>
+        </div> -->
+
         <!-- 다음 버튼 -->
-        <div class="swiper-next swiper-button">
+        <!-- <div class="swiper-next swiper-button">
           <span class="material-icons arrow_forward">arrow_forward_ios</span>
         </div>
-      </div>
+      </div> -->
+
+        <div class="promotion">
+          <div class="swiper-container" ref="swiperContainer">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" v-for="item in mainData.expensive" :key="item.id">
+                <img :src="item.product_image" alt="Product Image" />
+                <p>{{ item.product_description }}</p>
+                <strong>{{ item.product_name }} -</strong>
+                <strong>{{ item.product_price }}원</strong>
+              </div>
+            </div>
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- 이전 버튼 -->
+            <div class="swiper-prev">
+              <span class="material-icons">arrow_back_ios</span>
+            </div>
+            <!-- 다음 버튼 -->
+            <div class="swiper-next">
+              <span class="material-icons">arrow_forward_ios</span>
+            </div>
+          </div>
+        </div>
+
+
+
+
 
 
     <section>
@@ -227,6 +255,8 @@
 <script>
 import axios from 'axios';
 import Swiper from 'swiper'; // Swiper import (Vue에서는 컴포넌트로 불러와야 함)
+import 'swiper/swiper-bundle.css';
+
 
 export default{ 
     name:'',
@@ -249,7 +279,7 @@ export default{
     setup(){},
     created(){},
     mounted(){
-      // swiper 설정 
+      // swiper 설정
       this.initializeSwiper();
       window.addEventListener('resize', () => {
         if (this.swiperInstance) {
@@ -288,6 +318,7 @@ export default{
         this.$router.push(`/products/${product_id}`)
     },
       initializeSwiper() {
+        
       this.swiperInstance = new Swiper(this.$refs.swiperContainer, {
         slidesPerView: 1,
         spaceBetween: 10,

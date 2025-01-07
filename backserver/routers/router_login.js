@@ -20,13 +20,13 @@ router.get('/check', (req, res) => {
     });
     
     if (req.isAuthenticated() && req.user) {
-        res.json({
+        res.status(200).json({
             isLoggedIn: true,
             user: req.user,
             lastActivity: req.session.lastActivity
         });
     } else {
-        res.json({
+        res.status(403).json({
             isLoggedIn: false,
             user: null
         });
