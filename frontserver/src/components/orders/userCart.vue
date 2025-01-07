@@ -18,13 +18,12 @@
                     <td><img :src="cartedProduct.Product.product_image" alt=""></td>                  
                     <td>{{cartedProduct.Product.product_name}}</td>
                     <td>
-                        <button @click="plusC()">-</button>
+                        <button @click="minusC(cartedProduct)">-</button>
                         {{cartedProduct.count}}
-                        <button @click="minusC()">+</button></td>
+                        <button @click="plusC(cartedProduct)">+</button></td>
                     <td>{{cartedProduct.Product.product_price}}</td>
-                    <td>{{cartedProduct.total_price}}원</td>
+                    <td>{{cartedProduct.count * cartedProduct.Product.product_price}}원</td>
                     <td><button @click="deleteProduct(cartedProduct.id)">삭제</button></td>
-                    
                 </tr>
             </tbody>
         </table>
@@ -53,7 +52,7 @@
         </div>
         <div>
             <button>선택상품 주문</button>
-            <button>전체상품 주문</button>
+            <button @click="setProductSession()">전체상품 주문</button>
         </div>
     </div>
 </div>
@@ -63,13 +62,17 @@
 <script>
 import axios from 'axios';
 
+
 export default{ 
     name:'',
     components:{},
     data(){
         return{
             cartedProducts : [],
+            //selectedProducts: [],
             userid : 0,
+            productInfoForOrder : [],
+
         };
     },
     setup(){},
@@ -79,7 +82,17 @@ export default{
     },
     unmounted(){},
     methods:{
+        // 제품 수량 변경 함수
+        plusC(cartedProduct){
+            cartedProduct.count += 1 
+        },
 
+        minusC(cartedProduct){
+            if(cartedProduct.count > 0){
+                cartedProduct.count -= 1 
+            } return;
+            
+        },
         //Cart READ
         async getCartedProducts() {
             try {
@@ -106,8 +119,19 @@ export default{
             }catch(err){
                 console.error(err);
             }
-        }
+        },
+
+
+        //Order CREATE
+        //주문할 제품정보를 세션에 저장하여 쓰기
+        setProductSession(){
+            this.productInfoForOrder = this.cartedProducts;
+            console.log(`##############this.productInfoForOrder:${this.productInfoForOrder}`)
+            //세션에 저장
+            sessionStorage.setItem('productInfo',JSON.stringify(this.productInfoForOrder));
+        },
     }
 }
 
 </script>
+
