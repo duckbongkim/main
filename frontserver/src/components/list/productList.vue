@@ -31,15 +31,35 @@ export default {
   data() {
     return {
       products: [],
+      filteredProducts: [],
     };
   },
   created() {
     this.fetchProducts();  
   },
   mounted() {
-    this.fetchProductsByType(this.drink_type);
+    // 검색어가 있는 경우 검색 실행, 없는 경우 일반 상품 목록 표시
+     // 검색어가 있는 경우 검색 실행, 없는 경우 일반 상품 목록 표시
+    if (this.$route.query.search) {
+      this.fetchProducts().then(() => {
+        this.filterProductsBySearch(this.$route.query.search);
+      });
+    } else if (this.drink_type) {
+      this.fetchProductsByType(this.drink_type);
+    } else {
+      this.fetchProducts();
+    }
   },
   watch: {
+    '$route.query.search'(newSearch) {
+      if (newSearch) {
+        this.fetchProducts().then(() => {
+          this.filterProductsBySearch(newSearch);
+        });
+      } else {
+        this.fetchProducts();
+      }
+    },
     drink_type(newDrinkType) {
       this.fetchProductsByType(newDrinkType);
     },
@@ -86,6 +106,16 @@ export default {
         console.error(error);
       }
     },
+
+    // 검색어로 상품 필터링하는 새로운 메소드
+    filterProductsBySearch(searchQuery) {
+      const query = searchQuery.toLowerCase();
+      this.products = this.products.filter(product => 
+        product.product_name.toLowerCase().includes(query) ||
+        product.product_description.toLowerCase().includes(query) ||
+        product.drink_type.toLowerCase().includes(query)
+      );
+    }
   },
 };
 </script>

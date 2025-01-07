@@ -1,25 +1,25 @@
 <template>
 <div>
 
-    <!-- <header>
-      <button class="login-button" @click="getaccount('/login')">로그인</button>
-    </header>
-
-    <header>
-      <button class="basket-button" @click="$getaccount('/basket')">장바구니</button>
-    </header>    
-
-    <header>
-      <button class="createAccount-button" @click="getaccount('/createAccount')">회원가입</button>
-    </header>     -->
-
   <div class="clear">
       <button class="login-button" @click="$router.push('/login')">로그인</button>
       <button class="login-button" @click="$router.push('/createAccount')">회원가입</button>
       <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
+
+      <!-- 임시 검색창 -->
+      <div class="search-form">
+        <input 
+          v-model="searchQuery" 
+          type="text" 
+          placeholder="검색어를 입력하세요"
+        >
+        <button @click="handleSearch">검색</button>
+      </div>
+
       <button @click="$router.push('/mypage')">마이페이지</button>
       <button @click="$router.push('/post/post_detail/3')">게시물 상세 페이지 테스트 버튼</button>
-      <button @click="$router.push('/post/addPost')">게시물 추가 페이지 테스트 버튼</button>         
+      <button @click="$router.push('/post/addPost')">게시물 추가 페이지 테스트 버튼</button>
+
   </div>
     
   <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
@@ -75,8 +75,10 @@
 
 <script>
 import axios from 'axios';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-    export default{
+export default{
     data(){
       return {
         account: [],
@@ -88,17 +90,24 @@ import axios from 'axios';
         const response = await axios.get(`http://localhost:3000/${router}`);
         this.account = response.data;
         console.log(response);
-      }catch(err){
-        console.error(err);
-      }
-    },
+        }catch(err){
+          console.error(err);
+        }
+      },
 
-    goToMenu(path){
-    this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
-        },
-      }
+      goToMenu(path){
+      this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
+      },
       
+      handleSearch() {
+      this.$router.push({
+        path: '/liqueur',
+        query: { search: this.searchQuery }
+      });
+    },
     }
+    
+}
 </script>
 
 <style scoped>
