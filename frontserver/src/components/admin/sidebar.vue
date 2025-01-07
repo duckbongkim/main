@@ -24,7 +24,7 @@
                 <a class="nav-link" @click="goToMenu('/admin/users')">-사용자 목록</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" @click="goToMenu('/admin/orders')">-주문 목록</a>
+                <a class="nav-link" @click="goToMenu('/admin/manageOrders')">-주문 목록</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" @click="goToMenu('/admin/products')">-상품 목록</a>

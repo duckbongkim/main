@@ -143,8 +143,12 @@ export default{
                 this.$router.push('/');
                 
             }catch(error){
-                console.error(error);
-                alert('회원가입 중 오류가 발생했습니다.');
+                if(error.response.status === 400){
+                    alert(error.response.data.message);
+                    this.$nextTick(() => {
+                      this.$refs.emailInput.focus();
+                    });
+                }
             }
         }
     },

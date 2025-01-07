@@ -4,10 +4,12 @@ const {isLoggedIn} = require('../middlewares/middleware_checkLogin.js');
 const {getProfile} = require('../controllers/controller_profile.js');
 const {getRatings} = require('../controllers/admin/controller_ratings.js');
 const {getSpecificUserPosts} = require('../controllers/post/controller_post.js');
+const {dropOutUser} = require('../controllers/admin/controller_account.js');
 
 router.get('/',isLoggedIn,getProfile);
 router.get('/ratings',isLoggedIn,getRatings);
 router.get('/posts',isLoggedIn,getSpecificUserPosts);
+router.get('/dropOut',isLoggedIn,dropOutUser);
 
 
 module.exports = router;
