@@ -21,7 +21,7 @@ const loginRouter = require('./routers/router_login.js');
 const orderRouter = require('./routers/router_orders.js');// 1월2일 orderRouter 추가 (누리)
 const profileRouter = require('./routers/router_profile.js');
 const postRouter = require('./routers/router_post.js');
-
+const modifyRouter = require('./routers/router_modiuser.js') // 1월7일 유저 정보 수정 router 추가
 const Accounts = require('./models/model_accounts.js');
 
 
@@ -92,6 +92,7 @@ app.use('/liqueur',listRouter);
 app.use('/orders',orderRouter);// 1월2일 orderRouter 추가 (누리)
 app.use('/profile',profileRouter);
 app.use('/post',postRouter);
+app.use('/modify',modifyRouter); // 1월7일 추가 동진
 
 
 
