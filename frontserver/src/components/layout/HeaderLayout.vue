@@ -157,6 +157,7 @@ export default{
 
 
     goToMenu(path){
+      console.log("Navigating to path:", path);
     this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
         },
       },

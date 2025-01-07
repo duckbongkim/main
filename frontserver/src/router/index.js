@@ -44,14 +44,18 @@ const routes = [
         path: '',
         name: 'post_all',
         component: () => import('../components/post/postAll.vue')
+      },
+      {
+        path: 'test',
+        name: 'post_test',
+        component: () => import('../components/post/postListAll.vue')
       }
     ]
   },
   {
-
-    path: '/liqueur', // 상품리스트 임시용
+    path: '/liqueur',
     name: 'liqueur',
-    component: productList
+    component: () => import('../components/list/productAll.vue')
   },
   {
     path: '/liqueur/:drink_type', // 상품리스트 임시용
@@ -59,6 +63,7 @@ const routes = [
     component: productList,
     props: true
   },
+
   {
     path: '/post/post_detail/:id',
     name: 'post_detail',
@@ -164,30 +169,30 @@ const routes = [
   },
 
   // 2025-01-02 김우진 nav바에서 주류사이트로 이동이 가능하게 components에 test를 만들어서 연결 시켰습니다.성공!!
-  {
-    path:'/liqueur',
-    name:'liqueur',
-    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/liqueur.vue')
+  // {
+  //   path:'/liqueur',
+  //   name:'liqueur',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/liqueur.vue')
 
-  },
-  {
-    path:'/whiskey',
-    name:'whiskey',
-    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/whiskey.vue')
+  // },
+  // {
+  //   path:'/whiskey',
+  //   name:'whiskey',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/whiskey.vue')
 
-  },
-  {
-    path:'/wine',
-    name:'wine',
-    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/wine.vue')
+  // },
+  // {
+  //   path:'/wine',
+  //   name:'wine',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/wine.vue')
 
-  },
-  {
-    path:'/traditional',
-    name:'traditional',
-    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
+  // },
+  // {
+  //   path:'/traditional',
+  //   name:'traditional',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
 
-  },
+  // },
   // 2025-01-03 김우진 여기는 etc상품 이동 라우터 입니다.
   {
     path:'/glass',
