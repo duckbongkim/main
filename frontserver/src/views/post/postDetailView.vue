@@ -33,12 +33,12 @@
                             <!-- Comment form-->
                             <form class="mb-4" @submit.prevent="addReply(null)">
                                 <div class="d-flex gap-2">
-                                    <textarea ref="replyTextarea" v-model="sendReply.reply_content" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <textarea ref="replyText" v-model="sendReply.reply_content" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
                                     <button type="submit" class="btn btn-primary align-self-stretch">댓글 작성</button>
                                 </div>
                             </form> 
                             <!-- Comment with nested comments-->
-                            <div v-for="reply in replyList.filter(reply => reply.reply_reply_id === null)" :key="reply.id" class="d-flex mb-4">
+                            <div v-for="reply, index in replyList.filter(reply => reply.reply_reply_id === null)" :key="reply.id" class="d-flex mb-4">
                                 <!-- Parent comment-->
                                 <div class="ms-3" style="width: 90%;">
                                     <div class="d-flex justify-content-between align-items-start">
@@ -66,9 +66,13 @@
                                             <i class="fas fa-comments" data-bs-toggle="collapse" :data-bs-parent="replyAccordion" :data-bs-target="'#reply-' + reply.id" aria-expanded="false" aria-controls="reply" style="cursor: pointer; font-size: 1.2em; color: #adb5bd;"></i>
                                         </div>
                                         <div :id="'reply-' + reply.id" class="collapse mt-4" style=" background-color: #f8f9fa; padding: 5px; border-radius: 5px;">
-                                            <form class="mb-4" @submit.prevent="addReply(reply.id)">
+                                            <form class="mb-4" @submit.prevent="addReply(reply.id, index)">
                                                 <div class="d-flex gap-2">
-                                                    <input type="text" ref="replyreplyTextarea" v-model="sendReply.reply_reply_content" class="form-control" placeholder="댓글을 입력하세요...">
+                                                    <input type="text" 
+                                                        :ref="`replyInput${index}`"
+                                                        v-model="replyReplyContents[index]" 
+                                                        class="form-control" 
+                                                        placeholder="댓글을 입력하세요...">
                                                     <button type="submit" class="btn btn-primary align-self-stretch">댓글 작성</button>
                                                 </div>
                                             </form>
@@ -198,6 +202,7 @@ export default{
                 }
             },
             replyList:[],
+            replyReplyContents:[],
             user:{
                 nickname:'',
                 email:''
@@ -218,7 +223,7 @@ export default{
         this.getPostDetail();
     },
     mounted(){
-        
+        console.log('모든 refs:', this.$refs);
         this.getReplyList();
     },
     unmounted(){},
@@ -229,9 +234,14 @@ export default{
             console.log("postDetail",this.postDetail);
             console.log("postDetail.Account.email",this.postDetail.Account.email);
         },
+        initializeReplyReplyContents() {
+            const parentReplies = this.replyList.filter(reply => reply.reply_reply_id === null);
+            this.replyReplyContents = new Array(parentReplies.length).fill('');
+        },
         async getReplyList(){
             const response = await axios.get(`http://localhost:3000/post/reply_list/${this.postId}`);
             this.replyList = response.data;
+            this.initializeReplyReplyContents();
             console.log("replyList",this.replyList);
         },
         async getUser(){
@@ -257,38 +267,53 @@ export default{
                 }
             }
         },
-        async addReply(reply_id){
-            console.log("reply_id",reply_id);
-            if(this.sendReply.reply_content === '' && this.sendReply.reply_reply_content === ''){
-                alert("댓글을 입력해주세요.");
-                if(this.sendReply.reply_reply_content === ''){
+        async addReply(reply_id, index){
+            if(!reply_id){
+                if(this.sendReply.reply_content === ''){
+                    alert("댓글을 입력해주세요.");
                     this.$nextTick(() => {
-                        this.$refs.replyTextarea.focus();
+                        this.$refs.replyText.focus();
                     });
-                }else{
-                    this.$nextTick(() => {
-                        this.$refs.replyreplyTextarea.focus();
-                    });
+                    return;
                 }
-                return;
             }
-            if(reply_id){
+            else{
+                if(this.replyReplyContents[index] === ''){
+                    alert("댓글을 입력해주세요.");
+                    this.$nextTick(() => {
+                        const refName = `replyInput${index}`;
+                        if (this.$refs[refName]) {
+                            this.$refs[refName][0].focus();//:ref=`replyInput${index}`처럼 바인딩 해서 값을 넣은 경우 값이 배열로 들어가기 때문에 확인을 잘 해서 찾아줘야 함. console.log('모든 refs:', this.$refs); 로 확인 가능
+                        }
+                    });
+                    return;
+                }
                 this.sendReply.reply_reply_id = reply_id;
+                this.sendReply.reply_content = this.replyReplyContents[index];
             }
             try{
                 const response = await axios.post(`http://localhost:3000/post/reply_add/${this.postId}`,this.sendReply,{withCredentials:true});
                 this.sendReply = {
                     reply_content:'',
-                    reply_reply_content:'',
                     reply_reply_id:null,
                 };
                 this.getReplyList();
             }catch(error){
                 if(error.response.status === 401 || error.response.status === 403){
                     alert("로그인 후 이용해주세요.");
-                    this.$nextTick(() => {
-                        this.$refs.replyTextarea.focus();
-                    });
+                    if(!reply_id){
+                        this.$nextTick(() => {
+                            this.$refs[`replyText`].focus();
+                        });
+                    }
+                    else{
+                        this.$nextTick(() => {
+                            const refName = `replyInput${index}`;
+                            if (this.$refs[refName]) {
+                                this.$refs[refName][0].focus();
+                            }
+                        });
+                    }
                 }
                 console.log("댓글 작성 실패",error);
             }

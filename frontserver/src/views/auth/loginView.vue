@@ -8,7 +8,7 @@
       <!-- 이메일/비밀번호 폼 -->
       <form class="login-form" @submit.prevent="localLogin">
         <div class="form-group">
-          <input  type="email" placeholder="이메일" class="form-input" v-model="loginFrom.email" required/>
+          <input ref="emailInput" type="email" placeholder="이메일" class="form-input" v-model="loginFrom.email" required/>
         </div>
         <div class="form-group">
           <input type="password" placeholder="비밀번호" class="form-input" v-model="loginFrom.password" required/>
@@ -79,9 +79,7 @@ export default{
             }catch(error){
                 if(error.response.status === 401){
                     alert(error.response.data.message);
-                    this.$nextTick(() => {
-                      this.$refs.emailInput.focus();
-                    });
+                    this.$refs.emailInput?.focus();
                 }
             }
         },

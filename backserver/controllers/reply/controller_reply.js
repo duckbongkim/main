@@ -23,9 +23,6 @@ exports.addReply = async (req,res,next)=>{
     try{
         const post_id = req.params.id;
         let newReply = req.body;
-        if(newReply.reply_reply_id){
-            newReply.reply_content = newReply.reply_reply_content;
-        }
         const account_email = req.user.email;
         const account = await Accounts.findOne({where:{email:account_email}});
         const account_id = account.id;

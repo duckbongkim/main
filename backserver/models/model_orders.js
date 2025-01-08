@@ -42,6 +42,10 @@ class Orders extends Sequelize.Model {
                 type: Sequelize.TEXT,
                 allowNull: true,
             },
+            final_paid_price:{
+                type: Sequelize.FLOAT,
+                allowNull: true,
+            },
         },{
             sequelize,
             timestamps: false,
