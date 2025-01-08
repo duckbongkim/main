@@ -3,7 +3,7 @@
     <h3> 전체 게시판</h3>
     <ul>
       <li v-for="post in posts" :key="post.id">
-        <router-link :to="`/post_detail/${post.id}`">
+        <router-link :to="`/post/post_detail/${post.id}`">
           <div>
             <h2>{{ post.title }}</h2>
             <p>{{ post.content }}</p>
@@ -37,7 +37,7 @@ export default {
   methods:{
     async AllPosts(){
         try {
-            const response = await axios.get('http://localhost:3000/postlist');
+            const response = await axios.get('http://localhost:3000/post/post_list');
             this.posts = response.data; 
         } catch (error) {
             console.error('전체 게시물을 가져오는데 실패했습니다.', error);

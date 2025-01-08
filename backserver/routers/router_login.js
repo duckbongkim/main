@@ -4,7 +4,10 @@ const {isNotLoggedIn,isLoggedIn} = require('../middlewares/middleware_checkLogin
 const {localLogin,logout} = require('../controllers/auth/controller_login.js');
 const {kakaoLogin,kakaoCallback} = require('../controllers/auth/controller_kakaoLogin.js');
 const {naverLogin,naverCallback} = require('../controllers/auth/controller_naverLogin.js');
+const {addAccount} = require('../controllers/admin/controller_account.js');
 
+//회원가입
+router.post('/signup',isNotLoggedIn,addAccount);
 
 //로컬 로그인
 router.post('/',isNotLoggedIn,localLogin);
@@ -20,13 +23,13 @@ router.get('/check', (req, res) => {
     });
     
     if (req.isAuthenticated() && req.user) {
-        res.json({
+        res.status(200).json({
             isLoggedIn: true,
             user: req.user,
             lastActivity: req.session.lastActivity
         });
     } else {
-        res.json({
+        res.status(403).json({
             isLoggedIn: false,
             user: null
         });
@@ -43,5 +46,6 @@ router.get('/naver/callback',naverCallback);
 
 //로그아웃
 router.post('/logout',isLoggedIn,logout);
+
 
 module.exports = router;

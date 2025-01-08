@@ -34,6 +34,18 @@ class Orders extends Sequelize.Model {
                 allowNull: true,
                 defaultValue: Sequelize.NOW,
             },
+            cancel_date:{
+                type: Sequelize.DATE,
+                allowNull: true,
+            },
+            cancel_reason:{
+                type: Sequelize.TEXT,
+                allowNull: true,
+            },
+            final_paid_price:{
+                type: Sequelize.FLOAT,
+                allowNull: true,
+            },
         },{
             sequelize,
             timestamps: false,

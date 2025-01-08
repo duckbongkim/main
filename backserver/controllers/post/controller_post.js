@@ -1,7 +1,7 @@
 const Postes = require('../../models/model_postes');
 const Accounts = require('../../models/model_accounts');
 const Replies = require('../../models/model_replies');
-
+const Likes = require('../../models/model_likes');
 //전체 게시글 조회
 exports.getPosts = async (req,res,next)=>{
     try{
@@ -125,3 +125,41 @@ exports.uploadPostImage = async (req,res,next)=>{
         next(error);
     }
 }
+
+//좋아요 추가
+exports.addPostLike = async (req,res,next)=>{
+    try{
+        let user = await Accounts.findOne({where:{email:req.user.email}});
+        const {post_id} = req.params;
+        const allLikers = await Likes.findAll({where:{post_id}});
+
+        if(allLikers.some(liker=>liker.who_liked === req.user.email)){//이미 좋아요를 누른 경우 some -> 배열 중 하나라도 조건에 맞으면 true
+            res.status(400).json({message:"이미 좋아요를 누르셨습니다."});
+        }
+
+        let post = await Postes.findOne({where:{id:post_id}});
+        await Likes.create({who_liked:req.user.email,post_id:post_id});
+        await Postes.update({ like_count: post.like_count + 1 },{ where: { id:post_id } });
+        
+        const totalLikeCount = await Postes.sum('like_count', { where: { account_id:post.account_id } });
+        let newRatingId = 1; // 기본 등급
+        if (totalLikeCount >= 500) {
+            newRatingId = 5;
+        } else if (totalLikeCount >= 150) {
+            newRatingId = 4;
+        } else if (totalLikeCount >= 100) {
+            newRatingId = 3;
+        } else if (totalLikeCount >= 5) {
+            newRatingId = 2;
+        }
+        if(newRatingId > user.rating_id){
+            await Accounts.update({ rating_id: newRatingId }, { where: { id: post.account_id } });
+        }
+
+        res.status(200).json({likeCount:post.like_count});
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+}
+

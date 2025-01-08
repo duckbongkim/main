@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="factory in factories" :key="factory.id">
+                <tr v-for="factory in paginatedFactories" :key="factory.id">
                     <td>{{factory.id}}</td>
                     <td>{{factory.factory_name}}</td>
                     <td>{{factory.factory_location}}</td>
@@ -103,6 +103,21 @@
         </div>
     </div>          
     
+    <!-- 페이지네이션 추가 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
+            </li>
+            <li class="page-item" v-for="page in displayedPages" :key="page" :class="{ active: page === currentPage }">
+                <a class="page-link" href="#" @click.prevent="currentPage = page">{{ page }}</a>
+            </li>
+            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                <a class="page-link" href="#" @click.prevent="currentPage++">다음</a>
+            </li>
+        </ul>
+    </nav>
+    
 </div>
 </template>
 
@@ -112,12 +127,38 @@ import axios from 'axios';
 export default{ 
     name:'',
     components:{},
-    computed:{},
+    computed:{
+        paginatedFactories() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.factories.slice(start, end);
+        },
+        totalPages() {
+            return Math.ceil(this.factories.length / this.itemsPerPage);
+        },
+        displayedPages() {
+            const pages = [];
+            let start = Math.max(1, this.currentPage - 1);
+            let end = Math.min(this.totalPages, start + 2);
+            
+            if (end > this.totalPages) {
+                start = Math.max(1, this.totalPages - 2);
+                end = this.totalPages;
+            }
+
+            for (let i = start; i <= end; i++) {
+                pages.push(i);
+            }
+            return pages;
+        }
+    },
     data(){
         return{
             factories:[],
             newFactory:{},
             editingFactory:{},
+            currentPage: 1,
+            itemsPerPage: 15
         };
     },
     setup(){},
@@ -133,25 +174,87 @@ export default{
             this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
         },
         async getSupplyFactories(){
-            const response = await axios.get('http://localhost:3000/admin/products/supplyFactories');
-            this.factories = response.data;
+            try{
+                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories',{withCredentials:true});
+                this.factories = response.data;
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 목록을 불러오는데 실패했습니다. : ',error);
+                }
+            }
         },
         async modifyFactory(factory){
             this.editingFactory = { ...factory };
         },
         async submitModifyFactory(){
-            const response = await axios.patch('http://localhost:3000/admin/modifySupplyFactory',this.editingFactory);
-            this.getSupplyFactories();
+            try{
+                const response = await axios.patch('http://localhost:3000/admin/modifySupplyFactory',this.editingFactory,{withCredentials:true});
+                this.getSupplyFactories();
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 수정에 실패했습니다. : ',error);
+                }
+            }
         },
         async deleteFactory(factory){
-            const response = await axios.delete(`http://localhost:3000/admin/deleteSupplyFactory/${factory.id}`);
-            this.factories = this.factories.filter(fac => fac.id !== factory.id);
+            try{
+                const response = await axios.delete(`http://localhost:3000/admin/deleteSupplyFactory/${factory.id}`,{withCredentials:true});
+                if (response.status === 200) {
+                    this.factories = this.factories.filter(fac => fac.id !== factory.id);
+                }
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 삭제에 실패했습니다. : ',error);
+                }
+            }
         },
         async submitAddFactory(){
-            const response = await axios.post('http://localhost:3000/admin/addSupplyFactory',this.newFactory);
-            this.factories.push(response.data);
-            this.newFactory = {};
-            this.getSupplyFactories();
+            try{
+                const response = await axios.post('http://localhost:3000/admin/addSupplyFactory',this.newFactory,{withCredentials:true});
+                this.factories.push(response.data);
+                this.newFactory = {};
+                this.getSupplyFactories();
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 추가에 실패했습니다. : ',error);
+                }
+            }
         }
         
     },
@@ -178,5 +281,45 @@ export default{
 
 .modal-body form {
     text-align: left;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.page-link {
+    color: #007bff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-link:active {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #1976d2;
+}
+
+.page-link:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.page-item.active .page-link {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #1976d2;
+    font-weight: bold;
+}
+
+.page-link:hover {
+    background-color: #f5f9ff;
+    border-color: #90caf9;
+    color: #1976d2;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #f8f9fa;
 }
 </style>

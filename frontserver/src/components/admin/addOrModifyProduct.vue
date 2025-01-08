@@ -138,22 +138,42 @@ export default{
     methods:{
         async getProductLocations(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/products/locations');
+                const response = await axios.get('http://localhost:3000/admin/products/locations',{withCredentials:true});
                 this.productLocations = response.data;
                 console.log("productLocations",response);
             }
             catch(error){
-                console.log("상품 원산지 조회에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 원산지 조회에 실패했습니다. : ',error);
+                }
             }
         },
         async getSupplyFactories(){
             try{
-                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories');
+                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories',{withCredentials:true});
                 this.supplyFactories = response.data;
                 console.log("supplyFactories",response);
             }
             catch(error){
-                console.log("상품 공급처 조회에 실패했습니다.",error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 공급처 조회에 실패했습니다. : ',error);
+                }
             }
         },
 
@@ -177,13 +197,24 @@ export default{
                 const response = await axios.post('http://localhost:3000/admin/upload/descriptionImg', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
-                    }
+                    },
+                    withCredentials:true
                 });
                 this.product.product_description_img = response.data.imageUrl;
                 console.log("product.product_description_img",this.product.product_description_img);
                 console.log("이미지 업로드 응답",response);
             } catch (error) {
-                console.error('이미지 업로드 실패:', error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 설명 이미지 업로드에 실패했습니다. : ',error);
+                }
             }
         },
         async uploadProductImage() {
@@ -197,38 +228,67 @@ export default{
                 const response = await axios.post('http://localhost:3000/admin/upload/productImg', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
-                    }
+                    },
+                    withCredentials:true
                 });
                 this.product.product_image = response.data.imageUrl;
                 console.log("product.product_image",this.product.product_image);
                 console.log("이미지 업로드 응답",response);
             } catch (error) {
-                console.error('이미지 업로드 실패:', error);
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 이미지 업로드에 실패했습니다. : ',error);
+                }
             }
         },
 
         //상품 추가
         async AddProduct(){
             try{
-                const response = await axios.post('http://localhost:3000/admin/addProduct', this.product);
+                const response = await axios.post('http://localhost:3000/admin/addProduct', this.product,{withCredentials:true});
                 console.log("상품 추가 응답",response);
                 this.product = {};
             }
             catch(error){
-                console.log("상품 추가 실패",error);
-                
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 추가에 실패했습니다. : ',error);
+                }
             }
 
         },
         //상품 수정
         async ModifyProduct(){
             try{
-                const response = await axios.patch('http://localhost:3000/admin/modifyProduct', this.product);
+                const response = await axios.patch('http://localhost:3000/admin/modifyProduct', this.product,{withCredentials:true});
                 console.log("상품 수정 응답",response);
             }
             catch(error){
-                console.log("상품 수정 실패",error);
-                
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('상품 수정에 실패했습니다. : ',error);
+                }
             }
         },
     },

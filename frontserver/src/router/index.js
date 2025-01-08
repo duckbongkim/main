@@ -4,9 +4,12 @@ import MainView from '../views/MainView.vue'
 import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
-import OrderView from '../views/OrderView.vue';
+import OrderView from '../views/OrderView.vue'
 import productList from '../components/list/productList.vue';
 import PostListView from '../views/PostListView.vue'
+import testView from '../views/testView.vue'
+import modifyUser from '../views/ModifyUserView.vue';
+
 
 
 
@@ -43,14 +46,18 @@ const routes = [
         path: '',
         name: 'post_all',
         component: () => import('../components/post/postAll.vue')
+      },
+      {
+        path: 'test',
+        name: 'post_test',
+        component: () => import('../components/post/postListAll.vue')
       }
     ]
   },
   {
-
-    path: '/liqueur', // 상품리스트 임시용
+    path: '/liqueur',
     name: 'liqueur',
-    component: productList
+    component: () => import('../components/list/productAll.vue')
   },
   {
     path: '/liqueur/:drink_type', // 상품리스트 임시용
@@ -58,6 +65,7 @@ const routes = [
     component: productList,
     props: true
   },
+
   {
     path: '/post/post_detail/:id',
     name: 'post_detail',
@@ -94,12 +102,13 @@ const routes = [
         component: () => import(/* webpackChunkName: "manageUsers" */ '../components/admin/manageUsers.vue')
       },
       {
-        path:'orders/',
-        name:'orders',
+        path:'manageOrders/',
+        name:'manageOrders',
         component: () => import(/* webpackChunkName: "manageOrders" */ '../components/admin/manageOrders.vue')
       },
       {
-        path:'products/',
+        path:'manageProducts/',
+        name:'manageProducts',
         component: () => import(/* webpackChunkName: "manageProducts" */ '../components/admin/manageProducts.vue')
       },
       {
@@ -109,7 +118,7 @@ const routes = [
       },
       {
 
-        path:'ModifyProduct/:id',
+        path:'modifyProduct/:id',
         component: () => import(/* webpackChunkName: "addOrModifyProduct" */ '../components/admin/addOrModifyProduct.vue')
       },
       {
@@ -135,6 +144,11 @@ const routes = [
     name: 'mypage',
     component: MypageView,
   }, // 마이페이지 view 추가
+  {
+    path:'/modify',
+    name:'modify',
+    component: modifyUser // 1월7일 유저 정보 수정 페이지 추가 동진
+  },
 
   {
     path: '/orders',
@@ -162,30 +176,30 @@ const routes = [
   },
 
   // 2025-01-02 김우진 nav바에서 주류사이트로 이동이 가능하게 components에 test를 만들어서 연결 시켰습니다.성공!!
-  {
-    path:'/liqueur',
-    name:'liqueur',
-    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/liqueur.vue')
+  // {
+  //   path:'/liqueur',
+  //   name:'liqueur',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/liqueur.vue')
 
-  },
-  {
-    path:'/whiskey',
-    name:'whiskey',
-    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/whiskey.vue')
+  // },
+  // {
+  //   path:'/whiskey',
+  //   name:'whiskey',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/whiskey.vue')
 
-  },
-  {
-    path:'/wine',
-    name:'wine',
-    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/wine.vue')
+  // },
+  // {
+  //   path:'/wine',
+  //   name:'wine',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/wine.vue')
 
-  },
-  {
-    path:'/traditional',
-    name:'traditional',
-    component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
+  // },
+  // {
+  //   path:'/traditional',
+  //   name:'traditional',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
 
-  },
+  // },
   // 2025-01-03 김우진 여기는 etc상품 이동 라우터 입니다.
   {
     path:'/glass',
@@ -222,7 +236,13 @@ const routes = [
     name:'decanter',
     component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
 
-  },  
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: testView
+  }, // startbootstrap 테스트 위해 1월 5일 동진
+
 
 
 

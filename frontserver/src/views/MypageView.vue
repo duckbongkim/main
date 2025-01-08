@@ -5,23 +5,22 @@
     <div class="user-info">
       <div class="user-details">
         <div>
-          <h3>{{ user.nickname }} 님 반갑습니다.</h3>
-          <button class="edit-btn">내 정보 수정</button>
+          <h3><span>{{ user.nickname }}</span> 님 은 <span>{{rating.rating_name}}</span> 등급입니다.</h3>
+          <button type="submit" class="edit-btn" @click="modify">내 정보 수정</button>
         </div>
       </div>
 
     <div class="user-balance">
-        <div class="balance-item">
-            <h4 class="rating_name">등급</h4>
-            <p>{{ rating.rating_name }}</p>
-        </div>
-        <hr class="balance-line">
+         <div class="balance-item">
+            <h4 class="rating_name">예치금</h4>
+            <p><span>{{ user.savedMoney }}</span>원</p>
+        </div> 
+       
         <div class="balance-item">
             <h4>적립금</h4>
-            <p class="ratingPoint">{{ user.ratingPoint }}원</p>
+            <p class="ratingPoint"><span>{{ user.ratingPoint }}</span>원</p>
         </div>
     </div>
-    
     </div>
 
     <!-- Icon Menu Section -->
@@ -80,18 +79,17 @@ export default{
         };
     },
     setup(){},
-    created(){},
-    mounted(){
-        this.getUser()
-        this.getRating()
+    created(){
+      this.getUser()
+      this.getRating()
     },
+    mounted(){},
     unmounted(){},
     methods:{
          async getUser(){
             try{
                 const res = await axios.get(`http://localhost:3000/profile`,{withCredentials:true})
                 this.user = res.data
-                console.log(res)
             }catch(err){
                 if (err.status===403) {
                 alert('로그인이 필요함')
@@ -105,7 +103,6 @@ export default{
             try{
                 const res = await axios.get(`http://localhost:3000/profile/ratings`,{withCredentials:true})
                 this.rating = res.data.find((rating)=>rating.id === this.user.rating_id)
-                console.log('유저 등급',this.rating)
             }catch(err){
                 console.error(err)
             }
@@ -120,7 +117,16 @@ export default{
             console.error(err)
           }
          },
-        
+
+      async modify() {
+        try {
+            await axios.post('http://localhost:3000/modify',{email:this.user.email},{withCredentials: true})
+            this.$router.push('/modify')
+          } catch (err) {
+              console.error(err);
+          }
+        } // 1월7일 유저 페이지로 유저 정보를 보내는 post 작성 동진
+
 
          
         }
@@ -145,11 +151,12 @@ export default{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 50px;
   border-radius: 8px;
   font-size: calc(12px + 0.5vw); 
   gap: 20px;
   margin: 50px 0 50px 0;
+  background-color: rgb(249,249,249);
 }
 
 .user-details,
@@ -159,49 +166,57 @@ export default{
 }
 
 .user-details {
-  display: flex;
   flex-direction: column;
-  align-items: flex-start; 
-  gap: 10px; 
-  text-align: left;
 }
 
 .user-details div {
-  display: flex; 
-  align-items: center; 
+  
+   
   gap: 10px; 
 }
 
 .user-details h3 {
   margin: 0; 
   line-height: 1.2; 
+  font-size: 1.1em;
+}
+
+.user-details h3 span {
+  font-weight: 700;
+  color: black;
 }
 
 .edit-btn {
-  color: white;
+  color: #000;
+  background-color:rgb(254, 245, 231) ;
   padding: 6px 10px; 
   border: none;
   border-radius: 4px;
   font-size: calc(10px + 0.3vw);
-  margin: 0; 
+  margin-top: 20px; 
   display: inline-block; 
   height: auto; 
 }
 
 .user-balance {
   display: flex;
-  flex-direction: column;
-  margin: 50px 0 50px 0;
+  justify-content: center;
+  gap: 10%;
 }
 
 .balance-item {
   display: flex; 
-  justify-content: space-between; 
+  flex-direction: column;
   align-items: center;
+  gap:50px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 .balance-item h4 {
   margin: 0; 
+  font-size: 1rem;
 }
 
 
@@ -209,6 +224,10 @@ export default{
   margin: 0; 
   text-align: right;
   font-weight: 700;
+}
+
+.balance-item p span {
+  color: rgb(80,80,80);
 }
 
 .balance-line {
@@ -223,16 +242,17 @@ export default{
   gap: 10px;
   text-align: center;
   font-size: calc(10px + 0.4vw);
-  padding: 30px 0 30px 0;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  padding: 30px 30px 30px 30px;
+  border-radius: 10px;
+  background-color: rgb(249,249,249);
 }
 
 .menu-item {
-  background: #f5f5f5;
+  color: #000;
+  background-color:rgb(254, 245, 231) ;
   padding: 10px;
   border-radius: 8px;
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .frequent-purchase-section{

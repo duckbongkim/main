@@ -62,9 +62,10 @@ export default {
   },
   created(){
     if(this.$route.params.id){
+        console.log(this.$route.params.id);
         this.isModify = true;
         const postID = this.$route.params.id;
-        axios.get(`http://localhost:3000/post/selectedPost/${postID}`,{withCredentials:true})
+        axios.get(`http://localhost:3000/post/post_detail/${postID}`,{withCredentials:true})
         .then(response => {
             console.log(response);
             this.post = response.data;
@@ -103,6 +104,20 @@ export default {
       // 게시글 제출 처리 로직
       try{
         if(this.isModify){
+          if(this.post.title === null || this.post.title === ''){
+            alert("제목을 입력해주세요.");
+            this.$nextTick(() => {
+              document.getElementById('postTitle').focus();
+            });
+            return;
+          }
+          if(this.post.post_content === null || this.post.post_content === ''){
+            alert("내용을 입력해주세요.");
+            this.$nextTick(() => {
+              document.getElementById('postContent').focus();
+            });
+            return;
+          }
           const response = await axios.patch(`http://localhost:3000/post/modifyPost/${this.post.id}`,this.post,{withCredentials:true});
           console.log("게시글 수정 응답",response);
           this.post = {};

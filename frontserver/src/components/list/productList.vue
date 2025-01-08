@@ -1,25 +1,25 @@
 <template>
   <div>
+    <div>
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
+    
+
     <h1>상품 목록</h1>
-      <div v-for="product in products" :key="product.id" class="product-card">
+    <div v-for="product in filteredProducts" :key="product.id" class="product-card">
+      <router-link :to="'/products/' + product.id">
         <h3>{{ product.product_name }}</h3>
         <p>{{ product.product_description }}</p>
         <p>{{ product.drink_type }}</p>
         <p>{{ product.product_price }}</p>
-      </div>
-    <div>
-    <h1>상품 검색</h1>
-    <div>
-      <input v-model="searchQuery" placeholder="상품 검색" @input="fetchProducts" />
+      </router-link>
     </div>
-    
-    <h2>상품 목록</h2>
-    <ul>
-      <li v-for="product in filteredProducts" :key="product.id">
-        {{ product.product_name }} - {{ product.product_description }} - {{ product.drink_type }} - {{ product.product_kind }}
-      </li>
-    </ul>
-  </div>
+
+    <div v-if="noResultsMessage" class="no-results">
+      {{ noResultsMessage }}
+    </div>
+
   </div>
 </template>
 
@@ -30,62 +30,74 @@ export default {
   props: ['drink_type'],
   data() {
     return {
-      products: [],
+
+      products: [],  
+      searchQuery: '',  
+      filteredProducts: [], 
+      noResultsMessage: '',  
+
     };
   },
-  created() {
-    this.fetchProducts();  
-  },
   mounted() {
-    this.fetchProductsByType(this.drink_type);
+    this.fetchProductsByType(this.drink_type);  
   },
   watch: {
+    '$route.query.search'(newSearch) {
+      if (newSearch) {
+        this.fetchProducts().then(() => {
+          this.filterProductsBySearch(newSearch);
+        });
+      } else {
+        this.fetchProducts();
+      }
+    },
     drink_type(newDrinkType) {
-      this.fetchProductsByType(newDrinkType);
+      this.fetchProductsByType(newDrinkType);  
     },
   },
   methods: {
-    // 상품 목록 조회
-    async fetchProducts() {
-      try {
-        const response = await axios.get('http://localhost:3000/liqueur'); 
-        this.products = response.data; 
-      } catch (error) {
-        this.error = '상품 데이터를 불러오는 데 실패했습니다.';
-        console.error(error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    // 상품 검색 (검색창 기능)
-    async searchProducts() {
-      const productName = ''; 
-      const productDescription = '';  
-      const drinkType = '';   
-      const productKind ='';         
-      try {
-        const response = await axios.get('http://localhost:3000/liqueur/search', {
-          params: { product_name: productName, product_description: productDescription, drink_type: drinkType,product_kind: productKind },
-        });
-        this.products = response.data; 
-      } catch (error) {
-        this.error = '상품 검색에 실패했습니다.';
-        console.error(error);
-      }
-    },
-    // 특정 품목별 상품 조회
+    // drink_type에 맞는 상품 목록을 불러오는 메서드
     async fetchProductsByType(drinkType) {
       try {
-        
-        const response = await axios.get(`http://localhost:3000/liqueur/${drinkType}`
-        );
-        console.log('서버에서 받은 데이터:', response.data);  
+        const response = await axios.get(`http://localhost:3000/liqueur/${drinkType}`);
+        console.log('서버에서 받은 데이터:', response.data);
         this.products = response.data;
+        this.filteredProducts = this.products;  // 처음에는 모든 상품을 표시
       } catch (error) {
-        this.error = '품목별 상품을 불러오는 데 실패했습니다.';
-        console.error(error);
+        console.error('상품을 불러오는 데 실패했습니다.', error);
       }
     },
+    
+    // 검색 기능
+    searchProducts() {
+      if (this.searchQuery.trim() === '') {
+        this.filteredProducts = this.products;  // 검색어가 없으면 모든 상품을 표시
+        this.noResultsMessage = '';  // 메시지 초기화
+      } else {
+        this.filteredProducts = this.products.filter(product =>
+          product.product_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          product.product_description.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          product.drink_type.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+        
+        //검색 메세지 설정
+        if (this.filteredProducts.length === 0) {
+          this.noResultsMessage = '검색 내용이 없습니다.';  
+        } else {
+          this.noResultsMessage = '';  
+        }
+      }
+    },
+
+    // 검색어로 상품 필터링하는 새로운 메소드
+    filterProductsBySearch(searchQuery) {
+      const query = searchQuery.toLowerCase();
+      this.products = this.products.filter(product => 
+        product.product_name.toLowerCase().includes(query) ||
+        product.product_description.toLowerCase().includes(query) ||
+        product.drink_type.toLowerCase().includes(query)
+      );
+    }
   },
 };
 </script>
@@ -97,8 +109,21 @@ export default {
   margin: 10px;
   text-align: center;
 }
-.error-message {
-  color: red;
-  font-weight: bold;
+
+input {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 </style>
