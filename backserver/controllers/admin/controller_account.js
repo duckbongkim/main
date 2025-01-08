@@ -31,6 +31,10 @@ exports.modifyUser = async(req,res,next)=>{
     try{
         const user = req.body;
         user.updated_at = new Date();
+        if(user.password !== null || user.password !== ''){
+            const hashedPassword = await crypto(user.password);
+            user.password = hashedPassword;
+        }
         const result = await Accounts.update(user,{where:{id:user.id}});
         res.status(200).json(result);
     }
