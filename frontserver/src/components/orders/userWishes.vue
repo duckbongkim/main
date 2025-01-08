@@ -86,24 +86,32 @@ export default{
             }
         },
 
-        // Wish CREATE 1/6
+        // Cart CREATE 1/6
         async addCart(product){
             try{
                 // accountid, productid 보내주기
                 this.userid = this.$route.params.userId;
+                
                 const userOrder = {
-                    userid,
-                    product_id : product.id,
-                    quantity : 0,
+                    userId : this.userid,
+                    product_Id : product.id,
+                    quantity : 1,
                 }
-                await axios.post(`http://localhost:3000/orders/cart`, userOrder);
+                console.log(`################userOrder:${JSON.stringify(userOrder)}`);
+                // data를 req.body로 백에 보내고, res받아 완료 메세지 띄우기
+                const response = await axios.post(`http://localhost:3000/orders/cart`, userOrder);
 
-                // 장바구니 갈래?
-                const goToCart = confirm("장바구니로 이동하실래요?");
-                if(goToCart) {
-                    this.$router.push('/cart');
+                // "장바구니 갈래? y/n"
+                if(response) {
+                    const GotoCart = confirm(response.data.message);
+                    if(GotoCart) {
+                        this.$router.push(`/cart/${this.userid}`);              
+                    /// frontserver/src/router/index.js 에 라우터 추가 
+                } else {
+                    alert("상품이 장바구니에 추가됐다.");
+                }
                 }else{
-                    aleart("상품이 장바구니에 추가됐다.");
+                    console.error(err);
                 }
 
             }catch(err){

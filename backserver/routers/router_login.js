@@ -36,6 +36,7 @@ router.get('/check', (req, res) => {
     }
 });
 
+
 //카카오 로그인
 router.get('/kakao',isNotLoggedIn,kakaoLogin);
 router.get('/kakao/callback',kakaoCallback);

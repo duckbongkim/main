@@ -5,7 +5,6 @@ const Accounts = require ('../models/model_accounts');
 const Carts = require ('../models/model_buckets');
 const Products = require ('../models/model_products');
 const Wishes = require ('../models/model_wishes');
-//const { Wishes } = require ('../models/model_index');
 
 // http://localhost:3000/orders
 
@@ -135,6 +134,7 @@ router.post('/cart', async(req, res, next) => {
     try{
         //FK값이 해당 테이블에 데이터 있는지 확인
         const user = await Accounts.findByPk(userId);
+        console.log(`##########################user${JSON.stringify(user)}`)
         const CartProduct = await Products.findByPk(product_Id);
         if(!user || !CartProduct) {
             return res.status(404).json({message:"없는 유저거나 없는 상품임"})
