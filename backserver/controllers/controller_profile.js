@@ -1,6 +1,7 @@
 const Accounts = require('../models/model_accounts');
 const Orders = require('../models/model_orders');
 const Ratings = require('../models/model_ratings');
+
 exports.getProfile = async (req,res,next)=>{
     try{
         const {email} = req.user;
