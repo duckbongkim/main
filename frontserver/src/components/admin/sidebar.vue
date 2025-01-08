@@ -35,48 +35,12 @@
               <li class="nav-item">
                 <a class="nav-link" @click="goToMenu('/admin/productLocations')">-원산지 관리</a>
               </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" @click="toggleMenu('products')" :class="{ active: activeMenu === 'products' }">
-              <div class="menu-title">
-                Products
-                <span class="material-icons icon-left">inventory_2</span>
-              </div>
-              <span class="material-icons">{{ activeMenu === 'products' ? 'expand_less' : 'expand_more' }}</span>
-            </a>
-            <ul class="nav flex-column sub-menu" :class="{ show: activeMenu === 'products' }">
               <li class="nav-item">
-                <a class="nav-link" @click="goToMenu('/map')">-상품 목록</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" >-상품 등록</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" >-카테고리 관리</a>
+                <a class="nav-link" @click="goToMenu('/admin/userRatings')">-사용자 등급 관리</a>
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" @click="toggleMenu('reports')" :class="{ active: activeMenu === 'reports' }">
-              <div class="menu-title">
-                Reports
-                <span class="material-icons icon-left">assessment</span>
-              </div>
-              <span class="material-icons">{{ activeMenu === 'reports' ? 'expand_less' : 'expand_more' }}</span>
-            </a>
-            <ul class="nav flex-column sub-menu" :class="{ show: activeMenu === 'reports' }">
-              <li class="nav-item">
-                <a class="nav-link" href="#">-매출 보고서</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">-트래픽 분석</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">-사용자 통계</a>
-              </li>
-            </ul>
-          </li>
+          
         </ul>
       </div>
     </nav>

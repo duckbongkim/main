@@ -134,6 +134,10 @@ const routes = [
         component: () => import(/* webpackChunkName: "manageProductLocations" */ '../components/admin/manageProductLocations.vue')
       },
       {
+        path:'userRatings/',
+        component: () => import(/* webpackChunkName: "manageUserRatings" */ '../components/admin/manageUserRatings.vue')
+      },
+      {
         path:'cart/',
         component: () => import(/* webpackChunkName: "about" */ '../components/admin/manageProductLocations.vue')
       },

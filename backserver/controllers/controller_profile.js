@@ -28,6 +28,9 @@ exports.getOrders = async (req,res,next)=>{
 
 exports.modifyPassword = async (req,res,next)=>{
     try{
+        if(!req.body.password){
+            return res.status(400).json({message:"비밀번호를 입력해주세요."});
+        }
         const {password} = req.body;
         const user = await Accounts.findOne({where:{email:req.user.email}});
         const hashedPassword = await crypto(password);

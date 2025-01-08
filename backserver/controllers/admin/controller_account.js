@@ -31,7 +31,7 @@ exports.modifyUser = async(req,res,next)=>{
     try{
         const user = req.body;
         user.updated_at = new Date();
-        if(user.password !== null || user.password !== ''){
+        if(user.password && user.password !== null && user.password !== ''){
             const hashedPassword = await crypto(user.password);
             user.password = hashedPassword;
         }
@@ -84,7 +84,7 @@ exports.addAccount = async(req,res,next)=>{
         if(!account.updated_at){
             account.updated_at = new Date();
         }
-        if(account.password !==null || account.password !== ''){
+        if(account.password && account.password !== null && account.password !== ''){
             const hash = await crypto(account.password);
             account.password = hash;
         }
