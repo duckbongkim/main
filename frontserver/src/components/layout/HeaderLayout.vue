@@ -95,6 +95,14 @@ export default{
         isLoggedIn:false,
       }
     },
+    watch: {
+      '$route': {
+        handler() {//라우터가 변경될 때 마다 실행되는 콜백 함수
+          this.checkLogin(); // 라우트 변경시마다 로그인 상태 확인
+        },
+        immediate: true
+      }
+    },
     methods :{
     // 로그아웃 처리 함수 여기부터 logout까지 2025-01-07
       async checkLogin() {
