@@ -7,7 +7,8 @@ const {getOrders} = require('../controllers/admin/controller_order.js');
 const {addProductLocation,modifyProductLocation,deleteProductLocation} = require('../controllers/admin/controller_productLocation.js');
 const {addSupplyFactory,modifySupplyFactory,deleteSupplyFactory} = require('../controllers/admin/controller_supplyFactory.js');
 const {isAdmin} = require('../middlewares/middleware_checkLogin.js');
-
+const {modifyUserRating,deleteUserRating,addUserRating} = require('../controllers/admin/controller_ratings.js');
+const {addCoupon,modifyCoupon,deleteCoupon,getCoupons} = require('../controllers/admin/controller_coupon.js');
 
 //사용자 관리
 router.get('/users',isAdmin,getUsers);
@@ -46,5 +47,16 @@ router.delete('/deleteProductLocation/:id',isAdmin,deleteProductLocation);
 router.post('/addSupplyFactory',isAdmin,addSupplyFactory);
 router.patch('/modifySupplyFactory',isAdmin,modifySupplyFactory);
 router.delete('/deleteSupplyFactory/:id',isAdmin,deleteSupplyFactory);
+
+//등급 관리
+router.patch('/modifyUserRating',isAdmin,modifyUserRating);
+router.delete('/deleteUserRating/:id',isAdmin,deleteUserRating);
+router.post('/addUserRating',isAdmin,addUserRating);
+
+//쿠폰 관리
+router.get('/coupons',isAdmin,getCoupons);
+router.post('/addCoupon',isAdmin,addCoupon);
+router.patch('/modifyCoupon',isAdmin,modifyCoupon);
+router.delete('/deleteCoupon/:id',isAdmin,deleteCoupon);
 
 module.exports = router;

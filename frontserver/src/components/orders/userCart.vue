@@ -52,7 +52,7 @@
         </div>
         <div>
             <button>선택상품 주문</button>
-            <button @click="setProductSession()">전체상품 주문</button>
+            <button @click="makeOrder()">전체상품 주문</button>
         </div>
     </div>
 </div>
@@ -72,6 +72,8 @@ export default{
             //selectedProducts: [],
             userid : 0,
             productInfoForOrder : [],
+            //{"id":8,"count":1,"total_price":2790000,"createdAt":"2025-01-08T04:14:53.000Z","updatedAt":"2025-01-08T04:14:53.000Z","account_id":4,"product_id":4,
+            // "Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"}},
 
         };
     },
@@ -122,13 +124,21 @@ export default{
         },
 
 
-        //Order CREATE
-        //주문할 제품정보를 세션에 저장하여 쓰기
-        setProductSession(){
-            this.productInfoForOrder = this.cartedProducts;
-            console.log(`##############this.productInfoForOrder:${this.productInfoForOrder}`)
-            //세션에 저장
-            sessionStorage.setItem('productInfo',JSON.stringify(this.productInfoForOrder));
+        //Ordering Product PUSH
+        async makeOrder(){
+            try{
+                // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
+                this.userid = this.$route.params.userId
+                this.productInfoForOrder = this.cartedProducts //(임시)
+                console.log(`##############this.productInfoForOrder:${JSON.stringify(this.productInfoForOrder)}`)
+                //this.$router.push(`/order/${this.userid}/${this.productInfoForOrder}`);
+                 this.$router.push({
+                    path: `/order/${this.userid}`,
+                    query : {productInfoQuery : JSON.stringify(this.productInfoForOrder)}
+                });
+            }catch(err){
+                console.error(err);
+            }
         },
     }
 }

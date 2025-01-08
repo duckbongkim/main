@@ -43,7 +43,7 @@ router.post('/wish', async (req, res, next) =>{
     //FK값이 해당 테이블에 데이터 있는지 확인
         const user = await Accounts.findByPk(userId);
         const targetProduct = await Products.findByPk(product_Id);
-        console.log(`######################백 라우터.포스트.userId : ${user}, product_Id: ${targetProduct}`)
+        //console.log(`######################백 라우터.포스트.userId : ${user}, product_Id: ${targetProduct}`)
         if(!user || !targetProduct) {
             return res.status(404).json({message:"없는 유저거나 없는 상품임"})
         }
@@ -96,21 +96,6 @@ router.get('/wish/:userid', async (req, res, next) => {
     }
 })
 
-// Order post
-router.get('/orderingProducts/:productIds', async(req, res,next) => {
-    try{
-        const productIds = req.params;
-        console.log(`##############productIds${JSON.stringify(productIds)}`)
-        const productPromises = productIds.map(async (product) => {
-            return await Products.findOnd({where : {id : product}});
-        })
-        const orderingProducts = await Promise.all(productPromises);
-        res.status(200).json(orderingProducts);
-    }catch(err){
-        console.error(err);
-        next(err);
-    }
-})
 
 // Wishes DELETE
 router.delete('/wish/:productid', async (req, res, next) => {
@@ -180,6 +165,20 @@ router.delete('/cart/:cartedProduct_id', async (req, res, next) =>{
     }
 })
 
+
+// MAKE ordering List FROM product view
+router.get('/order/:infoFromProductView', async (req, res, next)=>{
+    try{
+        const {infoFromProductView} = req.params; //{"id":9,"count":1}
+        const parsedInfo = JSON.parse(infoFromProductView);
+        const result = await Products.findOne({where : {id :parsedInfo.id}})
+        parsedInfo.Product = result;
+        res.status(200).json(parsedInfo);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+})
 
 
 
