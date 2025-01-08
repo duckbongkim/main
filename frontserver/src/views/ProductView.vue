@@ -194,8 +194,8 @@ export default{
                 //1. selectedProduct.id 를 likes DB에 추가
                     //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
                     //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
-                const userId = this.dummy.userid;
-                //const userId = this.session.userId;
+                //const userId = this.dummy.userid;
+                const userId = this.session.userId;
                 const userWish = {
                     userId,
                     product_Id : this.selectedProduct.id,
