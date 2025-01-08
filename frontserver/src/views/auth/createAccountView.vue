@@ -7,7 +7,7 @@
                 
                 <div class="mb-3">
                     <label for="email">이메일(필수)</label>
-                    <input type="email" v-model="createAccountData.email" v-directive="email_format" class="form-control" id="email" placeholder="you@example.com" required>
+                    <input ref="emailInput" type="email" v-model="createAccountData.email" v-directive="email_format" class="form-control" id="email" placeholder="you@example.com" required>
                 </div>
                 <div class="mb-3">
                     <label for="password">비밀번호(필수)</label>

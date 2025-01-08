@@ -1,8 +1,6 @@
-const express = require('express')
-const router = express.Router()
-const Accounts = require('../models/model_accounts')
-
-
+const express = require('express');
+const router = express.Router();
+const Accounts = require('../models/model_accounts');
 
 router.post('/',async(req,res,next)=>{
     try{
