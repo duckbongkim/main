@@ -38,6 +38,9 @@
               <li class="nav-item">
                 <a class="nav-link" @click="goToMenu('/admin/userRatings')">-사용자 등급 관리</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" @click="goToMenu('/admin/coupons')">-쿠폰 관리</a>
+              </li>
             </ul>
           </li>
           

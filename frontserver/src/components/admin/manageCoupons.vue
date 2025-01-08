@@ -1,83 +1,97 @@
 <template>
 <div>
     <div class=header-container>
-        <h1>Manage User Ratings</h1>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRatingModal">등급명 추가</button>
+        <h1>Manage Coupons</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCouponModal">쿠폰 추가</button>
     </div>
     <div class='manage-users-container'>
         <table class="table">
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>등급명</th>
-                    <th>적립률</th>
+                    <th>쿠폰명</th>
+                    <th>할인률</th>
+                    <th>생성일</th>
+                    <th>수정일</th>
+                    <th>만료일</th>
                     <th>수정</th>
                     <th>삭제</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="rating in paginatedRatings" :key="rating.id">
-                    <td>{{rating.id}}</td>
-                    <td>{{rating.rating_name}}</td>
-                    <td>{{rating.saved_money_rate}}</td>
-                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifyRatingModal" @click="modifyRating(rating)">수정</button></td>
-                    <td><button class="btn btn-danger" @click="deleteRating(rating)">삭제</button></td>
+                <tr v-for="coupon in paginatedCoupons" :key="coupon.id">
+                    <td>{{coupon.id}}</td>
+                    <td>{{coupon.coupon_name}}</td>
+                    <td>{{coupon.coupon_discount_rate}}</td>
+                    <td>{{coupon.create_at}}</td>
+                    <td>{{coupon.update_at}}</td>
+                    <td>{{coupon.end_date}}</td>
+                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifyCouponModal" @click="modifyCoupon(coupon)">수정</button></td>
+                    <td><button class="btn btn-danger" @click="deleteCoupon(coupon)">삭제</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
     
     <!-- 등급명 수정 모달 -->
-    <div class="modal fade" id="modifyRatingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="modifyCouponModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modify Rating</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modify Coupon</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="name" class="form-label">등급명</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="emailHelp" v-model="editingRating.rating_name">
+                        <label for="name" class="form-label">쿠폰명</label>
+                        <input type="text" class="form-control" id="name" aria-describedby="emailHelp" v-model="editingCoupon.coupon_name">
                     </div>  
                     <div class="mb-3">
-                        <label for="rate" class="form-label">적립률</label>
-                        <input type="text" class="form-control" id="rate" v-model="editingRating.saved_money_rate">
+                        <label for="rate" class="form-label">할인률</label>
+                        <input type="text" class="form-control" id="rate" v-model="editingCoupon.coupon_discount_rate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="expiry" class="form-label">만료일</label>
+                        <input type="date" class="form-control" id="expiry" v-model="editingCoupon.end_date">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @click="submitModifyRating">Submit</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @click="submitModifyCoupon">Submit</button>
             </div>
             </div>
         </div>
     </div>
 
     <!-- 등급명 추가 모달 -->
-    <div class="modal fade" id="addRatingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="addCouponModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Rating</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Coupon</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="name" class="form-label">등급명</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="emailHelp" v-model="newRating.rating_name">
+                        <label for="name" class="form-label">쿠폰명</label>
+                        <input type="text" class="form-control" id="name" aria-describedby="emailHelp" v-model="newCoupon.coupon_name">
                     </div>
                     <div class="mb-3">
-                        <label for="rate" class="form-label">적립률</label>
-                        <input type="text" class="form-control" id="rate" v-model="newRating.saved_money_rate">
+                        <label for="rate" class="form-label">할인률</label>
+                        <input type="text" class="form-control" id="rate" v-model="newCoupon.coupon_discount_rate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="expiry" class="form-label">만료일</label>
+                        <input type="date" class="form-control" id="expiry" v-model="newCoupon.end_date">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @click="submitAddRating">Submit</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @click="submitAddCoupon">Submit</button>
             </div>
             </div>
         </div>
@@ -108,13 +122,13 @@ export default{
     name:'',
     components:{},
     computed:{
-        paginatedRatings() {
+        paginatedCoupons() {
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
-            return this.ratings.slice(start, end);
+            return this.coupons.slice(start, end);
         },
         totalPages() {
-            return Math.ceil(this.ratings.length / this.itemsPerPage);
+            return Math.ceil(this.coupons.length / this.itemsPerPage);
         },
         displayedPages() {
             const pages = [];
@@ -134,9 +148,9 @@ export default{
     },
     data(){
         return{
-            ratings:[],
-            newRating:{},
-            editingRating:{},
+            coupons:[],
+            newCoupon:{},
+            editingCoupon:{},
             currentPage: 1,
             itemsPerPage: 15
         };
@@ -145,17 +159,17 @@ export default{
     created(){
     },
     mounted(){
-        this.getUserRatings();
+        this.getCoupons();
     },
     unmounted(){},
     methods:{
         goToMenu(path){
             this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
         },
-        async getUserRatings(){
+        async getCoupons(){
             try{
-                const response = await axios.get('http://localhost:3000/profile/ratings',{withCredentials:true});
-                this.ratings = response.data;
+                const response = await axios.get('http://localhost:3000/admin/coupons',{withCredentials:true});
+                this.coupons = response.data;
             }
             catch(error){
                 if(error.response.status === 402){
@@ -171,13 +185,13 @@ export default{
                 }
             }
         },
-        async modifyRating(rating){
-            this.editingRating = { ...rating };
+        async modifyCoupon(coupon){
+            this.editingCoupon = { ...coupon };
         },
-        async submitModifyRating(){
+        async submitModifyCoupon(){
             try{
-                const response = await axios.patch('http://localhost:3000/admin/modifyUserRating',this.editingRating,{withCredentials:true});
-                this.getUserRatings();
+                const response = await axios.patch('http://localhost:3000/admin/modifyCoupon',this.editingCoupon,{withCredentials:true});
+                this.getCoupons();
             }
             catch(error){
                 if(error.response.status === 402){
@@ -189,14 +203,14 @@ export default{
                     this.$router.push('/');
                 }
                 else{
-                    alert('원산지 수정에 실패했습니다. : ',error);
+                    alert('원폰 수정에 실패했습니다. : ',error);
                 }
             }
         },
-        async deleteRating(rating){
+        async deleteCoupon(coupon){
             try{
-                const response = await axios.delete(`http://localhost:3000/admin/deleteUserRating/${rating.id}`,{withCredentials:true});
-                this.ratings = this.ratings.filter(rat => rat.id !== rating.id);
+                const response = await axios.delete(`http://localhost:3000/admin/deleteCoupon/${coupon.id}`,{withCredentials:true});
+                this.coupons = this.coupons.filter(cou => cou.id !== coupon.id);
             }
             catch(error){
                 if(error.response.status === 402){
@@ -208,16 +222,16 @@ export default{
                     this.$router.push('/');
                 }
                 else{
-                    alert('등급명 삭제에 실패했습니다. : ',error);
+                    alert('쿠폰 삭제에 실패했습니다. : ',error);
                 }
             }
         },
-        async submitAddRating(){
+        async submitAddCoupon(){
             try{
-                const response = await axios.post('http://localhost:3000/admin/addUserRating',this.newRating,{withCredentials:true});
-                this.ratings.push(response.data);
-                this.newRating = {};
-                this.getUserRatings();
+                const response = await axios.post('http://localhost:3000/admin/addCoupon',this.newCoupon,{withCredentials:true});
+                this.coupons.push(response.data);
+                this.newCoupon = {};
+                this.getCoupons();
             }
             catch(error){
                 if(error.response.status === 402){
@@ -229,7 +243,7 @@ export default{
                     this.$router.push('/');
                 }
                 else{
-                    alert('등급명 추가에 실패했습니다. : ',error);
+                    alert('쿠폰 추가에 실패했습니다. : ',error);
                 }
             }
         }

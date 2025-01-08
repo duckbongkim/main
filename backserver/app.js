@@ -33,8 +33,8 @@ app.set('port',process.env.PORT);
 sequelize.sync({force:false})
 .then(()=>{
     console.log('데이터베이스 연결 성공');
-    // 매일 오전 11시에 실행되는 스케줄러
-    schedule.scheduleJob('0 11 * * *', async () => {
+    // 매 시간 0분에 실행되는 스케줄러
+    schedule.scheduleJob('0 * * * *', async () => {
         try {
             // 탈퇴 회원 삭제
             const currentDate = new Date();

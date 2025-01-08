@@ -16,6 +16,10 @@ class Coupons extends Sequelize.Model {
                 allowNull: false,
                 defaultValue: Sequelize.NOW,
             },
+            end_date:{
+                type: Sequelize.DATE,
+                allowNull: false,
+            },
             updated_at:{
                 type: Sequelize.DATE,
                 allowNull: true,
