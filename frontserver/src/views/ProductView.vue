@@ -121,10 +121,7 @@ export default{
 
             product_id: null,
             orderQuantity : 1,
-            dummy: {
-
-                userid: 42,
-            }
+            user : [],
             
         };
     },
@@ -136,6 +133,7 @@ export default{
         
         this.getProducts()
         this.getRecommendProducts() //1월1일 추천상품 목록 진열 기능 확인 위해 주석제거(동진)
+        this.getUserProfile() //250108 누리) 유저 정보 끌어오기
     },
     unmounted(){},
     methods:{
@@ -152,6 +150,20 @@ export default{
         },
 
         // axios 요청 메소드
+
+        // GET user profile
+          async getUserProfile(){
+            try{
+                const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
+                //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
+                //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
+                this.user = response.data
+                console.log(`################userInfo${JSON.stringify(this.user)}`);
+            }catch(err){
+                console.error(err);
+            }
+          },  
+
 
         // Product info READ
         async getProducts() {
@@ -194,10 +206,9 @@ export default{
                 //1. selectedProduct.id 를 likes DB에 추가
                     //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
                     //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
-                const userId = this.dummy.userid;
                 //const userId = this.session.userId;
                 const userWish = {
-                    userId,
+                    userId : this.user.id,
                     product_Id : this.selectedProduct.id,
                 };
                 
@@ -230,11 +241,8 @@ export default{
             try{
 
             // 1. selectedProduct.id 와 orderQuantity 를 carts DB에 추가.
-                //세션에서 userid를, data에서 productid와 orderQ를 따와 params으로 만들기.
-                //const userId = this.session.userId;
-                const userId = this.dummy.userid;
                 const userOrder = {
-                    userId,
+                    userId : this.user.id,
                     product_Id :this.selectedProduct.id,
                     quantity : this.orderQuantity, 
                 }
@@ -243,12 +251,11 @@ export default{
                 // data를 req.body로 백에 보내고, res받아 완료 메세지 띄우기
                 const response = await axios.post(`http://localhost:3000/orders/cart`, userOrder);
 
-
                 // "장바구니 갈래? y/n"
                 if(response) {
                     const GotoCart = confirm(response.data.message);
                     if(GotoCart) {
-                        this.$router.push(`/cart/${userId}`);              
+                        this.$router.push(`/cart/${this.user.id}`);              
                     /// frontserver/src/router/index.js 에 라우터 추가 
                 } else {
                     alert("상품이 장바구니에 추가됐다.");
