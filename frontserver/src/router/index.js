@@ -87,6 +87,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "login", webpackPrefetch: true */ '../views/auth/loginView.vue')
   },
   {
+    path: '/agree',
+    name: 'agree',
+    component: () => import(/* webpackChunkName: "agree" */ '../views/auth/agreeView.vue')
+  },
+  {
     path: '/admin',
     name: 'admin',
     component: AdminView,
