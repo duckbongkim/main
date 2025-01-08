@@ -45,6 +45,8 @@
                 </div>
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary me-2">저장</button>
+                    <button v-if="!checkDropOut" type="button" class="btn btn-danger me-2" @click="deleteUser">회원탈퇴</button>
+                    <button v-else type="button" class="btn btn-danger me-2" @click="cancleDropOut">회원탈퇴 취소</button>
                     <button type="button" class="btn btn-secondary" @click="$router.go(-1)">취소</button>
                 </div>
             </form>
@@ -87,7 +89,8 @@ export default{
             user:{},
             modifyUser: {},
             passwordConfirm: '',
-            newPassword: '',    
+            newPassword: '',
+            checkDropOut:false    
         };
     },
     setup(){},
@@ -101,6 +104,9 @@ export default{
             try{
                 const res = await axios.get(`http://localhost:3000/profile`,{withCredentials:true});
                 this.user = res.data;
+                if(this.user.delete_time){
+                    this.checkDropOut = true;
+                }
                 this.modifyUser = {
                     id: this.user.id,
                     name: this.user.name,
@@ -139,7 +145,34 @@ export default{
             }catch(err){
                 console.error(err);
             }
-         }
+         },
+         async deleteUser() {
+            if (confirm('정말로 탈퇴하시겠습니까? 14일 뒤에 회원 정보가 삭제됩니다. (탈퇴 취소는 14일 내에 현재 페이지에서 진행이 가능합니다.)')) {
+                try {
+                    console.log('탈퇴 요청 보내기');
+                    const response = await axios.patch('http://localhost:3000/profile/dropOut',{}, { withCredentials: true });
+                    if (response.status === 200) {
+                        alert('회원 탈퇴가 완료되었습니다.');
+                        this.$router.push('/');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('회원 탈퇴 처리 중 오류가 발생했습니다.');
+                }
+            }
+        },
+        async cancleDropOut(){
+            try{
+                const response = await axios.patch('http://localhost:3000/profile/cancleDropOut',{}, { withCredentials: true });
+                if(response.status === 200){
+                    alert('회원 탈퇴가 취소되었습니다.');
+                    this.checkDropOut = false;
+                    this.$router.replace('/mypage');
+                }
+            }catch(err){
+                console.error(err);
+            }
+        }
     }
 }
 </script>

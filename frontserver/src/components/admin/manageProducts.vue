@@ -4,6 +4,10 @@
         <h1>Manage Products</h1>
         <button class="btn btn-primary" @click="goToMenu('/admin/addProduct')">상품 추가</button>
     </div>
+    <div class="search-container">
+        <input type="text" v-model="searchQuery" placeholder="상품 검색">
+        <button @click="handleSearch">검색</button>
+    </div>
     <div class='manage-users-container'>
         <table class="table">
             <thead>
