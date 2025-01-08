@@ -26,13 +26,13 @@
     <div class="order-list">
         <ul class="order-list-ul">
             <li>
-                <a @click="goWish(dummy.userId)"> 찜 리스트 </a>
+                <a @click="goWish(user.id)"> 찜 리스트 </a>
             </li>
             <li>
-                <a @click="goCart(dummy.userId)"> 장바구니 </a>
+                <a @click="goCart(user.id)"> 장바구니 </a>
             </li>
             <li>
-                <a @click="goOrder(dummy.userId)"> 주문목록 </a>
+                <a @click="goOrder(user.id)"> 주문목록 </a>
             </li>
             <li>
                 <a @click="goRefund()">취소/환불 목록</a>
@@ -61,16 +61,15 @@ export default{
     },
     data(){
         return{
-
-            dummy : {userId : 42},
-            user:{}, // 유저 데이터를 받아올수있도록 data 에 작성 1월5일 동진
+            user:{}, //  250108 누리) getUserProfile()에서 사용하는 변수로 변경. <= 이전 : 250105 동진)유저 데이터를 받아올수있도록 data 에 작성
             rating:{},
         };
 
     },
     setup(){},
     created(){
-      this.getUserData(); // getuserdata 를 마운트에 작성 1월 6일 동진
+      //this.getUserData(); // getuserdata 를 마운트에 작성 1월 6일 동진
+      this.getUserProfile() // 250108 누리) router_profile 에서 userdata 받아오기로 변경
       this.getRating();
     },
     mounted(){},
@@ -90,16 +89,34 @@ export default{
         },
 
       // 마이페이지에서 유저 정보를 받아오는 get 작성 1월5일 동진
-      async getUserData(){
-        try {
-          const res = await axios.get('http://localhost:3000/orders',{withCredentials: true})
-          this.user = res.data
-          console.log('user',res)
+      // async getUserData(){
+      //   try {
+      //     const res = await axios.get('http://localhost:3000/orders',{withCredentials: true})
+      //     this.user = res.data
+      //     console.log('user',res)
+      //   }catch(err){
+      //     console.error(err)
+      //   }
+      // },
+
+
+      // 250108 누리) router_profile에서 user data 받아오기로 변경
+      // GET user profile
+      async getUserProfile(){
+        try{
+            const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
+            //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
+            //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
+            this.user = response.data
+            console.log(`################userInfo${JSON.stringify(this.user)}`);
         }catch(err){
-          console.error(err)
+            console.error(err);
         }
-      },
+      },  
+
+      
       // 유저의 레이팅 등급을 받아오는 get 작성 1월 5일 동진
+      // 
       async getRating(){
         try{
           const res = await axios.get('http://localhost:3000/profile/ratings',{withCredentials:true})
