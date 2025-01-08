@@ -5,7 +5,7 @@
     <div class="user-info">
       <div class="user-details">
         <div>
-          <h3><span>{{ user.nickname }}</span> 님 은 <span>{{rating.rating_name}}</span> 등급입니다.</h3>
+          <h3><span>{{ user.nickname }}</span> 님 은 <span>{{rating}}</span> 등급입니다.</h3>
           <button type="submit" class="edit-btn" @click="modify">내 정보 수정</button>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default{
                 nickname:'',
                 email:''
             },
-            rating:{},
+            rating:'',
             frequentItems: [
               { id: 1, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
               { id: 2, name: '상품 E', price: 4500, image: 'https://example.com/image5.jpg' },
@@ -81,30 +81,33 @@ export default{
     setup(){},
     created(){
       this.getUser()
+      
+    },
+    mounted(){
       this.getRating()
     },
-    mounted(){},
     unmounted(){},
     methods:{
          async getUser(){
             try{
-                const res = await axios.get(`http://localhost:3000/profile`,{withCredentials:true})
-                this.user = res.data
+                const res = await axios.get(`http://localhost:3000/profile`,{withCredentials:true});
+                this.user = res.data;
             }catch(err){
                 if (err.status===403) {
-                alert('로그인이 필요함')
-                this.$router.push(`/login`)
-                console.error(err)
+                alert('로그인이 필요함');
+                this.$router.push(`/login`);
+                console.error(err);
                 }  
             }
          },
 
          async getRating(){
             try{
-                const res = await axios.get(`http://localhost:3000/profile/ratings`,{withCredentials:true})
-                this.rating = res.data.find((rating)=>rating.id === this.user.rating_id)
+                const res = await axios.get(`http://localhost:3000/profile/userRating`,{withCredentials:true});
+                console.log(res.data);
+                this.rating = res.data.rating;
             }catch(err){
-                console.error(err)
+                console.error(err);
             }
          },
 
@@ -114,14 +117,13 @@ export default{
             await axios.post('http://localhost:3000/orders',{email:this.user.email},{withCredentials: true});
             this.$router.push('/orders');
           }catch(err){
-            console.error(err)
+            console.error(err);
           }
          },
 
       async modify() {
         try {
-            await axios.post('http://localhost:3000/modify',{email:this.user.email},{withCredentials: true})
-            this.$router.push('/modify')
+            this.$router.push(`/modify`);
           } catch (err) {
               console.error(err);
           }

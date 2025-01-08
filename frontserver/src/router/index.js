@@ -174,6 +174,11 @@ const routes = [
 
     ]
   },
+  {
+    path:'/finalOrder',
+    name:'finalOrder',
+    component: () => import(/* webpackChunkName: "finalOrder" */ '../views/FinalOrderView.vue')
+  },
 
   // 2025-01-02 김우진 nav바에서 주류사이트로 이동이 가능하게 components에 test를 만들어서 연결 시켰습니다.성공!!
   // {
