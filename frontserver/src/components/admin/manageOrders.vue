@@ -65,14 +65,26 @@ export default{
         totalPages() {//총 페이지 수 정해주는 함수
             return Math.ceil(this.orders.length / this.itemsPerPage);
         },
-        displayedPages() {//페이지 버튼 목록 정해주는 함수
+        displayedPages() {
             const pages = [];
-            let start = Math.max(1, this.currentPage - 1);
-            let end = Math.min(this.totalPages, start + 2);
+            let start, end;
             
-            if (end > this.totalPages) {
-                start = Math.max(1, this.totalPages - 2);
+            if (this.totalPages <= 3) {
+                // 전체 페이지가 3개 이하인 경우
+                start = 1;
                 end = this.totalPages;
+            } else {
+                // 전체 페이지가 3개 ��과인 경우
+                if (this.currentPage === 1) {
+                    start = 1;
+                    end = 3;
+                } else if (this.currentPage === this.totalPages) {
+                    start = this.totalPages - 2;
+                    end = this.totalPages;
+                } else {
+                    start = this.currentPage - 1;
+                    end = this.currentPage + 1;
+                }
             }
 
             for (let i = start; i <= end; i++) {
