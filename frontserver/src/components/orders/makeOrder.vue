@@ -12,13 +12,15 @@
                             <th>수량</th>
                             <th>상품금액</th>
                             <th>합계금액</th>
-                            <th>삭제</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="product in productInfo" :key="product.id">                
-                            <td>{{product.product_id}}</td>
-                            <td>{{product.product_id}}</td>
+                        <tr v-for="info in productInfo " :key="info.id">                
+                            <td><img :src="info.Product.product_image"></td>
+                            <td>{{info.Product.product_name}}</td>
+                            <td>{{info.count}}</td>
+                            <td>{{info.Product.product_price}}</td>
+                            <td>{{info.count * info.Product.product_price}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -36,39 +38,44 @@ export default{
     data(){
         return{
             productInfo :[],
-            orderingProducts : [],
+            //{"id":8,"count":1,"total_price":2790000,"createdAt":"2025-01-08T04:14:53.000Z","updatedAt":"2025-01-08T04:14:53.000Z","account_id":4,"product_id":4,
+            // "Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"}},
+            //{"id":10,"count":1,
+            //"Product":{"id":10,"product_name":"글렌피딕 30년산","product_price":1100000,"product_description":"글렌피딕의 대표 30년 숙성 제품","product_description_img":null,"product_stock":12,"product_image":"http://www.kajawine.kr/data/item/1219550509/thumb-6riA66CM7ZS865SV30_360x480.jpg","drink_type":"위스키","product_kind":"drink","created_at":"2025-01-07T15:00:35.000Z","updated_at":"2025-01-07T15:00:35.000Z","product_location_id":null,"supply_factory_id":null}}
         };
     },
     setup(){},
-    created(){},
+    created(){     
+    },
     mounted(){
-        this.setInfo();
-        this.getOrderingProducts();
+    //// 들어오는 쿼리에 따라 다른 파라메터를 넣어 같은 함수를 실행시키는 코드
+        //'productInfoQuery'가 있으면, 문자열'productInfoQuery'를 넣어서 함수 실행
+        if(this.$route.query.productInfoQuery){
+            this.getProductInfo('productInfoQuery');
+        // orderingInfoQuary가 있으면, 문자열 'orderingInfoQuary'를 넣어서 함수 실행
+        }else if (this.$route.query.orderingInfoQuary){
+            this.getProductInfo('orderingInfoQuary');
+        }else {
+            console.error("주문할 제품 정보(쿼리)를 받지 못합니다.")
+        }
+
 
     },
     unmounted(){},
     methods:{
-        setInfo(){
-            const sessionData = sessionStorage.getItem('productInfo');
-             console.log(`##############sessionData${sessionData}`)
-            if(sessionData){
-                this.productInfo = JSON.parse(sessionData) //저장된 문자열을 원래의 객체나 배열 형태로 복원
-                //console.log(this.productInfo);
-            }
-        },
-        
-        async getOrderingProducts(){
+        async getProductInfo(query){
             try{
-                const productIds = this.productInfo.map(p => p.product_id);
-                console.log(`##############productIds${productIds}`)
-                const response = await axios.get(`http://localhost:3000/orders/orderingProducts/${productIds}`,)
-                this.orderingProducts = response.data;
-                
+                if(query === 'productInfoQuery'){
+                    this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
+                }else if(query === 'orderingInfoQuary') {
+                    const InfoFromProductView = this.$route.query.orderingInfoQuary;
+                    const response = await axios.get(`http://localhost:3000/orders/order/${InfoFromProductView}`);
+                    this.productInfo = [response.data];
+                }
             }catch(err){
                 console.error(err);
             }
-        }
-
+        },
     }
 }
 

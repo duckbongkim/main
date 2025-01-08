@@ -178,8 +178,6 @@ const routes = [
         name:'order',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/makeOrder.vue')
       },
-
-
     ]
   },
   {
