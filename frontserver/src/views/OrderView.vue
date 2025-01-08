@@ -100,15 +100,15 @@ export default{
       // },
 
 
-      // 250108 누리) router_profile에서 user data 받아오기로 변경
-      // GET user profile
+      
+      // GET user profile / 250108 누리) router_profile에서 user data 받아오기로 변경
       async getUserProfile(){
         try{
             const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
             //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
             //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
             this.user = response.data
-            console.log(`################userInfo${JSON.stringify(this.user)}`);
+            //console.log(`################userInfo${JSON.stringify(this.user)}`);
         }catch(err){
             console.error(err);
         }

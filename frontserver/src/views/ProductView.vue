@@ -45,7 +45,7 @@
                     <i class="bi bi-heart wish-heart"></i>
                 </button>
                 <button @click="addCarts()" class="btn btn-outline-dark cart-button">장바구니</button>
-                <button @click="dirOrder()" class="btn btn-dark buy-button">구매하기</button>
+                <button @click="makeOrder()" class="btn btn-dark buy-button">구매하기</button>
             </div>
 
 
@@ -158,7 +158,7 @@ export default{
                 //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
                 //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
                 this.user = response.data
-                console.log(`################userInfo${JSON.stringify(this.user)}`);
+                //console.log(`################userInfo${JSON.stringify(this.user)}`);
             }catch(err){
                 console.error(err);
             }
@@ -241,15 +241,15 @@ export default{
             try{
 
             // 1. selectedProduct.id 와 orderQuantity 를 carts DB에 추가.
-                const userOrder = {
+                const cartingInfo = {
                     userId : this.user.id,
                     product_Id :this.selectedProduct.id,
                     quantity : this.orderQuantity, 
                 }
-                console.log(`################userorder${JSON.stringify(userOrder)}`);
+                //console.log(`################userorder${JSON.stringify(cartingInfo)}`);
 
                 // data를 req.body로 백에 보내고, res받아 완료 메세지 띄우기
-                const response = await axios.post(`http://localhost:3000/orders/cart`, userOrder);
+                const response = await axios.post(`http://localhost:3000/orders/cart`, cartingInfo);
 
                 // "장바구니 갈래? y/n"
                 if(response) {
@@ -271,18 +271,24 @@ export default{
             
         },
 
-        async dirOrder() {
-            try {
-                await axios.post(`http://localhost:3000/orders/`,{
-                    product_id : this.selectedProduct.id,
-                    quantity : this.orderQuantity
+        //Ordering Product PUSH
+        async makeOrder(){
+            try{
+                // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
+                const orderingInfo = {
+                    //userId : this.user.id,
+                    id :this.selectedProduct.id,
+                    count : this.orderQuantity, 
+                }
+                this.$router.push({
+                    path: `/order/${this.user.id}`,
+                    query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
                 });
+
             }catch(err){
-                console.error(err)
+                console.error(err);
             }
-        }
-            // selectedProduct.id 와 orderQuantity 를 orders DB에 추가. 
-            // 주문 페이지로 이동
+        },
         }        
     }
 
