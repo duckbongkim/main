@@ -1,24 +1,24 @@
 require('dotenv').config();
-
+const Products = require('../models/model_products.js')
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
 
 //MySQL 연결 설정
-const productList = mysql.createConnection({
-  host: 'localhost',
-  user: process.env.DB_USER,   
-  password: process.env.DB_PASSWORD, 
-  database: process.env.DB_NAME
-});
+// const productList = mysql.createConnection({
+//   host: 'localhost',
+//   user: process.env.DB_USER,   
+//   password: process.env.DB_PASSWORD, 
+//   database: process.env.DB_NAME
+// });
 
-productList.connect((err) => {
-  if (err) {
-    console.error('연결 실패:', err);
-    return;
-  }
-  console.log('연결 성공');
-});
+// productList.connect((err) => {
+//   if (err) {
+//     console.error('연결 실패:', err);
+//     return;
+//   }
+//   console.log('연결 성공');
+// });
 
 
 //상품 조회 (리스트 품목 이동 시 데이터 보여주기)
@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
   const query = 'SELECT * FROM products'; 
 
   try{
-      const [results] = await productList.promise().query(query);
+      const [results] = await Products.promise().query(query);
       console.log('상품 목록:', results); // 데이터 연결 확인
       res.json(results);
    

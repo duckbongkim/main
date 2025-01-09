@@ -81,7 +81,6 @@ export default{
     setup(){},
     created(){
       this.getUser()
-      
     },
     mounted(){
       this.getRating()
