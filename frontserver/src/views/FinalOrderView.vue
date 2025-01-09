@@ -19,10 +19,7 @@
                     <tr v-for="info in productInfo " :key="info.id">                
                         <td><img :src="info.Product.product_image"></td>
                         <td>{{info.Product.product_name}}</td>
-                        <td>
-                            <button @click="minusC(info)">-</button>
-                            {{info.count}}
-                            <button @click="plusC(info)">+</button></td>
+                        <td>{{info.count}}</td>
                         <td>{{info.Product.product_price}}</td>
                         <td>{{info.count * info.Product.product_price}}</td>
                     </tr>
@@ -130,16 +127,6 @@ export default{
     },
     unmounted(){},
     methods:{
-        // 제품 수량 변경 함수
-        plusC(info){
-            info.count += 1 
-        },
-
-        minusC(info){
-            if(info.count > 0){
-                info.count -= 1 
-            } return;
-        },
 
 
         //총액 계산 함수
