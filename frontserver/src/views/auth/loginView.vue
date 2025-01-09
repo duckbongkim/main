@@ -59,7 +59,6 @@ export default{
         async checkLogin() {
             try {
                 const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
-                console.log("response",response);
                 this.isLoggedIn = response.data.isLoggedIn;
             } catch (error) {
               if(error.response.status === 403){
@@ -74,7 +73,10 @@ export default{
                     this.loginFrom.email = '';
                     this.loginFrom.password = '';
                     this.checkLogin();
-                    this.$router.push('/');
+                    this.$router.push({ //뒤로가기 방지
+                        path: '/',
+                        replace: true
+                    });
                 }
             }catch(error){
                 if(error.response.status === 401){

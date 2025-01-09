@@ -406,4 +406,3 @@ export default{
     padding: 5px 10px;
 }
 </style>
-<style src="@vueform/slider/themes/default.css"></style>
