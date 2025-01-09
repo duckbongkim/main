@@ -151,18 +151,31 @@ export default{
 
         // axios 요청 메소드
 
-        // GET user profile
-          async getUserProfile(){
-            try{
-                const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
-                //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
-                //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
-                this.user = response.data
-                //console.log(`################userInfo${JSON.stringify(this.user)}`);
-            }catch(err){
-                console.error(err);
+        // Check Login
+
+        checkLogin () {
+            if(!this.user.id) {
+                alert("로그인이 필요합니다");
+                this.$router.push('/login');
+                return false;
+            }else {
+                return true;
             }
-          },  
+        },
+
+        // GET user profile
+        async getUserProfile(){
+        try{
+            const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
+            //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
+            //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
+            this.user = response.data
+            //console.log(`################userInfo${JSON.stringify(this.user)}`);
+        }catch(err){
+            console.error(err);
+            
+        }
+        },  
 
 
         // Product info READ
@@ -204,6 +217,10 @@ export default{
         // wish CREATE
         async addWish() {
             try {
+
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
+
                 //1. selectedProduct.id 를 likes DB에 추가
                     //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
                     //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
@@ -232,14 +249,19 @@ export default{
                 if(err.response && err.response.status == 409){
                     alert(err.response.data.message);
                 } else {
+
+                    
                 console.error(err);
                 }
             }
         },
+        
 
         // Cart CREATE
         async addCarts() {
             try{
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
 
             // 1. selectedProduct.id 와 orderQuantity 를 carts DB에 추가.
                 const cartingInfo = {
@@ -275,6 +297,9 @@ export default{
         //Ordering Product PUSH
         async makeOrder(){
             try{
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
+
                 // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
                 const orderingInfo = {
                     //userId : this.user.id,
@@ -287,7 +312,7 @@ export default{
                 });
 
             }catch(err){
-                console.error(err);
+                console.error(err);                
             }
         },
         }        
