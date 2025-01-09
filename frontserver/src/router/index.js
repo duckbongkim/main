@@ -99,7 +99,7 @@ const routes = [
       {
         path:'',
         name:'',
-        component: () => import(/* webpackChunkName: "defaultAdminPage" */ '../components/admin/defaultAdminPage.vue')
+        component: () => import(/* webpackChunkName: "defaultAdminPage" */ '../components/admin/manageUsers.vue')
       },
       {
         path:'users/',
