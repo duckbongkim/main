@@ -1,17 +1,37 @@
 <template>
-  <div>
-    <h3>{{ postkind }} 게시판</h3>
-    <ul>
-      <li v-for="post in posts" :key="post.id">
-        <router-link :to="`/post/post_detail/${post.id}`">
-          <div>
-            <h2>{{ post.title }}</h2>
-            <p>{{ post.content }}</p>
-            <img v-if="post.imageUrl" :src="post.imageUrl" alt="게시글 이미지" width="100" />
-          </div>
-        </router-link>
-      </li>
-    </ul>
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="text-center w-100">{{ postkind }} 게시판</h3>
+      <router-link to="/post/addPost" class="btn btn-primary btn-sm position-absolute" style="right: 7.5%">
+        글쓰기
+      </router-link>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover w-85 mx-auto">
+        <thead class="table-light">
+          <tr>
+            <th scope="col" width="10%">번호</th>
+            <th scope="col" width="40%">제목</th>
+            <th scope="col" width="20%">작성일</th>
+            <th scope="col" width="20%">수정일</th>
+            <th scope="col" width="10%">좋아요</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(post, index) in posts" :key="post.id">
+            <td>{{ index + 1 }}</td>
+            <td>
+              <router-link :to="`/post/post_detail/${post.id}`" class="text-decoration-none text-dark">
+                {{ post.title }}
+              </router-link>
+            </td>
+            <td>{{ new Date(post.created_at).toLocaleDateString() }}</td>
+            <td>{{ new Date(post.updated_at).toLocaleDateString() }}</td>
+            <td>{{ post.like_count }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -53,6 +73,7 @@ export default {
       try {
         const response = await axios.get(`http://localhost:3000/post/post_list/${postKind}`);
         this.posts = response.data;
+        console.log(response);
       } catch (error){
         console.error('게시물을 가져오는데 실패했습니다.', error)
       }
@@ -65,66 +86,58 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  margin-top: 80px;
+.w-85 {
+  width: 85% !important;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.table {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 8px;
 }
 
-li {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+.table thead th {
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: #333;
+  background-color: #ffffff;
 }
 
-router-link {
-  text-decoration: none;
+.table td {
+  border-bottom: 1px solid #eaeaea;
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.router-link-active {
   color: #333;
 }
 
-router-link:hover {
-  color: #007bff;
+h3 {
+  text-align: center;
+  margin: 0;
 }
 
-img {
-  margin-top: 10px;
+.container {
+  position: relative;
 }
 
-.create-post-form {
-  margin-top: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  background-color: #e5f1e6;
-  color: rgb(8, 8, 8);
+.btn-primary {
+  background-color: #007bff;
   border: none;
-  cursor: pointer;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  z-index: 1;
 }
 
-
-form {
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
+.btn-primary:hover {
+  background-color: #0056b3;
+  transition: background-color 0.2s ease;
 }
-
-form div {
-  margin-bottom: 10px;
-}
-
-form input, form textarea {
-  padding: 8px;
-  width: 300px;
-}
-
-form textarea {
-  height: 150px;
-}
-
-
-
 </style>

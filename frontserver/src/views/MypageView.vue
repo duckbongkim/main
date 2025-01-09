@@ -12,7 +12,7 @@
 
     <div class="user-balance">
          <div class="balance-item">
-            <h4 class="rating_name">예치금</h4>
+            <h4>예치금</h4>
             <p><span>{{ user.savedMoney }}</span>원</p>
         </div> 
        
@@ -81,9 +81,10 @@ export default{
     setup(){},
     created(){
       this.getUser()
+      
     },
     mounted(){
-      this.getRating()
+      this.getRating();
     },
     unmounted(){},
     methods:{
