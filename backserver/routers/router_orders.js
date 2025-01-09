@@ -41,6 +41,7 @@ router.post('/wish', async (req, res, next) =>{
     const {userId, product_Id} = req.body;
     try {
     //FK값이 해당 테이블에 데이터 있는지 확인
+        
         const user = await Accounts.findByPk(userId);
         const targetProduct = await Products.findByPk(product_Id);
         //console.log(`######################백 라우터.포스트.userId : ${user}, product_Id: ${targetProduct}`)
