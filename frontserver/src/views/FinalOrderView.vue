@@ -2,6 +2,54 @@
 <div class="container">
   <div class="content-wrapper">
     <h1>최종 주문 페이지</h1>
+    <div>
+        <div class="input-form col-md-12 max-auto">
+            <h4>주문창</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>상품 이미지</th>
+                        <th>상품명</th>
+                        <th>수량</th>
+                        <th>상품금액</th>
+                        <th>합계금액</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="info in productInfo " :key="info.id">                
+                        <td><img :src="info.Product.product_image"></td>
+                        <td>{{info.Product.product_name}}</td>
+                        <td>
+                            <button @click="minusC(info)">-</button>
+                            {{info.count}}
+                            <button @click="plusC(info)">+</button></td>
+                        <td>{{info.Product.product_price}}</td>
+                        <td>{{info.count * info.Product.product_price}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+        <div>
+            <p>주문수량 및 총액</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>총 {{numberOfProducts}}개 상품의 상품금액 </th>
+                        <th>배송비</th>
+                        <th>합계</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <tb>{{finalTotalPrice}}원</tb>
+                        <tb>{{deliveryFee}}원</tb>
+                        <tb>{{finalTotalPrice + deliveryFee}}원</tb>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
     <div class="orderAdressInputContainer">
         <form>
             <h2>배송지 정보</h2>
@@ -20,9 +68,6 @@
         </form>
     </div>
     <div>
-        누님이 상품 데이터 뿌릴 곳. 누님 끝나면 누님이 만들어요
-    </div>
-    <div>
         <button @click="order" class="btn btn-primary">주문하기</button>
     </div>
   </div>
@@ -31,6 +76,8 @@
 
 
 <script>
+import axios from 'axios';
+
 export default{ 
     name:'',
     components:{},
@@ -59,13 +106,73 @@ export default{
             address:'',
             addressDetail:'',
             zipCode:'',
+            productInfo :[],
+            numberOfProducts : 0,
+            finalTotalPrice: 0,
+            deliveryFee : 3000,
         };
     },
     setup(){},
     created(){},
-    mounted(){},
+    mounted(){
+
+        // 쿼리 선별 코드
+        // 들어오는 쿼리에 따라 다른 파라메터를 넣어 같은 함수를 실행시키는 코드
+        if(this.$route.query.productInfoQuery){
+            this.getProductInfo('productInfoQuery');
+        // orderingInfoQuary가 있으면, 문자열 'orderingInfoQuary'를 넣어서 함수 실행
+        }else if (this.$route.query.orderingInfoQuary){
+            this.getProductInfo('orderingInfoQuary');
+        }else {
+            console.error("주문할 제품 정보(쿼리)를 받지 못합니다.")
+        }
+
+    },
     unmounted(){},
-    methods:{},
+    methods:{
+        // 제품 수량 변경 함수
+        plusC(info){
+            info.count += 1 
+        },
+
+        minusC(info){
+            if(info.count > 0){
+                info.count -= 1 
+            } return;
+        },
+
+
+        //총액 계산 함수
+        total_products(){
+            this.numberOfProducts= this.productInfo.length
+        },
+        productTotalPrice(){
+            this.finalTotalPrice = this.productInfo.reduce((acc, info) => acc + info.Product.product_price * info.count, 0 )
+        },
+
+        calculateTotal(){
+            this.total_products()
+            this.productTotalPrice()
+        },
+
+
+        // MAKE Ordering Product List 
+        async getProductInfo(query){
+            try{
+                if(query === 'productInfoQuery'){
+                    this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
+                }else if(query === 'orderingInfoQuary') {
+                    const InfoFromProductView = this.$route.query.orderingInfoQuary;
+                    const response = await axios.get(`http://localhost:3000/orders/order/${InfoFromProductView}`);
+                    this.productInfo = [response.data];
+                }
+                //총액 계산
+                this.calculateTotal()
+            }catch(err){
+                console.error(err);
+            }
+        },
+    },
     watch:{}
 }
 </script>
