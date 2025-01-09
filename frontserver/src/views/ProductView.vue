@@ -232,15 +232,7 @@ export default{
                 const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
                 if(response.status == 201) {
                     console.log(response.data.message);
-                }
-
-                // 2. 찜리스트로 보내주기
-                const GotoWish = confirm("찜가실?");
-                if(GotoWish) {
-                    const response = await this.$router.push('/orders');   
-                    /// frontserver/src/router/index.js 에 라우터 추가 
-                } else {
-                    alert("상품이 찜에 추가됐다.");
+                    alert("찜 리스트에 추가되었습니다.");
                 }
             } catch(err) {
                 //찜에 중복된 상품이 들어갈 경우(409) 에러처리

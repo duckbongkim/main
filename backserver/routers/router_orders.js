@@ -127,7 +127,7 @@ router.post('/cart', async(req, res, next) => {
         }
 
         //cart 테이블에 데이터 생성
-        const duplicateCatch = await Carts.findOne({where : {product_id : product_Id }});
+        const duplicateCatch = await Carts.findOne({where : {product_id : product_Id, account_id : userId }});
         if(!duplicateCatch){
             await Carts.create({
                 account_id : user.id,
@@ -167,11 +167,23 @@ router.get('/cart/:userid', async(req, res, next) => {
 })
 
 //Cart DELETE
-router.delete('/cart/:cartedProduct_id', async (req, res, next) =>{
+// router.delete('/cart/:cartedProduct_id', async (req, res, next) =>{
+//     try{
+//         const {cartedProduct_id} = req.params; 
+//         console.log(`##################cartedProduct_id${cartedProduct_id}`)
+//         const result = await Carts.destroy({where : {id : cartedProduct_id}});
+//         res.status(200).json(result);
+
+//     }catch(err) {
+//         console.error(err);
+//         next(err);
+//     }
+// })
+router.delete('/cart', async (req, res, next) =>{
     try{
-        const {cartedProduct_id} = req.params; 
-        console.log(`##################cartedProduct_id${cartedProduct_id}`)
-        const result = await Carts.destroy({where : {id : cartedProduct_id}});
+        const {ids} = req.body; 
+        console.log(`##################cartedProduct_id${ids}`)
+        const result = await Carts.destroy({where : {id : ids}});
         res.status(200).json(result);
 
     }catch(err) {

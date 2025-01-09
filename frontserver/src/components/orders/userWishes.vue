@@ -17,7 +17,7 @@
                             {{product.product_name}}</td>
                         <td>{{product.product_price}}원</td>
                         <td><button @click="addCart(product)">장바구니 추가</button></td>
-                        <td><v-btn @click="deleteProduct(product)">삭제</v-btn></td>
+                        <td><button @click="deleteProduct(product)">삭제</button></td>
                     </tr>
                 </tbody>
             </table>
