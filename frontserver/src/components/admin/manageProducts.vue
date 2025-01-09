@@ -4,6 +4,33 @@
         <h1>Manage Products</h1>
         <button class="btn btn-primary" @click="goToMenu('/admin/addProduct')">상품 추가</button>
     </div>
+    <div class="filter-container">
+        <div class="search-box">
+            <input type="text" v-model="searchQuery" placeholder="상품 검색" class="search-input">
+        </div>
+        <div class="price-range-box">
+            <input type="number" v-model="minPrice" placeholder="최소 가격" class="price-input">
+            <span>~</span>
+            <input type="number" v-model="maxPrice" placeholder="최대 가격" class="price-input">
+        </div>
+        <div class="select-box">
+            <select v-model="selectedLocation" class="form-select">
+                <option value="">원산지 선택</option>
+                <option v-for="location in locations" :key="location.id" :value="location.id">
+                    {{ location.location_name }}
+                </option>
+            </select>
+        </div>
+        <div class="select-box">
+            <select v-model="selectedFactory" class="form-select">
+                <option value="">공급처 선택</option>
+                <option v-for="factory in supplyFactories" :key="factory.id" :value="factory.id">
+                    {{ factory.factory_name }}
+                </option>
+            </select>
+        </div>
+        <button @click="handleSearch" class="btn btn-primary">검색</button>
+    </div>
     <div class='manage-users-container'>
         <table class="table">
             <thead>
@@ -17,8 +44,8 @@
                     <th>상품 이미지</th>
                     <th>주종</th>
                     <th>상품 종류</th>
-                    <th>원산지id</th>
-                    <th>공급처id</th>
+                    <th>원산지</th>
+                    <th>공급처</th>
                     <th>생성일</th>
                     <th>수정일</th>
                     <th>수정</th>
@@ -36,8 +63,8 @@
                     <td><img :src="product.product_image" class="table-image" alt="상품 이미지"></td>
                     <td>{{product.drink_type}}</td>
                     <td>{{product.product_kind}}</td>
-                    <td>{{product.product_location_id}}</td>
-                    <td>{{product.supply_factory_id}}</td>
+                    <td>{{locations.find(location => location.id === product.product_location_id)?.location_name}}</td>
+                    <td>{{supplyFactories.find(factory => factory.id === product.supply_factory_id)?.factory_name}}</td>
                     <td>{{product.created_at}}</td>
                     <td>{{product.updated_at}}</td>
                     <td><button type="button" class="btn btn-primary" @click="modifyProduct(product.id)">수정</button></td>
@@ -83,12 +110,24 @@ export default{
         },
         displayedPages() {
             const pages = [];
-            let start = Math.max(1, this.currentPage - 1);
-            let end = Math.min(this.totalPages, start + 2);
+            let start, end;
             
-            if (end > this.totalPages) {
-                start = Math.max(1, this.totalPages - 2);
+            if (this.totalPages <= 3) {
+                // 전체 페이지가 3개 이하인 경우
+                start = 1;
                 end = this.totalPages;
+            } else {
+                // 전체 페이지가 3개 ��과인 경우
+                if (this.currentPage === 1) {
+                    start = 1;
+                    end = 3;
+                } else if (this.currentPage === this.totalPages) {
+                    start = this.totalPages - 2;
+                    end = this.totalPages;
+                } else {
+                    start = this.currentPage - 1;
+                    end = this.currentPage + 1;
+                }
             }
 
             for (let i = start; i <= end; i++) {
@@ -100,14 +139,24 @@ export default{
     data(){
         return{
             products:[],
+            originalProducts:[],
             currentPage: 1,
-            itemsPerPage: 15
+            itemsPerPage: 15,
+            searchQuery: '',
+            minPrice: 0,
+            maxPrice: 5000000,
+            locations:[],
+            supplyFactories:[],
+            selectedLocation: '',
+            selectedFactory: '',
         };
     },
     setup(){},
     created(){},
     mounted(){
         this.getProducts();
+        this.getProductLocations();
+        this.getSupplyFactories();
     },
     unmounted(){},
     methods:{
@@ -118,6 +167,7 @@ export default{
             try{
                 const response = await axios.get('http://localhost:3000/admin/products',{withCredentials:true});
                 this.products = response.data;
+                this.originalProducts = response.data;
             }
             catch(error){
                 if(error.response.status === 402){
@@ -157,7 +207,88 @@ export default{
                     alert('상품 삭제에 실패했습니다. : ',error);
                 }
             }
-        }
+        },
+        handleSearch() {
+            // 원본 데이터로 시작
+            let filteredProducts = [...this.originalProducts];
+
+            // 검색어 필터�
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                filteredProducts = filteredProducts.filter(product => 
+                    product.product_name.toLowerCase().includes(query) ||
+                    product.product_description.toLowerCase().includes(query) ||
+                    product.product_kind.toLowerCase().includes(query) ||
+                    product.drink_type.toLowerCase().includes(query)
+                );
+            }
+
+            // 가격 필터링
+            if (this.minPrice || this.maxPrice) {
+                filteredProducts = filteredProducts.filter(product => {
+                    const price = product.product_price;
+                    const minOk = !this.minPrice || price >= this.minPrice;
+                    const maxOk = !this.maxPrice || price <= this.maxPrice;
+                    return minOk && maxOk;
+                });
+            }
+
+            // 원산지 필터�
+            if (this.selectedLocation) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.product_location_id === this.selectedLocation
+                );
+            }
+
+            // 공급처 필터링
+            if (this.selectedFactory) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.supply_factory_id === this.selectedFactory
+                );
+            }
+
+            // 필터링된 결� 적용
+            this.products = filteredProducts;
+            this.currentPage = 1;
+        },
+        async getProductLocations(){
+            try{
+                const response = await axios.get('http://localhost:3000/admin/products/locations',{withCredentials:true});
+                this.locations = response.data;
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('원산지 목록 조회에 실패했습니다. : ',error);
+                }
+            }
+        },
+        async getSupplyFactories(){
+            try{
+                const response = await axios.get('http://localhost:3000/admin/products/supplyFactories',{withCredentials:true});
+                this.supplyFactories = response.data;
+            }
+            catch(error){
+                if(error.response.status === 402){
+                    alert('로그인이 필요합니다.');
+                    this.$router.push('/login');
+                }
+                else if(error.response.status === 403){
+                    alert('관리자 권한이 없습니다.');
+                    this.$router.push('/');
+                }
+                else{
+                    alert('공급처 목록을 불러오는데 실패했습니다. : ',error);
+                }
+            }
+        },
     },
     watch:{}
 }
@@ -231,4 +362,48 @@ export default{
     pointer-events: none;
     background-color: #f8f9fa;
 }
+
+.filter-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.search-box, .price-range-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input {
+    width: 200px;
+    padding: 5px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    height: 35px;
+}
+
+.price-input {
+    width: 120px;
+    padding: 5px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    height: 35px;
+}
+
+.select-box {
+    min-width: 150px;
+}
+
+.form-select {
+    height: 35px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 5px 10px;
+}
 </style>
+<style src="@vueform/slider/themes/default.css"></style>

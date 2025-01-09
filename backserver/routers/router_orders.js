@@ -41,6 +41,7 @@ router.post('/wish', async (req, res, next) =>{
     const {userId, product_Id} = req.body;
     try {
     //FK값이 해당 테이블에 데이터 있는지 확인
+        
         const user = await Accounts.findByPk(userId);
         const targetProduct = await Products.findByPk(product_Id);
         //console.log(`######################백 라우터.포스트.userId : ${user}, product_Id: ${targetProduct}`)
@@ -111,7 +112,7 @@ router.delete('/wish/:productid', async (req, res, next) => {
 
 //Cart UPDATE
 
-//Cart CREATE
+//Cart CREATE + UPDATE
 router.post('/cart', async(req, res, next) => {
     // userId, product_Id, quantity 받았는지 확인
     const {userId, product_Id, quantity} = req.body;
@@ -126,13 +127,27 @@ router.post('/cart', async(req, res, next) => {
         }
 
         //cart 테이블에 데이터 생성
-        await Carts.create({
-            account_id : user.id,
-            product_id : CartProduct.id,
-            count : quantity,
-            total_price : CartProduct.product_price * quantity,
-        });
-        res.status(201).json({message: "장바구니 추가됐다. 장바구니 갈래?"})
+        const duplicateCatch = await Carts.findOne({where : {product_id : product_Id }});
+        if(!duplicateCatch){
+            await Carts.create({
+                account_id : user.id,
+                product_id : CartProduct.id,
+                count : quantity,
+                total_price : CartProduct.product_price * quantity,
+            });
+            res.status(201).json({message: "장바구니 추가됐다. 장바구니 갈래?"})
+        }else{
+            //count 업데이트
+            const updatedCount = duplicateCatch.count + quantity;
+            const updatedTotal = updatedCount * CartProduct.product_price;
+            await Carts.update(
+                {count : updatedCount, total_price: updatedTotal},
+                {where : {product_id : product_Id}}
+            );
+            res.status(200).json({message:"장바구니에 같은 제품이 있어 수량이 추가되었습니다."})
+        }
+
+
     }catch(err){
         console.error(err);
         next(err);

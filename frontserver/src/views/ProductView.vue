@@ -282,7 +282,7 @@ export default{
                     count : this.orderQuantity, 
                 }
                 this.$router.push({
-                    path: `/order/${this.user.id}`,
+                    path: `/finalOrder/${this.user.id}`, ////뷰 변경!!!
                     query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
                 });
 

@@ -19,7 +19,7 @@
 
     <!-- 로그인 상태가 아니면 로그인, 회원가입 버튼 표시 -->
     <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/login')">로그인</button>
-    <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/createAccount')">회원가입</button>
+    <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/agree')">회원가입</button>
 
     <!-- 로그인 상태이면 로그아웃 버튼 표시 -->
     <button class="login-button" v-show="isLoggedIn" @click="logout">로그아웃</button>
@@ -93,6 +93,14 @@ export default{
       return {
         account: [],
         isLoggedIn:false,
+      }
+    },
+    watch: {
+      '$route': {
+        handler() {//라우터가 변경될 때 마다 실행되는 콜백 함수
+          this.checkLogin(); // 라우트 변경시마다 로그인 상태 확인
+        },
+        immediate: true
       }
     },
     methods :{

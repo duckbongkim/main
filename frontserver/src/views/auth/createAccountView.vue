@@ -140,7 +140,7 @@ export default{
                 const response = await axios.post('http://localhost:3000/auth/signup',this.createAccountData,{withCredentials:true});
                 // 성공 시 알림 표시 후 루트로 이동
                 alert('회원가입이 성공적으로 완료되었습니다.');
-                this.$router.push('/');
+                this.$router.push('/login');
                 
             }catch(error){
                 if(error.response.status === 400){

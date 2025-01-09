@@ -33,20 +33,18 @@ app.set('port',process.env.PORT);
 sequelize.sync({force:false})
 .then(()=>{
     console.log('데이터베이스 연결 성공');
-    // 매 시간 0분에 실행되는 스케줄러
-    schedule.scheduleJob('0 * * * *', async () => {
+    // 매 자정마다 실행되도록 수정
+    schedule.scheduleJob('0 0 * * *', async () => {
         try {
-            // 탈퇴 회원 삭제
             const currentDate = new Date();
             await Accounts.destroy({
                 where: {
-                    delete_date: {
+                    delete_time: {
                         [Op.lt]: currentDate
                     }
                 }
             });
-            
-            console.log('만료된 데이터 삭제 완료');
+            console.log('만료된 데이터 삭제 완료:', currentDate);
         } catch (error) {
             console.error('스케줄러 실행 중 오류 발생:', error);
         }
