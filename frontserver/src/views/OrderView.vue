@@ -32,7 +32,10 @@
                 <a @click="goCart(user.id)"> 장바구니 </a>
             </li>
             <li>
-                <a @click="goOrder(user.id)"> 주문목록 </a>
+                <a @click="orderBefore(user.id)"> 주문목록 </a>
+            </li>
+            <li>
+                <a @click="orderNow(user.id)"> 주문창(작업중) </a>
             </li>
             <li>
                 <a @click="goRefund()">취소/환불 목록</a>
@@ -84,8 +87,11 @@ export default{
         goCart(userId){
             this.$router.push(`/cart/${userId}`)
         },
-        goOrder(userId){
+        orderBefore(userId){
             this.$router.push(`/order/${userId}`)
+        },
+        orderNow(userId){
+            this.$router.push(`/finalOrder/${userId}`)
         },
 
       // 마이페이지에서 유저 정보를 받아오는 get 작성 1월5일 동진
@@ -100,15 +106,15 @@ export default{
       // },
 
 
-      // 250108 누리) router_profile에서 user data 받아오기로 변경
-      // GET user profile
+      
+      // GET user profile / 250108 누리) router_profile에서 user data 받아오기로 변경
       async getUserProfile(){
         try{
             const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
             //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
             //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
             this.user = response.data
-            console.log(`################userInfo${JSON.stringify(this.user)}`);
+            //console.log(`################userInfo${JSON.stringify(this.user)}`);
         }catch(err){
             console.error(err);
         }

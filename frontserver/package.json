@@ -7,6 +7,8 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "@vueform/slider": "^2.1.10",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
@@ -25,6 +27,8 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "vite-plugin-vuetify": "^2.0.4",
+    "vuetify": "^3.7.6",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1"
   },

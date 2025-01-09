@@ -42,7 +42,7 @@
                     <i class="bi bi-heart wish-heart"></i>
                 </button>
                 <button @click="addCarts()" class="btn btn-outline-dark cart-button">장바구니</button>
-                <button @click="dirOrder()" class="btn btn-dark buy-button">구매하기</button>
+                <button @click="makeOrder()" class="btn btn-dark buy-button">구매하기</button>
             </div>
 
 
@@ -147,18 +147,31 @@ export default{
 
         // axios 요청 메소드
 
-        // GET user profile
-          async getUserProfile(){
-            try{
-                const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
-                //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
-                //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
-                this.user = response.data
-                console.log(`################userInfo${JSON.stringify(this.user)}`);
-            }catch(err){
-                console.error(err);
+        // Check Login
+
+        checkLogin () {
+            if(!this.user.id) {
+                alert("로그인이 필요합니다");
+                this.$router.push('/login');
+                return false;
+            }else {
+                return true;
             }
-          },  
+        },
+
+        // GET user profile
+        async getUserProfile(){
+        try{
+            const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
+            //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
+            //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
+            this.user = response.data
+            //console.log(`################userInfo${JSON.stringify(this.user)}`);
+        }catch(err){
+            console.error(err);
+            
+        }
+        },  
 
 
         // Product info READ
@@ -199,6 +212,10 @@ export default{
         // wish CREATE
         async addWish() {
             try {
+
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
+
                 //1. selectedProduct.id 를 likes DB에 추가
                     //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
                     //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
@@ -227,25 +244,30 @@ export default{
                 if(err.response && err.response.status == 409){
                     alert(err.response.data.message);
                 } else {
+
+                    
                 console.error(err);
                 }
             }
         },
+        
 
         // Cart CREATE
         async addCarts() {
             try{
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
 
             // 1. selectedProduct.id 와 orderQuantity 를 carts DB에 추가.
-                const userOrder = {
+                const cartingInfo = {
                     userId : this.user.id,
                     product_Id :this.selectedProduct.id,
                     quantity : this.orderQuantity, 
                 }
-                console.log(`################userorder${JSON.stringify(userOrder)}`);
+                //console.log(`################userorder${JSON.stringify(cartingInfo)}`);
 
                 // data를 req.body로 백에 보내고, res받아 완료 메세지 띄우기
-                const response = await axios.post(`http://localhost:3000/orders/cart`, userOrder);
+                const response = await axios.post(`http://localhost:3000/orders/cart`, cartingInfo);
 
                 // "장바구니 갈래? y/n"
                 if(response) {
@@ -267,18 +289,27 @@ export default{
             
         },
 
-        async dirOrder() {
-            try {
-                await axios.post(`http://localhost:3000/orders/`,{
-                    product_id : this.selectedProduct.id,
-                    quantity : this.orderQuantity
+        //Ordering Product PUSH
+        async makeOrder(){
+            try{
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
+
+                // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
+                const orderingInfo = {
+                    //userId : this.user.id,
+                    id :this.selectedProduct.id,
+                    count : this.orderQuantity, 
+                }
+                this.$router.push({
+                    path: `/finalOrder/${this.user.id}`, ////뷰 변경!!!
+                    query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
                 });
+
             }catch(err){
-                console.error(err)
+                console.error(err);                
             }
-        }
-            // selectedProduct.id 와 orderQuantity 를 orders DB에 추가. 
-            // 주문 페이지로 이동
+        },
         }        
     }
 
