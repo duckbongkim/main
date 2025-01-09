@@ -25,7 +25,7 @@
     <button class="login-button" v-show="isLoggedIn" @click="logout">로그아웃</button>
 
     <!-- 장바구니, 마이페이지 버튼은 로그인 여부와 상관없이 항상 표시 -->
-    <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
+    <button class="basket-button" @click="$router.push('/cart/1')">장바구니</button>
     <button @click="$router.push('/mypage')">마이페이지</button>
     <!-- 로그인 상태에서 우측 상단에 환영 메시지 표시 -->
     <div class="welcome-message" v-show="isLoggedIn">
