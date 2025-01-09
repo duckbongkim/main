@@ -253,6 +253,10 @@ export default{
         async AddProduct(){
             try{
                 const response = await axios.post('http://localhost:3000/admin/addProduct', this.product,{withCredentials:true});
+                if(response.status === 200){
+                    alert('상품 추가가 완료되었습니다.');
+                    this.$router.push('/admin/manageProducts');
+                }
                 console.log("상품 추가 응답",response);
                 this.product = {};
             }
@@ -275,6 +279,10 @@ export default{
         async ModifyProduct(){
             try{
                 const response = await axios.patch('http://localhost:3000/admin/modifyProduct', this.product,{withCredentials:true});
+                if(response.status === 200){
+                    alert('상품 수정이 완료되었습니다.');
+                    this.$router.push('/admin/manageProducts');
+                }
                 console.log("상품 수정 응답",response);
             }
             catch(error){

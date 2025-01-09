@@ -37,8 +37,8 @@ export default{
 
 <style scoped>
 .container{
-  margin-left: 250px;
-  margin-top: 20px;
+  margin-left:250px;
+  margin-top:90px;
   width: 100%;
 }
 </style>

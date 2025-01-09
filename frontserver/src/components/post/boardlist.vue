@@ -3,7 +3,7 @@
     <h3>{{ postkind }} 게시판</h3>
     <ul>
       <li v-for="post in posts" :key="post.id">
-        <router-link :to="`/post_detail/${post.id}`">
+        <router-link :to="`/post/post_detail/${post.id}`">
           <div>
             <h2>{{ post.title }}</h2>
             <p>{{ post.content }}</p>

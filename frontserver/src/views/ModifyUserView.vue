@@ -149,10 +149,11 @@ export default{
          async deleteUser() {
             if (confirm('정말로 탈퇴하시겠습니까? 14일 뒤에 회원 정보가 삭제됩니다. (탈퇴 취소는 14일 내에 현재 페이지에서 진행이 가능합니다.)')) {
                 try {
-                    console.log('탈퇴 요청 보내기');
+                    
                     const response = await axios.patch('http://localhost:3000/profile/dropOut',{}, { withCredentials: true });
                     if (response.status === 200) {
                         alert('회원 탈퇴가 완료되었습니다.');
+                        await axios.post('http://localhost:3000/auth/logout',{}, { withCredentials: true });
                         this.$router.push('/');
                     }
                 } catch (err) {

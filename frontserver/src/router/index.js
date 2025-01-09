@@ -186,7 +186,7 @@ const routes = [
     ]
   },
   {
-    path:'/finalOrder',
+    path:'/finalOrder/:userId',
     name:'finalOrder',
     component: () => import(/* webpackChunkName: "finalOrder" */ '../views/FinalOrderView.vue')
   },
