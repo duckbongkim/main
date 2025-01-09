@@ -7,11 +7,12 @@
                 
                 <div class="mb-3">
                     <label for="email">이메일(필수)</label>
-                    <input ref="emailInput" type="email" v-model="createAccountData.email" v-directive="email_format" class="form-control" id="email" placeholder="you@example.com" required>
+                    <input ref="emailInput" type="email" v-model="createAccountData.email" v-email_format class="form-control" id="email" placeholder="you@example.com" required>
                 </div>
                 <div class="mb-3">
                     <label for="password">비밀번호(필수)</label>
-                    <input type="password" v-model="createAccountData.password" v-directive="password_format" class="form-control" id="password" required>
+                    <input type="password" v-model="createAccountData.password" v-password_format class="form-control" id="password" required>
+                    
                 </div>
                 <div class="mb-3">
                     <label for="passwordConfirm">비밀번호 확인(필수)</label>
@@ -33,7 +34,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="phone">핸드폰 번호(필수)</label>
-                    <input type="tel" v-model="createAccountData.phone_number" v-directive="phone_format" class="form-control" id="phone" placeholder="010-0000-0000" required>
+                    <input type="tel" v-model="createAccountData.phone_number" v-phone_format class="form-control" id="phone" placeholder="010-0000-0000" required>
                 </div>
                 <div class="mb-3">
                     <label for="address">주소(필수)</label>
@@ -68,30 +69,49 @@ export default{
     },
     directives:{
         //입력 양식 제한
-        email_format:{
+        email_format: {
             mounted(el) {
                 el.addEventListener('input', () => {
                     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!emailPattern.test(el.value)) {
-                        el.setCustomValidity('올바른 이메일 형식을 입력하세요.');
-                    } 
-                    else {
+                        el.classList.add('is-invalid');
+                        el.setCustomValidity('올바른 이메일 형식을 입력하세요. (예: example@email.com)');
+                    } else {
+                        el.classList.remove('is-invalid');
+                        el.classList.add('is-valid');
                         el.setCustomValidity('');
                     }
+                    el.reportValidity(); // 유효성 메시지를 즉시 표시
                 });
             }
         },
-        number_format:{
+        phone_format: {
             mounted(el) {
                 el.addEventListener('input', () => {
-                    // 한국 핸드폰 번호 형식: 010-XXXX-XXXX
+                    // 숫자만 추출
+                    let number = el.value.replace(/[^0-9]/g, "");
+                    
+                    // 길이에 따라 하이픈 추가
+                    if (number.length > 3 && number.length <= 7) {
+                        number = number.slice(0, 3) + "-" + number.slice(3);
+                    } else if (number.length > 7) {
+                        number = number.slice(0, 3) + "-" + number.slice(3, 7) + "-" + number.slice(7, 11);
+                    }
+                    
+                    // 입력 값 업데이트
+                    el.value = number;
+
+                    // 유효성 검사
                     const phonePattern = /^010-\d{4}-\d{4}$/;
-                    el.value = el.value.replace(/[^0-9-]/g, ""); // 숫자와 '-'만 허용
                     if (!phonePattern.test(el.value)) {
-                        el.setCustomValidity('올바른 한국 핸드폰 번호 형식을 입력하세요. 예: 010-1234-5678');
+                        el.classList.add('is-invalid');
+                        el.setCustomValidity('올바른 핸드폰 번호 형식을 입력하세요. (예: 010-1234-5678)');
                     } else {
+                        el.classList.remove('is-invalid');
+                        el.classList.add('is-valid');
                         el.setCustomValidity('');
                     }
+                    el.reportValidity();
                 });
             }
         },
@@ -101,10 +121,14 @@ export default{
                     // 비밀번호는 12-16자리, 특수문자 최소 1개 포함
                     const passwordPattern = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,16}$/;
                     if (!passwordPattern.test(el.value)) {
+                        el.classList.add('is-invalid');
                         el.setCustomValidity('비밀번호는 12자리 이상 16자리 이하이어야 하며, 특수문자를 최소 1회 이상 포함해야 합니다.');
                     } else {
+                        el.classList.remove('is-invalid');
+                        el.classList.add('is-valid');
                         el.setCustomValidity('');
                     }
+                    el.reportValidity(); // 유효성 메시지를 즉시 표시
                 });
             }
         }
@@ -179,11 +203,5 @@ label {
     margin-bottom: 0.5rem;
 }
 
-.is-invalid {
-    border-color: #ff8080 !important;
-}
 
-.is-valid {
-    border-color: #66cc99 !important;
-}
 </style>
