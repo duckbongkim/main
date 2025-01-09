@@ -1,9 +1,10 @@
 <template>
-<div>
+<div class="content-wrapper">
     <!-- Page content-->
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-lg-8">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                
                 <!-- Post content-->
                 <article>
                     <!-- Post header-->
@@ -12,19 +13,28 @@
                         <h1 class="fw-bolder mb-1">{{postDetail.title}}</h1>
                         
                     </header>
+                    
                     <!-- Preview image figure-->
                     <figure class="mb-4"><img class="img-fluid rounded" :src="`${postDetail.post_image}`" alt="..." /></figure>
                     <!-- Post content-->
                     <section class="mb-5">
                         <p class="fs-5 mb-4">{{postDetail.post_content}}</p>
                     </section>
+                    <div v-if="user.email === postDetail.Account.email || user.super_admin" class="d-flex gap-2 mb-4 justify-content-end">
+                        <button class="btn btn-outline-primary" @click="$router.push(`/post/modifyPost/${postDetail.id}`)">
+                            <i class="bi bi-pencil-square me-1"></i>수정
+                        </button>
+                        <button class="btn btn-outline-danger" @click="deletePost">
+                            <i class="bi bi-trash me-1"></i>삭제
+                        </button>
+                    </div>
                     <!-- 좋아요 버튼 추가 -->
-                        <div class="d-flex align-items-center gap-2">
-                            <button class="btn btn-outline-primary d-flex align-items-center gap-2" @click="toggleLike">
-                                <i class="bi bi-hand-thumbs-up-fill"></i>
-                                <span>좋아요 {{ postDetail.like_count }}</span>
-                            </button>
-                        </div>
+                    <div class="d-flex justify-content-center my-4">
+                        <button class="btn btn-outline-primary d-flex align-items-center gap-2" @click="toggleLike">
+                            <i class="bi bi-hand-thumbs-up-fill"></i>
+                            <span>좋아요 {{ postDetail.like_count }}</span>
+                        </button>
+                    </div>
                 </article>
                 <!-- Comments section-->
                 <section class="mb-5">
@@ -53,7 +63,7 @@
                                                 <span>{{ reply.like_count || 0 }}</span>
                                             </button>
                                         </div>
-                                        <div v-show="reply.Account.email === user.email">
+                                        <div v-show="reply.Account.email === user.email || user.super_admin">
                                             <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#modifyReplyModal" @click="modifyReply(reply.id)">수정</button>
                                             <button class="btn btn-sm btn-outline-danger" @click="deleteReply(reply.id)">삭제</button>
                                         </div>
@@ -89,7 +99,7 @@
                                                             <span>{{ re_reply.like_count || 0 }}</span>
                                                         </button>
                                                     </div>
-                                                    <div v-show="re_reply.Account.email === user.email">
+                                                    <div v-show="re_reply.Account.email === user.email || user.super_admin">
                                                         <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#modifyReplyModal" @click="modifyReply(re_reply.id)">수정</button>
                                                         <button class="btn btn-sm btn-outline-danger" @click="deleteReply(re_reply.id)">삭제</button>
                                                     </div>
@@ -105,40 +115,7 @@
                     </div>
                 </section>
             </div>
-            <!-- Side widgets-->
-            <div class="col-lg-4">
-                <div v-if="user.email === postDetail.Account.email" class="card mb-4">
-                    <button @click="$router.push(`/post/modifyPost/${postDetail.id}`)">수정</button>
-                    <button @click="deletePost">삭제</button>
-                </div>
-                <!-- Categories widget-->
-                <div class="card mb-4">
-                    <div class="card-header">Categories</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#!">여기</a></li>
-                                    <li><a href="#!">에는</a></li>
-                                    <li><a href="#!">뭐 넣</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#!">지?</a></li>
-                                    <li><a href="#!">CSS</a></li>
-                                    <li><a href="#!">Tutorials</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Side widget-->
-                <div class="card mb-4">
-                    <div class="card-header">Side Widget</div>
-                    <div class="card-body">뭐..어디에 쓸만한게 있지 않을까?</div>
-                </div>
-            </div>
+            
         </div>
     </div>
 
@@ -391,5 +368,10 @@ export default{
 /* 댓글 좋아요 버튼에 하단 마진 추가 */
 .btn-outline-primary.btn-sm {
     margin: 6px 0 10px 0;
+}
+
+.content-wrapper {
+    width: 85%;
+    margin: 0 auto;
 }
 </style>
