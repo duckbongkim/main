@@ -1,8 +1,5 @@
 <template>
 <div>
-
-
-            
     <section class="product-main container d-flex justify-content-center align-items-center flex-wrap">
         
         <div class="product-image-container text-center">
@@ -129,11 +126,10 @@ export default{
     created(){
     },
     mounted(){
-        
-        
+        window.scrollTo(0, 0);  // 페이지 최상단으로 스크롤
         this.getProducts()
-        this.getRecommendProducts() //1월1일 추천상품 목록 진열 기능 확인 위해 주석제거(동진)
-        this.getUserProfile() //250108 누리) 유저 정보 끌어오기
+        this.getRecommendProducts()
+        this.getUserProfile()
     },
     unmounted(){},
     methods:{

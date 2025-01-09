@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderLayout />
-    <div>
+    <div class="container">
       <router-view/> <!--여기는 라우터를 통해 호출되는 컴포넌트를 띄우겠다는 코드. 이게 라우터를 호출하거나 하는건아님. 라우터 호출을 main.js에서 -->
     </div>
     <FooterLayout />
@@ -38,6 +38,10 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.container {
+  margin-top: 90px;
 }
 </style>
 

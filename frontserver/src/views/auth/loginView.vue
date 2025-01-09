@@ -64,6 +64,9 @@ export default{
               if(error.response.status === 403){
                 this.isLoggedIn = false;
               }
+              else{
+                console.log('need login')
+              }
             }
         },
         async localLogin(){
