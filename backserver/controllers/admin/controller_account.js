@@ -99,12 +99,9 @@ exports.addAccount = async(req,res,next)=>{
 
 exports.dropOutUser = async(req,res,next)=>{
     try{
-        console.log("@@@@@@@@@@@@@@@req.user",req.user);
         const user = req.user.email;
-        console.log("@@@@@@@@@@@@@@@user",user);
         const futureDate = new Date();
         futureDate.setDate(futureDate.getDate() + 14); // 현재 날짜에 14일을 추가
-        console.log("@@@@@@@@@@@@@@@futureDate",futureDate);
         await Accounts.update({delete_time: futureDate},{where:{email:user}});
         res.status(200).json({message:'회원 탈퇴가 완료되었습니다. 14일 후 완전 삭제됩니다.'});
     }

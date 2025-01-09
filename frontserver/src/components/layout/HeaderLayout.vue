@@ -42,8 +42,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" @click="goToMenu('/admin')">Admin</a>
+        <li class="nav-item" v-if="checkAdmin">
+          <a class="nav-link active" aria-current="page" @click="goToAdmin('/admin')">Admin</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" @click="goToMenu('/products')">productDetail</a>
@@ -93,6 +93,7 @@ export default{
       return {
         account: [],
         isLoggedIn:false,
+        checkAdmin:false,
       }
     },
     watch: {
@@ -110,6 +111,7 @@ export default{
               const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
               console.log("response",response);
               this.isLoggedIn = response.data.isLoggedIn;
+              this.checkAdmin = response.data.isAdmin;
           } catch (error) {
               this.isLoggedIn = false;
           }
@@ -138,6 +140,8 @@ export default{
             await axios.post('http://localhost:3000/auth/logout', {}, { withCredentials: true });
             this.isLoggedIn = false; // 로그아웃 후 즉시 상태 갱신
             alert("로그아웃 되었습니다!");
+            this.checkAdmin = false;
+            this.isLoggedIn = false;
             this.$router.push('/'); // 로그아웃 후 홈으로 이동
           } catch (error) {
             console.error("로그아웃 실패:", error);
@@ -156,11 +160,17 @@ export default{
     },
 
     goToMenu(path){
-    this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
-        },
-      },
+      this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
+    },
+    goToAdmin(path){
+      if(this.checkAdmin){
+        this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
+      }else{
+        alert("관리자가 아닙니다.");
+      }
+    },
+  },
     mounted() {
-      this.checkLogin(); // 컴포넌트 로드시 로그인 상태 확인
     } ,
     
     handleSearch() {
