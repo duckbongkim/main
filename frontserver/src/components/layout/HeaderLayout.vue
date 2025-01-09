@@ -7,7 +7,7 @@
         <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/login')">로그인</button>
         <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/agree')">회원가입</button>
         <button class="login-button" v-show="isLoggedIn" @click="logout">로그아웃</button>
-        <i class="bi bi-cart3 icon" @click="checkLoginAndGoToPage('/basket')" title="장바구니"></i>
+        <i class="bi bi-cart3 icon" @click="checkLoginAndGoToPage('/cart/1')" title="장바구니"></i>
         <i class="bi bi-person icon" @click="checkLoginAndGoToPage('/mypage')" title="마이페이지"></i>
       </div>
       <a class="navbar-brand" @click="goToMenu('/')">Home</a>
