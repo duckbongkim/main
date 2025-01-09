@@ -80,9 +80,9 @@ export default{
 <style scoped>
 .sidebar {
   position: fixed;
-  top: 56px;
+  top: 90px;
   left: 0;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 90px);
   width: 250px;
   padding-top: 20px;
   z-index: 1010;
