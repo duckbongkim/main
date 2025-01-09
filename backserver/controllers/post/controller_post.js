@@ -5,7 +5,9 @@ const Likes = require('../../models/model_likes');
 //전체 게시글 조회
 exports.getPosts = async (req,res,next)=>{
     try{
-        const postes = await Postes.findAll();
+        const postes = await Postes.findAll({
+            order: [['created_at', 'DESC']]
+        });
         res.status(200).json(postes);
     }catch(error){
         console.error(error);
@@ -65,9 +67,10 @@ exports.getSpecificPostReplyList = async (req,res,next)=>{
 //게시글 수정
 exports.modifyPost = async (req,res,next)=>{
     try{
-        const requestUserEmail = req.user.email;//요청자
+        const requestUser = await Accounts.findOne({where:{email:req.user.email}});//요청자
+
         const writePostUser = await Postes.findOne({where:{id:req.params.id},include:{model:Accounts,attributes:['id','email']}});//작성자
-        if(requestUserEmail === writePostUser.Account.email){
+        if(requestUser.id === writePostUser.Account.id || requestUser.super_admin){
             req.body.updated_at = new Date();
             req.body.account_id = writePostUser.Account.id;
             await Postes.update(req.body,{where:{id:req.params.id}});

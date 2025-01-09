@@ -1,17 +1,39 @@
 <template>
-  <div>
-    <h3> 전체 게시판</h3>
-    <ul>
-      <li v-for="post in posts" :key="post.id">
-        <router-link :to="`/post/post_detail/${post.id}`">
-          <div>
-            <h2>{{ post.title }}</h2>
-            <p>{{ post.content }}</p>
-            <img v-if="post.imageUrl" :src="post.imageUrl" alt="게시글 이미지" width="100" />
-          </div>
-        </router-link>
-      </li>
-    </ul>
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="text-center w-100">전체 게시판</h3>
+      <router-link to="/post/addPost" class="btn btn-primary btn-sm position-absolute" style="right: 7.5%">
+        글쓰기
+      </router-link>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover w-85 mx-auto">
+        <thead class="table-light">
+          <tr>
+            <th scope="col" width="10%">번호</th>
+            <th scope="col" width="30%">제목</th>
+            <th scope="col" width="20%">이미지</th>
+            <th scope="col" width="20%">작성일</th>
+            <th scope="col" width="20%">내용</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(post, index) in posts" :key="post.id">
+            <td>{{ index + 1 }}</td>
+            <td>
+              <router-link :to="`/post/post_detail/${post.id}`" class="text-decoration-none text-dark">
+                {{ post.title }}
+              </router-link>
+            </td>
+            <td>
+              <img v-if="post.imageUrl" :src="post.imageUrl" alt="게시글 이미지" class="thumbnail" />
+            </td>
+            <td>{{ new Date(post.created_at).toLocaleDateString() }}</td>
+            <td>{{ post.content }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -19,6 +41,7 @@
 import axios from 'axios';
 
 export default {
+  
   data(){
     return{
       posts: [],
@@ -52,19 +75,68 @@ export default {
 </script>
 
 <style scoped>
+.w-85 {
+  width: 85% !important;
+}
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.table {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 8px;
 }
-li {
-  margin: 10px 0;
+
+.table thead th {
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: #333;
+  background-color: #ffffff;
 }
-h2 {
-  font-size: 1.2rem;
+
+.table td {
+  border-bottom: 1px solid #eaeaea;
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.router-link-active {
+  color: #333;
+}
+
+.thumbnail {
+  max-width: 100px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transition: background-color 0.2s ease;
+}
+
+h3 {
+  text-align: center;
   margin: 0;
 }
-p {
-  font-size: 0.9rem;
+
+.container {
+  position: relative;
+}
+
+.btn-primary {
+  z-index: 1;
 }
 </style>
