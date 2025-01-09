@@ -1,85 +1,58 @@
 <template>
 <div>
-
-  <div class="clear">
-      <!-- 임시 검색창 -->
-      <div class="search-form">
-        <input 
-          v-model="searchQuery" 
-          type="text" 
-          placeholder="검색어를 입력하세요"
-        >
-        <button @click="handleSearch">검색</button>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <div class="clear">
+        <div class="welcome-message" v-show="isLoggedIn">환영합니다!</div>
+        <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/login')">로그인</button>
+        <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/agree')">회원가입</button>
+        <button class="login-button" v-show="isLoggedIn" @click="logout">로그아웃</button>
+        <i class="bi bi-cart3 icon" @click="checkLoginAndGoToPage('/basket')" title="장바구니"></i>
+        <i class="bi bi-person icon" @click="checkLoginAndGoToPage('/mypage')" title="마이페이지"></i>
       </div>
-
-      <button @click="$router.push('/mypage')">마이페이지</button>
-      <button @click="$router.push('/post/post_detail/3')">게시물 상세 페이지 테스트 버튼</button>
-      <button @click="$router.push('/post/addPost')">게시물 추가 페이지 테스트 버튼</button>
-
-
-    <!-- 로그인 상태가 아니면 로그인, 회원가입 버튼 표시 -->
-    <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/login')">로그인</button>
-    <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/agree')">회원가입</button>
-
-    <!-- 로그인 상태이면 로그아웃 버튼 표시 -->
-    <button class="login-button" v-show="isLoggedIn" @click="logout">로그아웃</button>
-
-    <!-- 장바구니, 마이페이지 버튼은 로그인 여부와 상관없이 항상 표시 -->
-    <button class="basket-button" @click="$router.push('/basket')">장바구니</button>
-    <button @click="$router.push('/mypage')">마이페이지</button>
-    <!-- 로그인 상태에서 우측 상단에 환영 메시지 표시 -->
-    <div class="welcome-message" v-show="isLoggedIn">
-      환영합니다!
-    </div>
-
-  </div>
-    
-  <nav class="navbar navbar-expand-lg bg-body-tertiary additional-height">
-  <div class="container-fluid">
-    <a class="navbar-brand" @click="goToMenu('/')">Home</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item" v-if="checkAdmin">
-          <a class="nav-link active" aria-current="page" @click="goToAdmin('/admin')">Admin</a>
-        </li>
-        
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" role="button" aria-expanded="false">
-            주류
-          </a>
-          <ul class="dropdown-menu">
-
-            <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
-            <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
-            <li><a class="inner-title" @click="goToMenu('/whiskey')">위스키</a></li>      
-            <li><a class="inner-title" @click="goToMenu('/traditional')">동양주류</a></li>               
-          </ul>           
-        </li>
-        
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" aria-expanded="false">
-            etc 상품
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="inner-title" @click="goToMenu('/glass')">와인잔</a></li> 
-            <li><a class="inner-title" @click="goToMenu('/holder')">와인홀더</a></li> 
-            <li><a class="inner-title" @click="goToMenu('/opener')">와인오프너</a></li> 
-            <li><a class="inner-title" @click="goToMenu('/onetherock')">온더락잔</a></li> 
-            <li><a class="inner-title" @click="goToMenu('/straight')">스트레이트 잔</a></li> 
-            <li><a class="inner-title" @click="goToMenu('/decanter')">위스키 디캔터</a></li>
-          </ul>
-        </li>
-          <!-- 커뮤니티 -->
-          <li class="nav-item">
-            <a class="nav-link" @click="goToMenu('/test')">커뮤니티</a>
+      <a class="navbar-brand" @click="goToMenu('/')">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item" v-if="checkAdmin">
+            <a class="nav-link active" aria-current="page" @click="goToAdmin('/admin')">Admin</a>
           </li>
-      </ul>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" aria-expanded="false">
+              주류
+            </a>
+            <ul class="dropdown-menu">
+
+              <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
+              <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
+              <li><a class="inner-title" @click="goToMenu('/whiskey')">위스키</a></li>      
+              <li><a class="inner-title" @click="goToMenu('/traditional')">동양주류</a></li>               
+            </ul>           
+          </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" aria-expanded="false">
+              etc 상품
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="inner-title" @click="goToMenu('/glass')">와인잔</a></li> 
+              <li><a class="inner-title" @click="goToMenu('/holder')">와인홀더</a></li> 
+              <li><a class="inner-title" @click="goToMenu('/opener')">와인오프너</a></li> 
+              <li><a class="inner-title" @click="goToMenu('/onetherock')">온더락잔</a></li> 
+              <li><a class="inner-title" @click="goToMenu('/straight')">스트레이트 잔</a></li> 
+              <li><a class="inner-title" @click="goToMenu('/decanter')">위스키 디캔터</a></li>
+            </ul>
+          </li>
+            <!-- 커뮤니티 -->
+            <li class="nav-item">
+              <a class="nav-link" @click="goToMenu('/postlist')">커뮤니티</a>
+            </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 </div>
 </template>
 
@@ -89,7 +62,6 @@ import axios from 'axios';
 export default{
     data(){
       return {
-        account: [],
         isLoggedIn:false,
         checkAdmin:false,
       }
@@ -144,33 +116,30 @@ export default{
           } catch (error) {
             console.error("로그아웃 실패:", error);
           }
-        },
+      },
 
-      async getaccount(){
-      try{
-        const response = await axios.get(`http://localhost:3000/${router}`);
-        this.account = response.data;
-        console.log(response);
-      }catch(err){
-        console.error(err);
-      }
-      
-    },
 
-    goToMenu(path){
-      this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
-    },
-    goToAdmin(path){
-      if(this.checkAdmin){
+      goToMenu(path){
         this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
-      }else{
-        alert("관리자가 아닙니다.");
-      }
+      },
+      goToAdmin(path){
+        if(this.checkAdmin){
+          this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
+        }else{
+          alert("관리자가 아닙니다.");
+        }
+      },
+      checkLoginAndGoToPage(path){
+        if(this.isLoggedIn){
+          this.$router.push({path:path});//vue에서 사용하는 해당 경로의 라우터로 이동시키는 코드.
+        }else{
+          alert("로그인이 필요합니다.");
+          this.$router.push('/login');
+        }
+      },
     },
-  },
     mounted() {
-    } ,
-    
+    },
     handleSearch() {
     this.$router.push({
       path: '/liqueur',
@@ -178,7 +147,7 @@ export default{
     });
   },
 
-  }
+}
 
 
 </script>
@@ -253,16 +222,55 @@ export default{
   }
   /* 로그인시 환영합니다! 2025-01-07*/
   .clear {
-    position: relative; /* 부모 요소를 기준으로 위치 지정 */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px;
   }
 
   .welcome-message {
-    position: absolute;
-    top: 25px;
-    right: 210px;
-    font-size: 16px;
+    margin-right: 15px;
+    font-size: 14px;
     color: #333;
     font-weight: bold;
-  }  
+  }
+
+  .icon {
+    margin: 0 10px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .login-button {
+    margin: 0 10px;
+    padding: 6px 15px;
+    font-size: 14px;
+    color: #666;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .navbar {
+    height: 90px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: white;
+  }
+
+  .container-fluid {
+    position: relative;
+    height: 100%;
+  }
+
+  .clear {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+  }
 </style>
 
