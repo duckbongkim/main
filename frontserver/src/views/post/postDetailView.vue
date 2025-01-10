@@ -1,7 +1,7 @@
 <template>
 <div class="content-wrapper">
     <!-- Page content-->
-    <div class="container mt-5">
+    <div class="container" style="margin-top: 20vh;">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 
@@ -197,19 +197,17 @@ export default{
     created(){
         this.postId = this.$route.params.id;
         this.getUser();
-        this.getPostDetail();
+        
     },
     mounted(){
-        console.log('모든 refs:', this.$refs);
         this.getReplyList();
+        this.getPostDetail();
     },
     unmounted(){},
     methods:{
         async getPostDetail(){
             const response = await axios.get(`http://localhost:3000/post/post_detail/${this.postId}`);
             this.postDetail = response.data;
-            console.log("postDetail",this.postDetail);
-            console.log("postDetail.Account.email",this.postDetail.Account.email);
         },
         initializeReplyReplyContents() {
             const parentReplies = this.replyList.filter(reply => reply.reply_reply_id === null);
@@ -225,8 +223,6 @@ export default{
             try{
                 const res = await axios.get(`http://localhost:3000/profile`,{withCredentials:true});
                 this.user = res.data;
-                console.log("user",this.user);
-                console.log("user.email",this.user.email);
             }catch(err){
                 console.log("로그인 전");
             }
@@ -373,5 +369,9 @@ export default{
 .content-wrapper {
     width: 85%;
     margin: 0 auto;
+}
+
+.container {
+    margin-top: 20vh;
 }
 </style>
