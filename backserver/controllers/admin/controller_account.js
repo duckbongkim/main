@@ -1,4 +1,5 @@
 const {sequelize} = require('../../models/model_index.js');
+const { Op } = require('sequelize');
 const Accounts = require('../../models/model_accounts.js');
 const Ratings = require('../../models/model_ratings.js');
 const crypto = require('../../methods/crypto.js');
@@ -29,13 +30,58 @@ exports.getUsers = async(req,res,next)=>{
 
 exports.modifyUser = async(req,res,next)=>{
     try{
-        const user = req.body;
-        user.updated_at = new Date();
-        if(user.password && user.password !== null && user.password !== ''){
-            const hashedPassword = await crypto(user.password);
-            user.password = hashedPassword;
+        const modifyData = req.body;
+        const user = await Accounts.findOne({where:{email:req.user.email}});
+        console.log("user@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",user);
+        
+        // 변경된 데이터만 필터링
+        const changedData = Object.keys(modifyData).reduce((acc, key) => {
+            if (user[key] !== modifyData[key]) {
+                acc[key] = modifyData[key];
+            }
+            return acc;
+        }, {});
+
+        if(Object.keys(changedData).length === 0){
+            return res.status(400).json({message:"변경된 데이터가 없습니다."});
         }
-        const result = await Accounts.update(user,{where:{id:user.id}});
+
+        console.log("changedData@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",changedData);
+
+        // 닉네임이 변경되었을 경우에만 중복 체크
+        if(changedData.nickname) {
+            const existNickname = await Accounts.findOne({
+                where: {
+                    nickname: changedData.nickname,
+                    id: { [Op.ne]: user.id }
+                }
+            });
+            if(existNickname) {
+                return res.status(400).json({message:'이미 사용 중인 닉네임입니다.'});
+            }
+        }
+
+        // 전화번호가 변경되었을 경우에만 중복 체크
+        if(changedData.phone_number) {
+            const existPhone = await Accounts.findOne({
+                where: {
+                    phone_number: changedData.phone_number,
+                    id: { [Op.ne]: user.id }
+                }
+            });
+            if(existPhone) {
+                return res.status(400).json({message:'이미 등록된 전화번호입니다.'});
+            }
+        }
+
+        // 기존 코드 유지
+        changedData.updated_at = new Date();
+        if(changedData.password && changedData.password !== null && changedData.password !== ''){
+            const hashedPassword = await crypto(changedData.password);
+            changedData.password = hashedPassword;
+        }
+        
+        const result = await Accounts.update(changedData,{where:{id:user.id}});
         res.status(200).json(result);
     }
     catch(error){

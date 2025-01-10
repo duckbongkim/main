@@ -6,49 +6,48 @@
             <form class="validation-form" @submit.prevent="submitCreateAccount">
                 
                 <div class="mb-3">
-                    <label for="email">이메일(필수)</label>
+                    <label for="email">이메일</label>
                     <input ref="emailInput" type="email" v-model="createAccountData.email" v-email_format class="form-control" id="email" placeholder="you@example.com" required>
                 </div>
                 <div class="mb-3">
-                    <label for="password">비밀번호(필수)</label>
+                    <label for="password">비밀번호</label>
                     <input type="password" v-model="createAccountData.password" v-password_format class="form-control" id="password" required>
                     
                 </div>
                 <div class="mb-3">
-                    <label for="passwordConfirm">비밀번호 확인(필수)</label>
+                    <label for="passwordConfirm">비밀번호 확인</label>
                     <input type="password" v-model="passwordConfirm" class="form-control" :class="{ 'is-invalid': !passwordMatch && passwordConfirm, 'is-valid': passwordMatch && passwordConfirm }" id="passwordConfirm" required>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="name">이름(필수)</label>
+                        <label for="name">이름</label>
                         <input type="text" v-model="createAccountData.name" class="form-control" id="name" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="nickname">닉네임(필수)</label>
+                        <label for="nickname">닉네임</label>
                         <input type="text" v-model="createAccountData.nickname" class="form-control" id="nickname" required>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="birth">생년월일(필수)</label>
+                    <label for="birth">생년월일</label>
                     <input type="date" v-model="createAccountData.birth" class="form-control" id="birth" required>
                 </div>
                 <div class="mb-3">
-                    <label for="phone">핸드폰 번호(필수)</label>
+                    <label for="phone">핸드폰 번호</label>
                     <input type="tel" v-model="createAccountData.phone_number" v-phone_format class="form-control" id="phone" placeholder="010-0000-0000" required>
                 </div>
                 <div class="mb-3">
-                    <label for="address">주소(필수)</label>
-                    <input type="text" v-model="createAccountData.address" class="form-control" id="address" required>
+                    <label for="address">주소</label>
+                    <div class="input-group">
+                        <input type="text" v-model="createAccountData.addressNumber" class="form-control w-25" id="addressNumber" placeholder="우편번호" readonly required>
+                        <button type="button" @click="execDaumPostcode" class="btn btn-secondary" id="address-search">주소 검색</button>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="addressDetail">상세주소(선택)</label>
-                        <input type="text" v-model="createAccountData.addressDetail" class="form-control" id="addressDetail">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="addressNumber">우편번호(선택)</label>
-                        <input type="number" v-model="createAccountData.addressNumber" class="form-control" id="addressNumber">
-                    </div>
+                <div class="mb-3">
+                    <input type="text" v-model="createAccountData.address" class="form-control" id="address" placeholder="주소" readonly required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" v-model="createAccountData.addressDetail" class="form-control" id="addressDetail" placeholder="상세주소" required>
                 </div>
                 <button class="btn btn-primary btn-lg btn-block" type="submit">가입하기</button>
             </form>
@@ -146,7 +145,9 @@ export default{
                 address: null,
                 addressDetail: null,
                 addressNumber: null
-            }
+            },
+            postcode: null,
+            roadAddress: null,
         };
     },
     setup(){},
@@ -158,6 +159,13 @@ export default{
             if(!this.passwordMatch){
                 alert('비밀번호가 일치하지 않습니다.');
                 document.getElementById('password').focus();
+                return;
+            }
+            if(!this.createAccountData.addressNumber || !this.createAccountData.address || !this.createAccountData.addressDetail){
+                alert('주소를 입력해주세요.');
+                this.$nextTick(() => {
+                    document.getElementById('address-search').focus();
+                });
                 return;
             }
             try{
@@ -174,7 +182,43 @@ export default{
                     });
                 }
             }
-        }
+        },
+        //주소 검색 api 메서드
+        execDaumPostcode() {
+          // Daum Postcode API 호출
+          new daum.Postcode({
+            oncomplete: (data) => {
+              let roadAddr = data.roadAddress; // 도로명 주소
+              let extraRoadAddr = ""; // 참고 항목
+
+              // 참고항목 조합 (법정동, 건물명 등)
+              if (data.bname && /[동|로|가]$/g.test(data.bname)) {
+                extraRoadAddr += data.bname;
+              }
+              if (data.buildingName && data.apartment === "Y") {
+                extraRoadAddr += extraRoadAddr
+                  ? `, ${data.buildingName}`
+                  : data.buildingName;
+              }
+              if (extraRoadAddr) {
+                extraRoadAddr = ` (${extraRoadAddr})`;
+              }
+
+              // 데이터 바인딩
+              this.createAccountData.addressNumber = data.zonecode; // 우편번호
+              this.createAccountData.address = roadAddr; // 도로명 주소
+
+              // 가이드 메시지 처리
+              if (data.autoRoadAddress) {
+                this.guide = `예상 도로명 주소: ${data.autoRoadAddress} ${extraRoadAddr}`;
+              } else if (data.autoJibunAddress) {
+                this.guide = `예상 지번 주소: ${data.autoJibunAddress}`;
+              } else {
+                this.guide = "";
+              }
+            },
+          }).open(); // 팝업 창 열기
+        },
     },
     watch:{}
 }
@@ -203,5 +247,12 @@ label {
     margin-bottom: 0.5rem;
 }
 
+.input-group .btn {
+    margin-left: 10px;
+}
+
+.input-group input[readonly] {
+    background-color: #f8f9fa;
+}
 
 </style>
