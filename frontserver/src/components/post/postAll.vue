@@ -25,7 +25,7 @@
           </thead>
           <tbody>
             <tr v-for="(post, index) in paginatedPosts" :key="post.id">
-              <td>{{ index + 1 }}</td>
+              <td>{{ calculatePostNumber(index) }}</td>
               <td>
                 <router-link :to="`/post/post_detail/${post.id}`" class="text-decoration-none text-dark">
                   {{ post.title }}
@@ -157,6 +157,9 @@ export default {
         this.$router.push('/login');
       }
     },
+    calculatePostNumber(index) {
+      return (this.currentPage - 1) * this.itemsPerPage + index + 1;
+    }
   },
   watch:{
     '$route.params.post_kind':'boardList'
