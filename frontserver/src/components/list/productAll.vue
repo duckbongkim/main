@@ -29,7 +29,7 @@
             <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
           </div>
           <h2 class="product-title">{{ product.product_name }}</h2>
-          <p class="product-price">{{ product.product_price }}</p>
+          <p class="product-price">{{ product.product_price }} 원</p>
           
         </div>
       </div>
@@ -137,6 +137,7 @@ export default {
   text-align: center;
   overflow: hidden;
   transition: transform 0.3s;
+  cursor: pointer;
 }
 .product-card:hover {
   transform: scale(1.05);
