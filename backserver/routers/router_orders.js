@@ -5,6 +5,7 @@ const Accounts = require ('../models/model_accounts');
 const Carts = require ('../models/model_buckets');
 const Products = require ('../models/model_products');
 const Wishes = require ('../models/model_wishes');
+const Orders = require ('../models/model_orders');
 
 // http://localhost:3000/orders
 
@@ -167,18 +168,6 @@ router.get('/cart/:userid', async(req, res, next) => {
 })
 
 //Cart DELETE
-// router.delete('/cart/:cartedProduct_id', async (req, res, next) =>{
-//     try{
-//         const {cartedProduct_id} = req.params; 
-//         console.log(`##################cartedProduct_id${cartedProduct_id}`)
-//         const result = await Carts.destroy({where : {id : cartedProduct_id}});
-//         res.status(200).json(result);
-
-//     }catch(err) {
-//         console.error(err);
-//         next(err);
-//     }
-// })
 router.delete('/cart', async (req, res, next) =>{
     try{
         const {ids} = req.body; 
@@ -191,7 +180,6 @@ router.delete('/cart', async (req, res, next) =>{
         next(err);
     }
 })
-
 
 // MAKE ordering List FROM product view
 router.get('/order/:infoFromProductView', async (req, res, next)=>{
@@ -207,6 +195,39 @@ router.get('/order/:infoFromProductView', async (req, res, next)=>{
     }
 })
 
+// Order CREATE
+router.post('/order', async (req, res, next) => {
+    try {
+        const {orderInfos} = req.body;
+        console.log(`##########################orderInfo${orderInfos}`);
+
+        const transaction = await Orders.sequelize.transaction(); 
+        // 트랜잭션은 모든작업이 성공적으로 완료되면 커밋하고, 실패 시 롤백
+
+        for(const info of orderInfos){
+            if (!info.count || !info.account_id || !info.product_id || !info.address) {
+                throw new Error("누락된 필수 주문 정보가 있습니다.");
+            }
+            await Orders.create({
+                count : info.count,
+                account_id : info.account_id,
+                product_id : info.product_id,
+                address : info.address,              
+                addressDetail : info.addressDetail,
+                addressNumber : info.addressNumber,
+                orderMessage : info.orderMessage,
+            }, { transaction }
+            );
+        }
+        await transaction.commit(); // 모든 작업 성공 시 커밋
+        res.status(201).json({ message: "모든 주문이 성공적으로 처리되었습니다." });
+        
+    }catch(err){
+        await transaction.rollback()
+        console.error(err);
+        next(err);
+    }
+})
 
 
 module.exports = router;

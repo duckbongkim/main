@@ -26,8 +26,8 @@
                         <button @click="minusC(cartedProduct)">-</button>
                         {{cartedProduct.count}}
                         <button @click="plusC(cartedProduct)">+</button></td>
-                    <td>{{cartedProduct.Product.product_price}}</td>
-                    <td>{{cartedProduct.count * cartedProduct.Product.product_price}}원</td>
+                    <td>{{cartedProduct.Product.product_price.toLocaleString()}}</td>
+                    <td>{{cartedProduct.count * cartedProduct.Product.product_price.toLocaleString()}}원</td>
                     <td><button @click="deleteProduct(cartedProduct.id)">삭제</button></td>
                 </tr>
             </tbody>

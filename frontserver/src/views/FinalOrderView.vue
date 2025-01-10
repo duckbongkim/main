@@ -5,9 +5,9 @@
       <h1>주문/결제</h1>
       <div class="order-steps">
         <span class="step completed">장바구니</span>
-        <span class="step-arrow">></span>
+        <span class="step-arrow"></span>
         <span class="step active">주문/결제</span>
-        <span class="step-arrow">></span>
+        <span class="step-arrow"></span>
         <span class="step">주문완료</span>
       </div>
     </div>
@@ -97,6 +97,10 @@
           <label>상세 주소</label>
           <input type="text" v-model="addressDetail" placeholder="상세주소" required>
         </div>
+        <div class="form-group">
+          <label>배송메세지</label>
+          <input type="text" v-model="orderMessage" placeholder="배송메세지">
+        </div>
       </div>
     </div>
 
@@ -166,11 +170,16 @@ export default{
     },
     data(){
         return{
-            orderList:[],
             address:'',
             addressDetail:'',
             zipCode:'',
             productInfo :[],
+            //{"id":37,"count":2,"total_price":5580000,"createdAt":"2025-01-09T08:21:30.000Z","updatedAt":"2025-01-09T08:34:15.000Z","account_id":4,"product_id":4,
+            //"Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"},
+            //"selected":true}
+
+            //orderInfo:[],
+
             numberOfProducts : 0,
             finalTotalPrice: 0,
             deliveryFee : 3000,
@@ -195,6 +204,7 @@ export default{
         // 들어오는 쿼리에 따라 다른 파라메터를 넣어 같은 함수를 실행시키는 코드
         if(this.$route.query.productInfoQuery){
             this.getProductInfo('productInfoQuery');
+            
         // orderingInfoQuary가 있으면, 문자열 'orderingInfoQuary'를 넣어서 함수 실행
         }else if (this.$route.query.orderingInfoQuary){
             this.getProductInfo('orderingInfoQuary');
@@ -244,16 +254,40 @@ export default{
             try{
                 if(query === 'productInfoQuery'){
                     this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
+                    //console.log(`############################${JSON.stringify(this.productInfo)}`)
                 }else if(query === 'orderingInfoQuary') {
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
                     const response = await axios.get(`http://localhost:3000/orders/order/${InfoFromProductView}`);
                     this.productInfo = [response.data];
+                    
                 }
                 //총액 계산
                 this.calculateTotal()
             }catch(err){
                 console.error(err);
             }
+        },
+
+
+        // Order CREATING
+        async order(){
+          try {
+            const orderInfos = this.productInfo.map(product => ({
+              count : product.count,
+              account_id : product.account_id,
+              product_id : product.product_id,
+
+              address : this.address,              
+              addressDetail : this.addressDetail,
+              addressNumber : this.zipCode,
+              orderMessage : this.orderMessage,
+            }));
+            console.log(`################orderInfos:${JSON.stringify(orderInfos)}`);
+            await axios.post(`http://localhost:3000/orders/order`, orderInfos);
+            
+          }catch(err){
+            console.error(err);
+          }
         },
         //유저도 가져와야 해
         async getUser(){
