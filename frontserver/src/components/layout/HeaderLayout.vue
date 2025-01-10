@@ -27,8 +27,8 @@
 
               <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
               <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
-              <li><a class="inner-title" @click="goToMenu('/whiskey')">위스키</a></li>      
-              <li><a class="inner-title" @click="goToMenu('/traditional')">동양주류</a></li>               
+              <li><a class="inner-title" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>      
+              <li><a class="inner-title" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>               
             </ul>           
           </li>
           
@@ -37,12 +37,8 @@
               etc 상품
             </a>
             <ul class="dropdown-menu">
-              <li><a class="inner-title" @click="goToMenu('/glass')">와인잔</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/holder')">와인홀더</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/opener')">와인오프너</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/onetherock')">온더락잔</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/straight')">스트레이트 잔</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/decanter')">위스키 디캔터</a></li>
+              <li><a class="inner-title" @click="goToMenu('/etc/wineglass')">와인잔</a></li> 
+              <li><a class="inner-title" @click="goToMenu('/etc/onetherock')">온더락잔</a></li> 
             </ul>
           </li>
             <!-- 커뮤니티 -->
