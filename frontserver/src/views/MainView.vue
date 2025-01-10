@@ -1,7 +1,7 @@
 <template>
 <div>
     <!-- 광고형 슬라이드 -->
-    <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark">
+    <!-- <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -26,144 +26,130 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
-    </div>
+    </div> -->
+   
+    <!-- <v-carousel v-if="mainData.expensive.length > 0" height="400" show-arrows="hover" cycle hide-delimiter-background>
+      
+      <v-carousel-item
+        v-for="item in mainData.expensive"
+        :key="item.id"
+        @click="goProducts(item.id)"
+      >
+        <v-sheet color="white lighten-2" height="100%">
+          <div class="d-flex fill-height justify-center align-center">
+            <div class="text-center">
+              <img :src="item.product_image" alt="Product Image" style="max-height: 200px; object-fit: contain;" />
+              <p class="text-h6">{{ item.product_description }}</p>
+              <strong class="text-h5">{{ item.product_name }}</strong>
+              <div class="text-h6 mt-2">{{ item.product_price }}원</div>
+            </div>
+          </div>
+        </v-sheet>
+      </v-carousel-item>
+    </v-carousel> -->
 
-    <!--추천 판매량-->
-    <div class="promotion">
+    <!-- swiper -->
+    <section class="expensive-container"> 
 
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2021 뉴이어, 스타벅스와 함께 즐겁고 활기차게 시작하세요!" />
-            <p>곰표 쉽지않네.</p>
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
+      <div class="expensive-content">
+        아에이오우
+      </div>
+
+      
+      <div class="slider expensive-slider">
+        <!-- 추천 배너 텍스트 추가 -->
+        <div class="recommendation-banner">높은 가격대 추천</div>
+        <div class="swiper-container expensive-swiper-container">
+          <div class="swiper-wrapper expensive-swiper-wrapper">
+            <div 
+              class="swiper-slide expensive-slide" 
+              v-for="item in mainData.expensive" 
+              :key="item.id"
+              @click="goProducts(item.id)"
+            >
+              <img :src="item.product_image" alt="Product Image" />
+              <p>{{ item.product_description }}</p>
+              <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
+            </div>
           </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="기간 내 스타벅스 카드 e-Gift를 3만원 이상 선물 시, 아메리카노 e-쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="뉴이어 푸드와 제조 음료를 세트로 구매 시, 뉴이어 음료 BOGO(1+1) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="신년 MD 상품 포함 3만원 이상 구매 고객께 아메리카노(톨사이즈) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2017 DIGITAL LUCKY DRAW 100% 당첨의 행운을 드립니다!" />
-            <a href="javascript:void(0)" class="btn btn-primary">자세히 보기</a>
-          </div>
+          <!-- Pagination -->
+  
+          <!-- Navigation buttons -->
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+          <!-- Scrollbar -->
+          <div class="swiper-scrollbar"></div>
         </div>
-      </div>
-
-      <div class="swiper-pagination"></div>
-
-      <div class="swiper-prev swiper-button">
-        <span class="material-icons arrow_back">arrow_back_ios</span>
-      </div>
-      <div class="swiper-next swiper-button">
-        <span class="material-icons arrow_forward">arrow_forward_ios</span>
-      </div>
-    </div>
-
-    <!--신상품 판매량-->
-    <div class="promotion">
-
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(slide, index) in slides" :key="index">
-            <img src="img\곰표.jpg" alt="2021 뉴이어, 스타벅스와 함께 즐겁고 활기차게 시작하세요!" />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
+          <div class="image-container">
+            <img src="your-image-path.jpg" alt="Right Image" />
           </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="기간 내 스타벅스 카드 e-Gift를 3만원 이상 선물 시, 아메리카노 e-쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="뉴이어 푸드와 제조 음료를 세트로 구매 시, 뉴이어 음료 BOGO(1+1) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="신년 MD 상품 포함 3만원 이상 구매 고객께 아메리카노(톨사이즈) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2017 DIGITAL LUCKY DRAW 100% 당첨의 행운을 드립니다!" />
-            <a href="javascript:void(0)" class="btn btn-primary">자세히 보기</a>
-          </div>
-        </div>
+
       </div>
-
-      <div class="swiper-pagination"></div>
-
-      <div class="swiper-prev swiper-button">
-        <span class="material-icons arrow_back">arrow_back_ios</span>
-      </div>
-      <div class="swiper-next swiper-button">
-        <span class="material-icons arrow_forward">arrow_forward_ios</span>
-      </div>
-    </div>
-
-    <!-- 비싼 가격대 추천 -->
-    <div class="promotion">
-
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2021 뉴이어, 스타벅스와 함께 즐겁고 활기차게 시작하세요!" />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="기간 내 스타벅스 카드 e-Gift를 3만원 이상 선물 시, 아메리카노 e-쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="뉴이어 푸드와 제조 음료를 세트로 구매 시, 뉴이어 음료 BOGO(1+1) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="신년 MD 상품 포함 3만원 이상 구매 고객께 아메리카노(톨사이즈) 쿠폰을 드립니다." />
-            <a href="javascript:void(0)" class="btn">자세히 보기</a>
-          </div>
-          <div class="swiper-slide">
-            <img src="img\곰표.jpg" alt="2017 DIGITAL LUCKY DRAW 100% 당첨의 행운을 드립니다!" />
-            <a href="javascript:void(0)" class="btn btn-primary">자세히 보기</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="swiper-pagination"></div>
-
-      <div class="swiper-prev swiper-button">
-        <span class="material-icons arrow_back">arrow_back_ios</span>
-      </div>
-      <div class="swiper-next swiper-button">
-        <span class="material-icons arrow_forward">arrow_forward_ios</span>
-      </div>
-    </div>
-
-    <div class="promotion">
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <!-- v-for로 동적으로 슬라이드 생성 -->
-          <div class="swiper-slide" v-for="(item, index) in main" :key="index">
-            <img :src="item.imgSrc" :alt="item.altText" />
-            <a href="javascript:void(0)" class="btn">{{ mainData }}</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="swiper-pagination"></div>
-        <div class="swiper-prev swiper-button">
-          <span class="material-icons arrow_back">arrow_back_ios</span>
-        </div>
-        <div class="swiper-next swiper-button">
-          <span class="material-icons arrow_forward">arrow_forward_ios</span>
-      </div>
-    </div>
-
+    </section>
+    
+    
+    
+    
+    
+    <!-- test배너 -->
     <section>
+        <div class="container swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=10" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=11" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=12" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=13" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=14" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=15" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=16" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=17" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=18" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=19" alt="dummy-image">
+            </div>
+            
+            <div class="swiper-slide">
+              <img src="https://picsum.photos/600/900?image=20" alt="dummy-image">
+            </div>
+          </div>
+          
+          <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- <section>
       <h2>비싼 가격순</h2>
       <ul class="product-list">
         <li v-for="item in mainData.expensive" :key="item.id" @click="goProducts(item.id)">
@@ -175,7 +161,7 @@
     </section>
 
     <section>
-      <h2>싼 가격순</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <h2>싼 가격순</h2> 
       <ul class="product-list">
         <li v-for="item in mainData.cheap" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -186,7 +172,7 @@
     </section>
 
     <section>
-      <h2>20대 추천</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <h2>20대 추천</h2> 
       <ul class="product-list">
         <li v-for="item in mainData.recommend['20대 베스트']" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -197,7 +183,7 @@
     </section>
 
     <section>
-      <h2>30대 추천</h2> <!-- 이건 어떻게 받아와야 하지? -->
+      <h2>30대 추천</h2> 
       <ul class="product-list">
         <li v-for="item in mainData.recommend['30대 베스트']" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -208,7 +194,7 @@
     </section>
 
     <section>
-      <h2>신상품</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <h2>신상품</h2> 
       <ul class="product-list">
         <li v-for="item in mainData.newProduct" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -216,74 +202,115 @@
           <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
         </li>
       </ul>
-    </section>
-
-
-
-
-
-
+    </section> -->
 
 </div>
 </template>
 
-
 <script>
 import axios from 'axios';
+
 
 export default{ 
     name:'',
     components:{},
     computed:{},
     data(){
-        return{
-          mainData:{
-            expensive:[],
-            cheap:[],
-            newProduct:[],
-            recommend:{},
+      return{
+        mainData:{
+          expensive:[],
+          cheap:[],
+          newProduct:[],
+          recommend:{},
+          slides:[],
+        },
+        bestSeller:{
+          
+        },
+        colors: [
+          'indigo',
+          'warning',
+          'pink darken-2',
+          'red lighten-1',
+          'deep-purple accent-4',
+        ],
+        slides: [
+          'First',
+          'Second',
+          'Third',
+          'Fourth',
+          'Fifth',
+      ],
+        watch: {
+        'mainData.expensive': {
+          handler() {
+            this.$nextTick(() => {
+              this.initSwiper();
+            });
           },
-          bestSeller:{
-            
-          },
-
-
-        };
+          deep: true,
+        },
+      },
+      };
     },
     setup(){},
-    created(){},
+    created(){
+      this.getmain(); // 메인 데이터 가져오기 
+    },
     mounted(){
-
-
-
-      this.getmain();
-
-      new Swiper('.swiper-container', {
-      slidesPerView: 1,
-      spaceBetween: 10,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-    });
-  },
-    
+    // jQuery 기반 Swiper 초기화 제거
+      this.$nextTick(() => {
+        this.initSwiper();
+      });
+    },
+    updated() {},
     unmounted(){},
     methods:{
-      async getmain(){
-        try{
-          const response = await axios.get("http://localhost:3000/") 
-          this.mainData = response.data
-          console.log(response)
-        }catch(err){
-          console.error(err)
+      async getmain() {
+        try {
+          const response = await axios.get("http://localhost:3000/");
+          this.mainData = response.data;
+
+          // 데이터가 렌더링된 후 Swiper 초기화
+          this.$nextTick(() => {
+            this.initSwiper();
+          });
+
+          console.log(response);
+        } catch (err) {
+          console.error(err);
         }
       },
-      goProducts(product_id){ // 1월1일(동진) 상품 클릭시 해당 상품의 아이디를 가지고 이동되는 메소드
-        this.$router.push(`/products/${product_id}`)
-    },
+      goProducts(productId) {
+        // 제품 페이지 이동 로직 (예: 라우터 사용)
+        this.$router.push(`/products/${productId}`);
+      },
+      initSwiper() {
+        new Swiper('.swiper-container', {
+          direction: 'horizontal',
+          loop: true,
+          slidesPerView: 3, // 한 화면에 표시할 슬라이드 수
+          spaceBetween: 20, // 슬라이드 간격
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          scrollbar: {
+            el: '.swiper-scrollbar',
+            draggable: true,
+          },
+          // breakpoints: {
+          //   1920: { slidesPerView: 4 }, // 데스크탑
+          //   992: { slidesPerView: 3 },  // 태블릿
+          //   320: { slidesPerView: 2 },  // 모바일
+          // },
+        });
+      },
   }
-
 }
 </script>
 
@@ -291,7 +318,7 @@ export default{
   /* body부분 - 캐러셀 */
   /* 기본 캐러셀 스타일 */
   .carousel-item img {
-    width: 300px; /* 이미지를 캐러셀 아이템 너비에 맞춤 */
+    width: 100%; /* 이미지를 캐러셀 아이템 너비에 맞춤 */
     height: 500px; /* 높이는 자동으로 조절 */
     object-fit: contain; /* 이미지 비율 유지하며 최대한 크게 보여줌 */
   }
@@ -301,121 +328,93 @@ export default{
   .test{
     color:black;
   }
-
-
-  /* 추천 기능*/
-  /*PROMOTION*/
-  .promotion {
-    width: auto;
-    height: 693px;
-    background-color: #f6f5ef;
+ /* swiper 3개씩 넘겨지는*/
+  .slider {
+    margin: 0 auto;
+    max-width: 800px;
     position: relative;
-    overflow: hidden;
-    transition: height .4s;
-  }
-  .promotion.hide {
-    height: 0;
   }
 
-  .promotion .swiper-container {
-    /* 819px 슬라이드 3개와 그 사이 여백 10px씩 = 2477px */
-    width: calc(819px * 3 + 20px);
-    height: 553px;
-    position: absolute;
-    top: 40px;
-    left: 50%;
-    margin-left: calc((819px * 3 + 20px) / -2);
-  }
-  .promotion .swiper-slide {
-    position: relative;
-    opacity: .5;
-    transition: opacity 1s;
-  }
-  .promotion .swiper-slide-active {
-    opacity: 1;
-  }
-
-  
-  .promotion .swiper-slide .btn {
-    width: 130px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-  }
-  .promotion .swiper-pagination {
-    bottom: 40px;
-    left: 0;
-    right: 0;
-    z-index: 0;
-  }
-  .promotion .swiper-pagination .swiper-pagination-bullet {
-    background-color: black;
-  
-    width: 13px;
-    height: 12px;
-    margin-right: 6px;
-    outline: none;
-  }
-  .promotion .swiper-pagination .swiper-pagination-bullet:last-child {
-    margin-right: 0;
-  }
-  
-  .promotion .swiper-prev,
-  .promotion .swiper-next {
-    width: 42px;
-    height: 42px;
-    outline: none;
-    border: 2px solid #333;
-    border-radius: 50%;
-    position: absolute;
-    /* Swiper Container 높이의 절반만큼 끌어올림 /
-    /* 버튼 높이의 절반만큼 추가로 끌어올림 */
-    top: 300px;
-    z-index: 1;
-    cursor: pointer;
+  .swiper-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: .4s;
-  }
-  .promotion .swiper-prev {
-    left: 50%;
-    margin-left: -480px;
-  }
-  .promotion .swiper-next {
-    right: 50%;
-    margin-right: -480px;
-  }
-  .promotion .swiper-prev:hover,
-  .promotion .swiper-next:hover {
-    background-color: #333;
-    color: #fff;
-  }
-  .swiper-button {
-    position: relative;
-  }
-  .arrow_back{
-    position: absolute;
-    left: 25%;
-    right: 0;
-  }
-  .arrow_forward{
-    position: absolute;
-    right: 15%;
-  }
-
-  .product-list {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
-    padding: 0 20px;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .swiper-section {
+    flex: 0 0 70%;  /* swiper 슬라이더는 전체의 70% 차지 */
+    padding-right: 20px;  /* 이미지와 간격을 주기 위해 */
   }
 
-  .product-list li {
-    list-style: none;
-    cursor: pointer;
+  .image-container {
+    flex: 0 0 28%;  /* 이미지 컨테이너는 30% 차지 */
+    text-align: center;
   }
 
+  .recommendation-banner {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .swiper-container {
+    padding-bottom: 20px;
+  }
+  /* .swiper-wrapper img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  } */
+
+  .expensive-slide img {
+    width: 190px;
+    height: 120px;
+    object-fit: contain;
+  }
+  .bar1{
+    margin:150px;
+  }
+    /* 추천 배너 스타일 */
+  .recommendation-banner {
+    font-size: 36px; /* 글씨 크기 */
+    font-weight: bold; /* 굵은 글씨 */
+    text-align: center; /* 가운데 정렬 */
+    margin-bottom: 20px; /* 슬라이더와 배너 사이의 간격 */
+    color: #333; /* 글씨 색상 */
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10; /* 다른 요소들 위에 배치 */
+  }
+  #carouselExampleIndicators {
+    width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
+    margin: 0; /* 양옆 여백 제거 */
+    padding: 0; /* 양옆 패딩 제거 */
+  }
+
+
+  /* expensive-content */
+  .expensive-container {
+    width:100%;
+    display: flex;
+  }
+
+  .expensive-content {
+    max-width: 400px;
+    height: 600px;
+    background-color: aqua;
+  
+  }
+
+
+
+  
 </style>

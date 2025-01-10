@@ -24,10 +24,10 @@
                 <a class="nav-link" @click="goToMenu('/admin/users')">-사용자 목록</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" @click="goToMenu('/admin/orders')">-주문 목록</a>
+                <a class="nav-link" @click="goToMenu('/admin/manageOrders')">-주문 목록</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" @click="goToMenu('/admin/products')">-상품 목록</a>
+                <a class="nav-link" @click="goToMenu('/admin/manageProducts')">-상품 목록</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" @click="goToMenu('/admin/supplyFactories')">-공급처 관리</a>
@@ -35,48 +35,15 @@
               <li class="nav-item">
                 <a class="nav-link" @click="goToMenu('/admin/productLocations')">-원산지 관리</a>
               </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" @click="toggleMenu('products')" :class="{ active: activeMenu === 'products' }">
-              <div class="menu-title">
-                Products
-                <span class="material-icons icon-left">inventory_2</span>
-              </div>
-              <span class="material-icons">{{ activeMenu === 'products' ? 'expand_less' : 'expand_more' }}</span>
-            </a>
-            <ul class="nav flex-column sub-menu" :class="{ show: activeMenu === 'products' }">
               <li class="nav-item">
-                <a class="nav-link" @click="goToMenu('/map')">-상품 목록</a>
+                <a class="nav-link" @click="goToMenu('/admin/userRatings')">-사용자 등급 관리</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" >-상품 등록</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" >-카테고리 관리</a>
+                <a class="nav-link" @click="goToMenu('/admin/coupons')">-쿠폰 관리</a>
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" @click="toggleMenu('reports')" :class="{ active: activeMenu === 'reports' }">
-              <div class="menu-title">
-                Reports
-                <span class="material-icons icon-left">assessment</span>
-              </div>
-              <span class="material-icons">{{ activeMenu === 'reports' ? 'expand_less' : 'expand_more' }}</span>
-            </a>
-            <ul class="nav flex-column sub-menu" :class="{ show: activeMenu === 'reports' }">
-              <li class="nav-item">
-                <a class="nav-link" href="#">-매출 보고서</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">-트래픽 분석</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">-사용자 통계</a>
-              </li>
-            </ul>
-          </li>
+          
         </ul>
       </div>
     </nav>
@@ -113,9 +80,9 @@ export default{
 <style scoped>
 .sidebar {
   position: fixed;
-  top: 56px;
+  top: 90px;
   left: 0;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 90px);
   width: 250px;
   padding-top: 20px;
   z-index: 1010;
