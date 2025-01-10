@@ -7,15 +7,15 @@
     </div>
 
     <h1>상품 목록</h1>
-    <div v-for="product in filteredProducts" :key="product.id" class="product-card">
+    <div v-for="product in fetchProducts" :key="product.id" class="product-card">
       <router-link :to="'/products/' + product.id">
         <h3>{{ product.product_name }}</h3>
         <p>{{ product.product_description }}</p>
         <p>{{ product.drink_type }}</p>
         <p>{{ product.product_price }}</p>
       </router-link>
+        
     </div>
-
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div> -->
@@ -43,6 +43,7 @@
 import axios from 'axios';
 
 export default {
+  
   data() {
     return {
       products: [],
