@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <div class="content-wrapper">
+  <form class="content-wrapper" @submit.prevent="order">
     <div class="order-header">
       <h1>주문/결제</h1>
       <div class="order-steps">
@@ -84,17 +84,18 @@
         <div class="form-group">
           <label>우편번호</label>
           <div class="zipcode-input">
-            <input type="text" v-model="zipCode" v-zipcode placeholder="우편번호">
-            <button class="btn-search">주소 검색</button>
+            <input type="text" :value="postcode" placeholder="우편번호" readonly required>
+            <button ref="addressSearch" type="button" class="btn-search" @click="execDaumPostcode">주소 검색</button>
+            <button type="button" class="btn-search" @click="useUserAddress">사용자 주소 사용</button>
           </div>
         </div>
         <div class="form-group">
           <label>배송 주소</label>
-          <input type="text" v-model="address" placeholder="기본주소">
+          <input type="text" :value="roadAddress" placeholder="기본주소" readonly required>
         </div>
         <div class="form-group">
           <label>상세 주소</label>
-          <input type="text" v-model="addressDetail" placeholder="상세주소">
+          <input type="text" v-model="addressDetail" placeholder="상세주소" required>
         </div>
       </div>
     </div>
@@ -131,9 +132,9 @@
     </div>
 
     <div class="order-button">
-      <button @click="order" class="btn-order">결제하기</button>
+      <button type="submit" class="btn-order">결제하기</button>
     </div>
-  </div>
+  </form>
 </div>
 </template>
 
@@ -180,6 +181,8 @@ export default{
             usePoint: 0,
             originalTotalPrice: 0,
             totalPaymentAmount: 0,
+            postcode:null,
+            roadAddress:'',
         };
     },
     setup(){},
@@ -236,7 +239,6 @@ export default{
             // 최종 결제 금액 (배송비 포함)
             this.totalPaymentAmount = this.finalTotalPrice + this.deliveryFee;
         },
-
         // MAKE Ordering Product List 
         async getProductInfo(query){
             try{
@@ -253,12 +255,12 @@ export default{
                 console.error(err);
             }
         },
-
         //유저도 가져와야 해
         async getUser(){
             try{
               const response = await axios.get('http://localhost:3000/profile',{withCredentials:true});
               this.user = response.data;
+              console.log("user@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",this.user);
             }catch(err){
               console.error(err);
             }
@@ -287,6 +289,58 @@ export default{
             this.usePoint = Number(this.tempUsePoint);
             this.calculateTotal();
         },
+        useUserAddress(){
+            if(!this.user.addressNumber || !this.user.address || !this.user.addressDetail){
+                alert('사용자 주소가 없습니다.(사용자 정보 수정을 통해 주소를 입력해주세요)');
+                this.$nextTick(() => {
+                    this.$refs.addressSearch.focus();
+                });
+                return;
+            }
+            this.postcode = this.user.addressNumber;
+            this.roadAddress = this.user.address;
+            this.addressDetail = this.user.addressDetail;
+        },
+        //주소 검색 api 메서드
+        execDaumPostcode() {
+          // Daum Postcode API 호출
+          new daum.Postcode({
+            oncomplete: (data) => {
+              let roadAddr = data.roadAddress; // 도로명 주소
+              let extraRoadAddr = ""; // 참고 항목
+
+              // 참고항목 조합 (법정동, 건물명 등)
+              if (data.bname && /[동|로|가]$/g.test(data.bname)) {
+                extraRoadAddr += data.bname;
+              }
+              if (data.buildingName && data.apartment === "Y") {
+                extraRoadAddr += extraRoadAddr
+                  ? `, ${data.buildingName}`
+                  : data.buildingName;
+              }
+              if (extraRoadAddr) {
+                extraRoadAddr = ` (${extraRoadAddr})`;
+              }
+
+              // 데이터 바인딩
+              this.postcode = data.zonecode; // 우편번호
+              this.roadAddress = roadAddr; // 도로명 주소
+
+              // 가이드 메시지 처리
+              if (data.autoRoadAddress) {
+                this.guide = `예상 도로명 주소: ${data.autoRoadAddress} ${extraRoadAddr}`;
+              } else if (data.autoJibunAddress) {
+                this.guide = `예상 지번 주소: ${data.autoJibunAddress}`;
+              } else {
+                this.guide = "";
+              }
+            },
+          }).open(); // 팝업 창 열기
+        },
+
+        order(){
+            //결제 전에 주문지 들어갔는지 확인 코드 필요함.!
+        }
     },
     watch: {
         selectedCoupon: {
@@ -425,11 +479,16 @@ export default{
 
 .btn-search {
   padding: 0.8rem 1.5rem;
-  background: #6c757d;
-  color: white;
+  background: #F3EFE0;
+  color: #4A4A4A;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-search:hover {
+  background: #E5DCC3;
 }
 
 /* 결제 정보 스타일 */
@@ -476,8 +535,8 @@ export default{
 .btn-order {
   padding: 1rem 4rem;
   font-size: 1.2rem;
-  background: #007bff;
-  color: white;
+  background: #F3EFE0;
+  color: #4A4A4A;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -485,7 +544,7 @@ export default{
 }
 
 .btn-order:hover {
-  background: #0056b3;
+  background: #E5DCC3;
 }
 
 /* 할인 적용 스타일 */
@@ -534,16 +593,17 @@ export default{
 .btn-apply-point {
     padding: 0.5rem 1rem;
     height: 40px;
-    background: #6c757d;
-    color: white;
+    background: #F3EFE0;
+    color: #4A4A4A;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     white-space: nowrap;
     font-size: 0.9rem;
+    transition: background-color 0.2s;
 }
 
 .btn-apply-point:hover {
-    background: #5a6268;
+    background: #E5DCC3;
 }
 </style>
