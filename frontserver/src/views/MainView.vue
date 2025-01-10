@@ -26,10 +26,12 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
-    </div> -->
+
+    </div>
    
-    <!-- <v-carousel v-if="mainData.expensive.length > 0" height="400" show-arrows="hover" cycle hide-delimiter-background>
-      
+    <v-carousel v-if="mainData.expensive.length > 0" height="400" show-arrows="hover" cycle hide-delimiter-background>
+      <!-- 캐러셀 코드 -->
+
       <v-carousel-item
         v-for="item in mainData.expensive"
         :key="item.id"
@@ -46,9 +48,10 @@
           </div>
         </v-sheet>
       </v-carousel-item>
-    </v-carousel> -->
+    </v-carousel>
 
     <!-- swiper -->
+
     <section class="expensive-container"> 
 
       <div class="expensive-content">
@@ -72,80 +75,39 @@
               <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
             </div>
           </div>
-          <!-- Pagination -->
-  
+
           <!-- Navigation buttons -->
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
           <!-- Scrollbar -->
           <div class="swiper-scrollbar"></div>
         </div>
-          <div class="image-container">
-            <img src="your-image-path.jpg" alt="Right Image" />
-          </div>
 
       </div>
     </section>
-    
-    
-    
-    
-    
-    <!-- test배너 -->
+
+    <!--test-->
     <section>
-        <div class="container swiper-container">
+        <div class="bar1"></div>
+        <div class="recommendation-banner">"20대"에게 추천</div>
+        <div class="container swiper-container-good">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=10" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=11" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=12" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=13" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=14" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=15" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=16" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=17" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=18" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=19" alt="dummy-image">
-            </div>
-            
-            <div class="swiper-slide">
-              <img src="https://picsum.photos/600/900?image=20" alt="dummy-image">
+            <div 
+              class="swiper-slide" 
+              v-for="item in mainData.expensive" 
+              :key="item.id"
+              @click="goProducts(item.id)"
+            >
+              <img :src="item.product_image" alt="Product Image" />
+              <p>{{ item.product_description }}</p>
+              <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
             </div>
           </div>
-          
+          <!-- Navigation buttons -->
           <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+          <div class="swiper-button-next"></div>
         </div>
     </section>
-
-
 
 
 
@@ -303,15 +265,36 @@ export default{
             el: '.swiper-scrollbar',
             draggable: true,
           },
-          // breakpoints: {
-          //   1920: { slidesPerView: 4 }, // 데스크탑
-          //   992: { slidesPerView: 3 },  // 태블릿
-          //   320: { slidesPerView: 2 },  // 모바일
-          // },
+
+          breakpoints: {
+            1920: { slidesPerView: 3 }, // 데스크탑
+            992: { slidesPerView: 3 },  // 태블릿
+            320: { slidesPerView: 2 },  // 모바일
+          },
         });
-      },
-  }
-}
+      new Swiper('.swiper-container-good', {
+        slidesPerView: 3, // 한 화면에 표시할 슬라이드 개수
+        centeredSlides: true, // 활성 슬라이드를 가운데 정렬
+        loop: true, // 무한 반복 활성화
+        spaceBetween: 20, // 슬라이드 간격 없음
+        navigation: {
+          nextEl: '.swiper-button-next', // 다음 버튼
+          prevEl: '.swiper-button-prev', // 이전 버튼
+        },
+        breakpoints: {
+          1920: { slidesPerView: 3 }, // 데스크탑 설정
+          992: { slidesPerView: 3 },  // 태블릿 설정
+          320: { slidesPerView: 1 },  // 모바일 설정
+        },
+      });
+    },
+    goProducts(productId) {
+      // 제품 페이지 이동 로직 (예: 라우터 사용)
+      this.$router.push(`/products/${productId}`);
+    },
+  },
+}       
+
 </script>
 
 <style>
@@ -328,10 +311,12 @@ export default{
   .test{
     color:black;
   }
- /* swiper 3개씩 넘겨지는*/
+  /* swiper 3개씩 넘겨지는*/
   .slider {
     margin: 0 auto;
-    max-width: 800px;
+
+    max-width: 1200px;
+
     position: relative;
   }
 
@@ -339,7 +324,7 @@ export default{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
   }
   .swiper-section {
@@ -367,32 +352,12 @@ export default{
   .swiper-container {
     padding-bottom: 20px;
   }
-  /* .swiper-wrapper img {
+
+  .swiper-wrapper img {
     max-width: 100%;
     height: auto;
     object-fit: contain;
-  } */
 
-  .expensive-slide img {
-    width: 190px;
-    height: 120px;
-    object-fit: contain;
-  }
-  .bar1{
-    margin:150px;
-  }
-    /* 추천 배너 스타일 */
-  .recommendation-banner {
-    font-size: 36px; /* 글씨 크기 */
-    font-weight: bold; /* 굵은 글씨 */
-    text-align: center; /* 가운데 정렬 */
-    margin-bottom: 20px; /* 슬라이더와 배너 사이의 간격 */
-    color: #333; /* 글씨 색상 */
-    position: absolute;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10; /* 다른 요소들 위에 배치 */
   }
   #carouselExampleIndicators {
     width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
@@ -416,5 +381,60 @@ export default{
 
 
 
-  
+
+  .swiper-slide img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .bar1{
+    margin:150px;
+  }
+    /* 추천 배너 스타일 */
+  .recommendation-banner {
+    font-size: 36px; /* 글씨 크기 */
+    font-weight: bold; /* 굵은 글씨 */
+    text-align: center; /* 가운데 정렬 */
+    margin-bottom: 20px; /* 슬라이더와 배너 사이의 간격 */
+    color: #333; /* 글씨 색상 */
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10; /* 다른 요소들 위에 배치 */
+  }
+  #carouselExampleIndicators {
+    width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
+    margin: 0; /* 양옆 여백 제거 */
+    padding: 0; /* 양옆 패딩 제거 */
+  }
+  /* swiper 2 */  
+  .swiper-container-good {
+    max-width: 960px;
+    margin: 0 auto;
+    overflow: hidden; /* 슬라이더 영역 밖의 이미지 숨기기 */
+    position: relative; /* 버튼 위치를 컨테이너 기준으로 설정하기 위함 */    
+  }
+
+  .swiper-container-good .swiper-slide {
+    width: auto; /* 슬라이드 개수를 Swiper 옵션에서 제어 */
+    transition: all 0.25s ease-out;
+    opacity: 1;
+  }
+
+  .swiper-container-good .swiper-slide img {
+    width: 100%; /* 슬라이드 영역에 맞춰 이미지 크기 조정 */
+    height: 100%; /* 이미지 높이를 일정하게 설정 */
+    object-fit: contain; /* 이미지 비율 유지하면서 슬라이드 영역에 맞게 채움 */
+    max-width: 100%;
+    transition: all 0.25s ease-out;
+    transform: scale(0.55);
+    transform-origin: center;
+  }
+
+  .swiper-container-good .swiper-slide-active img {
+    transform: scale(1.0);
+  }
+
 </style>
