@@ -144,7 +144,7 @@ export default {
 }
 .product-card img {
   max-width: 100%;
-  height: auto;
+  height: 200px;
 }
 .product-details {
   display: flex;
