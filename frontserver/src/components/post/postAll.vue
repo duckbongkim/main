@@ -1,17 +1,45 @@
 <template>
-  <div>
-    <h3> 전체 게시판</h3>
-    <ul>
-      <li v-for="post in posts" :key="post.id">
-        <router-link :to="`/post/post_detail/${post.id}`">
-          <div>
-            <h2>{{ post.title }}</h2>
-            <p>{{ post.content }}</p>
-            <img v-if="post.imageUrl" :src="post.imageUrl" alt="게시글 이미지" width="100" />
-          </div>
-        </router-link>
-      </li>
-    </ul>
+  <div class="container mt-5">
+    <h3 class="text-center mb-4">전체 게시판</h3>
+    <div class="w-95 mx-auto">
+      <div class="d-flex flex-column align-items-end mb-4">
+        <div class="search-container d-flex justify-content-end mb-3">
+          <input v-model="searchQuery" type="text" placeholder="검색" class="form-control form-control-sm me-2">
+          <button @click="handleSearch" class="btn btn-primary btn-sm" style="width: 80px;">검색</button>
+        </div>
+        <button @click="goToAddPost" class="btn btn-primary btn-sm mt-2" style="width: 80px;">
+          글쓰기
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover w-95 mx-auto">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" width="8%">번호</th>
+              <th scope="col" width="40%">제목</th>
+              <th scope="col" width="15%">작성자</th>
+              <th scope="col" width="15%">작성일</th>
+              <th scope="col" width="12%">수정일</th>
+              <th scope="col" width="10%">좋아요</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(post, index) in posts" :key="post.id">
+              <td>{{ index + 1 }}</td>
+              <td>
+                <router-link :to="`/post/post_detail/${post.id}`" class="text-decoration-none text-dark">
+                  {{ post.title }}
+                </router-link>
+              </td>
+              <td>{{ post.Account.nickname || '익명' }}</td>
+              <td>{{ new Date(post.created_at).toLocaleDateString() }}</td>
+              <td>{{ new Date(post.updated_at).toLocaleDateString() }}</td>
+              <td>{{ post.like_count||0 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -22,28 +50,65 @@ export default {
   data(){
     return{
       posts: [],
-      
+      originalPosts:[],
+      searchQuery: '',
+      isLogin:false,
     };
 
+  },
+  computed:{
   },
   setup(){},
   created(){
     this.AllPosts();
+    this.checkLogin();
   },
   mounted(){
     
   },
   unmounted(){},
   methods:{
+    async checkLogin(){
+      try {
+        const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
+        this.isLogin = response.data.isLoggedIn;
+      } catch(error) {
+        return false;
+      }
+    },
     async AllPosts(){
         try {
             const response = await axios.get('http://localhost:3000/post/post_list');
             this.posts = response.data; 
+            this.originalPosts = response.data;
         } catch (error) {
-            console.error('전체 게시물을 가져오는데 실패했습니다.', error);
+            // console.error('전체 게시물을 가져오는데 실패했습니다.', error);
         }
-    }
-    
+    },
+    handleSearch() {
+            // 원본 데이터로 시작
+            let filteredPosts = [...this.originalPosts];
+            // 검색어 필터
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                filteredPosts = filteredPosts.filter(post => 
+                    (post.title?.toLowerCase() || '').includes(query) ||
+                    (post.content?.toLowerCase() || '').includes(query) ||
+                    (post.post_kind?.toLowerCase() || '').includes(query) ||
+                    (post.Account.nickname?.toLowerCase() || '').includes(query)
+                );
+            }
+            // 필터링된 결과 적용
+            this.posts = filteredPosts;
+    },
+    goToAddPost() {
+      if(this.isLogin){
+        this.$router.push('/post/addPost');
+      }else{
+        alert('로그인 필요');
+        this.$router.push('/login');
+      }
+    },
   },
   watch:{
     '$route.params.post_kind':'boardList'
@@ -52,19 +117,90 @@ export default {
 </script>
 
 <style scoped>
+.w-95 {
+  width: 95% !important;
+}
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.table {
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 8px;
 }
-li {
-  margin: 10px 0;
+
+.table thead th {
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: #333;
+  background-color: #ffffff;
 }
-h2 {
-  font-size: 1.2rem;
+
+.table td {
+  border-bottom: 1px solid #eaeaea;
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.router-link-active {
+  color: #333;
+}
+
+.thumbnail {
+  max-width: 100px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transition: background-color 0.2s ease;
+}
+
+h3 {
+  text-align: center;
   margin: 0;
 }
-p {
-  font-size: 0.9rem;
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.btn-primary {
+  z-index: 1;
+}
+
+.search-container {
+  width: 250px;
+}
+
+.search-container input {
+  width: 180px;
+  font-size: 0.875rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.text-decoration-none:hover {
+  color: #007bff !important;
+  text-decoration: underline !important;
+  cursor: pointer;
 }
 </style>

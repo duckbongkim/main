@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="container">
     <!-- 이미지 업로드 폼 -->
     <form @submit.prevent="uploadPostImage">
-      <div>
-        <label for="imageUpload">이미지 업로드:</label>
-        <img :src="post.post_image" alt="게시글 이미지" class="mt-2 img-preview">
+      <div class="image-upload-container">
+        <label for="imageUpload">이미지 업로드</label>
+        <img v-if="post.post_image" :src="post.post_image" alt="게시글 이미지" class="img-preview">
         <input @change="handleImageUpload" type="file" id="imageUpload" name="image" accept="image/*" />
         <button type="submit" v-if="postImage">이미지 업로드</button>
       </div>
@@ -12,10 +12,9 @@
 
     <!-- 게시글 작성 폼 -->
     <form @submit.prevent="handleSubmit">
-      <!-- 게시글 종류 선택 -->
-      <div>
-        <label for="postType">게시글 종류:</label>
-        <select v-model="post.post_kind" id="postType" name="postType">
+      <div class="form-group">
+        <label for="postType">게시글 종류</label>
+        <select v-model="post.post_kind" id="postType" name="postType" required>
           <option value="entire">전체게시판</option>
           <option value="free">자유게시판</option>
           <option value="review">리뷰게시판</option>
@@ -24,20 +23,17 @@
         </select>
       </div>
 
-      <!-- 게시글 타이틀 입력 -->
-      <div>
-        <label for="postTitle">제목:</label>
-        <input type="text" v-model="post.title" id="postTitle" name="title" />
+      <div class="form-group">
+        <label for="postTitle">제목</label>
+        <input type="text" v-model="post.title" id="postTitle" name="title" required/>
       </div>
 
-      <!-- 게시글 내용 입력 -->
-      <div>
-        <label for="postContent">내용:</label>
-        <textarea v-model="post.post_content" id="postContent" name="content"></textarea>
+      <div class="form-group">
+        <label for="postContent">내용</label>
+        <textarea v-model="post.post_content" id="postContent" name="content" required></textarea>
       </div>
 
-      <!-- 제출 버튼 -->
-      <button type="submit">제출</button>
+      <button type="submit">게시글 등록</button>
     </form>
   </div>
 </template>
@@ -142,38 +138,99 @@ export default {
 </script>
 
 <style scoped>
-/* 스타일 추가 */
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 label {
-  font-weight: bold;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
 }
 
 input[type="text"],
 textarea,
 select {
   width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  border: 1px solid #ccc;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
   border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.img-preview {
+  max-width: 300px;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin: 1rem 0;
+  border: 1px solid #e0e0e0;
+}
+
+.image-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+input[type="file"] {
+  padding: 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  width: 100%;
 }
 
 button {
-  width: 100px;
-  padding: 10px;
+  width: 120px;
+  padding: 0.75rem 1rem;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
 }
 
 button:hover {
   background-color: #0056b3;
+}
+
+button[type="submit"] {
+  margin-top: 1rem;
+  align-self: flex-start;
 }
 </style>

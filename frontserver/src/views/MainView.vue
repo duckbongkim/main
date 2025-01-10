@@ -26,6 +26,7 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
+
     </div>
     <section>
       <!-- 캐러셀 코드 -->
@@ -49,16 +50,17 @@
       </v-carousel>
     </section>
     <!-- swiper -->
-    <section> 
-      <div class="bar1"></div>
-      <div class="slider">
+
+    <section class="expensive-container"> 
+      
+      <div class="slider expensive-slider">
         <!-- 추천 배너 텍스트 추가 -->
-        <div class="recommendation-banner">높은 가격대 추천</div>
+        
           <img src="img\배너0.jpg" class="right-image" alt="04" />
         <div class="swiper-container">
           <div class="swiper-wrapper">
             <div 
-              class="swiper-slide" 
+              class="swiper-slide expensive-slide" 
               v-for="item in mainData.expensive" 
               :key="item.id"
               @click="goProducts(item.id)"
@@ -68,12 +70,14 @@
               <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
             </div>
           </div>
+
           <!-- Navigation buttons -->
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
           <!-- Scrollbar -->
           <div class="swiper-scrollbar"></div>
         </div>
+
       </div>
     </section>
 
@@ -224,6 +228,7 @@ export default{
             el: '.swiper-scrollbar',
             draggable: true,
           },
+
           breakpoints: {
             1920: { slidesPerView: 3 }, // 데스크탑
             992: { slidesPerView: 3 },  // 태블릿
@@ -267,6 +272,7 @@ export default{
     },
   },
 }       
+
 </script>
 
 <style>
@@ -286,7 +292,9 @@ export default{
   /* swiper 3개씩 넘겨지는*/
   .slider {
     margin: 0 auto;
+
     max-width: 1200px;
+
     position: relative;
   }
 
@@ -325,11 +333,35 @@ export default{
   .swiper-container {
     padding-bottom: 20px;
   }
+
   .swiper-wrapper img {
     max-width: 100%;
     height: auto;
     object-fit: contain;
+
   }
+  #carouselExampleIndicators {
+    width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
+    margin: 0; /* 양옆 여백 제거 */
+    padding: 0; /* 양옆 패딩 제거 */
+  }
+
+
+  /* expensive-content */
+  .expensive-container {
+    width:100%;
+    display: flex;
+  }
+
+  .expensive-content {
+    max-width: 400px;
+    height: 600px;
+    background-color: aqua;
+  
+  }
+
+
+
 
   .swiper-slide img {
     width: 200px;
