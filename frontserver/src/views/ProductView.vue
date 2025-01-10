@@ -33,7 +33,7 @@
 
             <div class="total-price-container">
                     <p>총 합계금액</p>
-                    <p class="price-txt">{{selectedProduct.product_price * orderQuantity}}원</p>
+                    <p class="price-txt">{{(selectedProduct.product_price * orderQuantity).toLocaleString()}}원</p>
             </div>
 
             
@@ -76,7 +76,7 @@
             <a @click="reRendRecommend(pro.id)">
                 <img :src="pro.product_image" alt="product_img" class="recomend-img">
                 <p>{{pro.product_name}}</p>
-                <p>{{pro.product_price}}원</p>
+                <p>{{pro.product_price.toLocaleString()}}원</p>
             </a>
 
         </div>
@@ -124,10 +124,10 @@ export default{
     },
     setup(){},
     created(){
+        this.getProducts()
     },
     mounted(){
         window.scrollTo(0, 0);  // 페이지 최상단으로 스크롤
-        this.getProducts()
         this.getRecommendProducts()
         this.getUserProfile()
     },
@@ -181,6 +181,7 @@ export default{
                 this.product_id = this.$route.params.product_id;
                 //console.log(this.product_id)
                 const response = await axios.get(`http://localhost:3000/products/${this.product_id}`);
+                console.log(response)
                 // product_id에 해당하는 제품 data object를 받아온다.
                 //console.log(response)
                 this.selectedProduct = response.data ; 
@@ -228,15 +229,7 @@ export default{
                 const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
                 if(response.status == 201) {
                     console.log(response.data.message);
-                }
-
-                // 2. 찜리스트로 보내주기
-                const GotoWish = confirm("찜가실?");
-                if(GotoWish) {
-                    const response = await this.$router.push('/orders');   
-                    /// frontserver/src/router/index.js 에 라우터 추가 
-                } else {
-                    alert("상품이 찜에 추가됐다.");
+                    alert("찜 리스트에 추가되었습니다.");
                 }
             } catch(err) {
                 //찜에 중복된 상품이 들어갈 경우(409) 에러처리

@@ -6,7 +6,7 @@
      <div class="user-info">
       <div class="user-details">
         <div>
-          <h3><span>{{ user.nickname }}</span> 님 은 <span>{{rating.rating_name}}</span> 등급입니다.</h3>
+          <h3><span>{{ user.nickname }}</span> 님 은 <span>{{rating}}</span> 등급입니다.</h3>
         </div>
       </div>
 
@@ -65,17 +65,19 @@ export default{
     data(){
         return{
             user:{}, //  250108 누리) getUserProfile()에서 사용하는 변수로 변경. <= 이전 : 250105 동진)유저 데이터를 받아올수있도록 data 에 작성
-            rating:{},
+            rating:'',
         };
 
     },
     setup(){},
     created(){
       //this.getUserData(); // getuserdata 를 마운트에 작성 1월 6일 동진
-      this.getUserProfile() // 250108 누리) router_profile 에서 userdata 받아오기로 변경
+      this.getUserProfile(); // 250108 누리) router_profile 에서 userdata 받아오기로 변경
+      
+    },
+    mounted(){
       this.getRating();
     },
-    mounted(){},
     unmounted(){},
     methods:{
 
@@ -124,13 +126,14 @@ export default{
       // 유저의 레이팅 등급을 받아오는 get 작성 1월 5일 동진
       // 
       async getRating(){
-        try{
-          const res = await axios.get('http://localhost:3000/profile/ratings',{withCredentials:true})
-          this.rating = res.data.find((rating)=>rating.id === this.user.rating_id)
-        }catch(err) {
-          console.error(err)
-        }
-      }
+          try{
+              const res = await axios.get(`http://localhost:3000/profile/userRating`,{withCredentials:true});
+              console.log(res.data);
+              this.rating = res.data.rating;
+          }catch(err){
+              console.error(err);
+          }
+      },
         
     }
 }

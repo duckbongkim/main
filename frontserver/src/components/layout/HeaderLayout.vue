@@ -19,9 +19,6 @@
           <li class="nav-item" v-if="checkAdmin">
             <a class="nav-link active" aria-current="page" @click="goToAdmin('/admin')">Admin</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" @click="goToMenu('/products')">productDetail</a>
-          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" role="button" aria-expanded="false">
               주류
@@ -82,7 +79,6 @@ export default{
       async checkLogin() {
           try {
               const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
-              console.log("response",response);
               this.isLoggedIn = response.data.isLoggedIn;
               this.checkAdmin = response.data.isAdmin;
           } catch (error) {

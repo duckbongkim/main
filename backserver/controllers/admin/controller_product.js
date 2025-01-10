@@ -6,7 +6,9 @@ const SupplyFactories = require('../../models/model_supplyFactory.js');
 
 exports.getProducts = async(req,res,next)=>{
     try{
-        const products = await Products.findAll();
+        const products = await Products.findAll({
+            order: [['created_at', 'DESC']]
+        });
         res.status(200).json(products);
     }
     catch(error){

@@ -5,6 +5,8 @@
         <table>
             <thead>
                 <tr>
+                    <th><input type="checkbox" v-model="allSelected" @click="selectAll()"></th>
+                    <!-- @click 말고 @change 하면 클릭시 체크 해제가 안됨. 꼬여서그러나 -->
                     <th>상품 이미지</th>
                     <th>상품명</th>
                     <th>수량</th>
@@ -15,7 +17,10 @@
             </thead>
             <tbody>
                 <tr v-for="cartedProduct in cartedProducts" :key="cartedProduct.id">
-                    <td><img :src="cartedProduct.Product.product_image" alt=""></td>                  
+                    <td>
+                        <input type="checkbox" v-model="cartedProduct.selected" @change="updateSelectedProduct()" >
+                    </td>
+                    <td><img :src="cartedProduct.Product.product_image" alt=""></td>
                     <td>{{cartedProduct.Product.product_name}}</td>
                     <td>
                         <button @click="minusC(cartedProduct)">-</button>
@@ -33,27 +38,27 @@
             <table>
                 <thead>
                     <tr>
-                        <th>총 {{numberOfProducts}}개 상품의 상품금액 </th>
+                        <th>선택상품금액 </th>
                         <th>배송비</th>
-                        <th>합계</th>
+                        <th>주문금액</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <tb>{{finalTotalPrice}}원</tb>
-                        <tb>{{deliveryFee}}원</tb>
-                        <tb>{{finalTotalPrice + deliveryFee}}원</tb>
+                        <td>{{finalTotalPrice}}원</td>
+                        <td>{{deliveryFee}}원</td>
+                        <td>{{finalTotalPrice + deliveryFee}}원</td>
                     </tr>
                 </tbody>
             </table>
 
         </div>
         <div>
-            <button>선택상품삭제</button>
+            <button @click="deleteSelectedProduct()">선택상품삭제</button>
         </div>
         <div>
-            <button>선택상품 주문</button>
-            <button @click="makeOrder()">전체상품 주문</button>
+            <button @click="makeOrder(false)">선택상품 주문</button>
+            <button @click="makeOrder(true)">전체상품 주문</button>
         </div>
     </div>
 </div>
@@ -73,14 +78,14 @@ export default{
     data(){
         return{
             cartedProducts : [],
-            //selectedProducts: [],
+            selectedProducts: [],
             userid : 0,
             productInfoForOrder : [],
             //{"id":8,"count":1,"total_price":2790000,"createdAt":"2025-01-08T04:14:53.000Z","updatedAt":"2025-01-08T04:14:53.000Z","account_id":4,"product_id":4,
             // "Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"}},
-            numberOfProducts : 0,
             finalTotalPrice: 0,
             deliveryFee : 3000,
+            allSelected : false,
         };
     },
     setup(){},
@@ -90,30 +95,37 @@ export default{
     },
     unmounted(){},
     methods:{
+        //총액 계산 함수
+        calculateTotal(){
+            this.finalTotalPrice = this.selectedProducts.reduce((acc, selectedProduct) => acc + selectedProduct.Product.product_price * selectedProduct.count, 0 )
+        },
+
         // 제품 수량 변경 함수
         plusC(cartedProduct){
             cartedProduct.count += 1 
+            this.calculateTotal()
         },
 
         minusC(cartedProduct){
-            if(cartedProduct.count > 0){
+            if(cartedProduct.count > 1){
                 cartedProduct.count -= 1 
+                this.calculateTotal()
             } return;
         },
 
-
-        //총액 계산 함수
-
-        total_products(){
-            this.numberOfProducts= this.cartedProducts.length
+        // 선택함수
+        updateSelectedProduct(){
+            this.selectedProducts = this.cartedProducts.filter((cartedProduct) => cartedProduct.selected);
+            this.allSelected = (this.selectedProducts.length === this.cartedProducts.length);
+            this.calculateTotal();
+            console.log(`#####################${JSON.stringify(this.cartedProducts)}, ${this.cartedProducts.length}`)
+            console.log(`#####################${JSON.stringify(this.selectedProducts)}, ${this.selectedProducts.length}`)
         },
-        productTotalPrice(){
-            this.finalTotalPrice = this.cartedProducts.reduce((acc, cartedProduct) => acc + cartedProduct.Product.product_price * cartedProduct.count, 0 )
-        },
 
-        calculateTotal(){
-            this.total_products()
-            this.productTotalPrice()
+        selectAll(){
+            this.allSelected = !this.allSelected;
+            this.cartedProducts.forEach((cartedProduct) => {cartedProduct.selected = this.allSelected;});
+            this.updateSelectedProduct();
         },
 
         //Cart READ
@@ -123,8 +135,12 @@ export default{
                 const response = await axios.get(`http://localhost:3000/orders/cart/${this.userid}`);
                 this.cartedProducts = response.data;
 
+                this.cartedProducts = this.cartedProducts.map(cartedProduct => ({...cartedProduct, selected : true})); // selected 기본값 true
+
+                // 선택된 제품을 selectedProducts 배열에 넣기
+                this.updateSelectedProduct();
                 //총액 계산
-                this.calculateTotal()
+                this.calculateTotal();
             }catch(err){
                 console.error(err);
             }            
@@ -135,7 +151,8 @@ export default{
             try{
                 const deleteCart = confirm("해당 제품을 장바구니에서 삭제하시겠습니까?");
                 if(!deleteCart){return;}
-                const response = await axios.delete(`http://localhost:3000/orders/cart/${cartedProduct_id}`);
+
+                const response = await axios.delete(`http://localhost:3000/orders/cart`, {data : {ids : [cartedProduct_id]}});
                 if (response.status === 200) {
                     alert("장바구니에서 삭제되었다");
                     this.cartedProducts = this.cartedProducts.filter(c => c.id !== cartedProduct_id);
@@ -149,33 +166,37 @@ export default{
             }
         },
 
+        async deleteSelectedProduct() {
+            try{
+                const selectedIds = this.selectedProducts.map((selectedProduct) => selectedProduct.id );
+                const deleteCart = confirm("선택 제품을 장바구니에서 삭제하시겠습니까?");
+                if(!deleteCart){return;}       
 
-        // //Ordering Product PUSH to makeOrder.vue '/order/:userId'
-        // async makeOrder(){
-        //     try{
-        //         // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
-        //         this.userid = this.$route.params.userId
-        //         this.productInfoForOrder = this.cartedProducts //(임시)
-        //         console.log(`##############this.productInfoForOrder:${JSON.stringify(this.productInfoForOrder)}`)
-        //         //this.$router.push(`/order/${this.userid}/${this.productInfoForOrder}`);
-        //          this.$router.push({
-        //             path: `/order/${this.userid}`,
-        //             query : {productInfoQuery : JSON.stringify(this.productInfoForOrder)}
-        //         });
-        //     }catch(err){
-        //         console.error(err);
-        //     }
-        // },
+                const response =await axios.delete(`http://localhost:3000/orders/cart`, {data : {ids : [selectedIds]}})
+                if (response.status === 200) {
+                    alert("장바구니에서 삭제되었다");
+                    this.cartedProducts = this.cartedProducts.filter(c => !selectedIds.includes(c.id));
+                }
+                console.log(response);
+                this.calculateTotal()
+            }catch(err){
+                console.error(err);
+            };
+        },
+
 
         //Ordering Product PUSH to FinalOrderView.vue '/finalOrder/:userId'
-        async makeOrder(){
-            try{
-                // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
+        async makeOrder(order){
+            try{                
                 this.userid = this.$route.params.userId
-                this.productInfoForOrder = this.cartedProducts //(임시)
+                //전체주문 = true / 선택주문 = false
+                if(order){
+                    this.productInfoForOrder = this.cartedProducts;
+                }else{
+                    this.productInfoForOrder = this.selectedProducts;
+                }               
                 console.log(`##############this.productInfoForOrder:${JSON.stringify(this.productInfoForOrder)}`)
-                //this.$router.push(`/order/${this.userid}/${this.productInfoForOrder}`);
-                 this.$router.push({
+                this.$router.push({
                     path: `/finalOrder/${this.userid}`, /////// 뷰 변경!!!!!!
                     query : {productInfoQuery : JSON.stringify(this.productInfoForOrder)}
                 });

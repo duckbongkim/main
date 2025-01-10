@@ -1,7 +1,7 @@
 <template>
 <div>
     <!-- 광고형 슬라이드 -->
-    <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark">
+    <!-- <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -26,10 +26,12 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
+
     </div>
    
     <v-carousel v-if="mainData.expensive.length > 0" height="400" show-arrows="hover" cycle hide-delimiter-background>
       <!-- 캐러셀 코드 -->
+
       <v-carousel-item
         v-for="item in mainData.expensive"
         :key="item.id"
@@ -49,15 +51,21 @@
     </v-carousel>
 
     <!-- swiper -->
-    <section> 
-      <div class="bar1"></div>
-      <div class="slider">
+
+    <section class="expensive-container"> 
+
+      <div class="expensive-content">
+        아에이오우
+      </div>
+
+      
+      <div class="slider expensive-slider">
         <!-- 추천 배너 텍스트 추가 -->
         <div class="recommendation-banner">높은 가격대 추천</div>
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
+        <div class="swiper-container expensive-swiper-container">
+          <div class="swiper-wrapper expensive-swiper-wrapper">
             <div 
-              class="swiper-slide" 
+              class="swiper-slide expensive-slide" 
               v-for="item in mainData.expensive" 
               :key="item.id"
               @click="goProducts(item.id)"
@@ -67,12 +75,14 @@
               <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
             </div>
           </div>
+
           <!-- Navigation buttons -->
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
           <!-- Scrollbar -->
           <div class="swiper-scrollbar"></div>
         </div>
+
       </div>
     </section>
 
@@ -100,7 +110,8 @@
     </section>
 
 
-    <section>
+
+    <!-- <section>
       <h2>비싼 가격순</h2>
       <ul class="product-list">
         <li v-for="item in mainData.expensive" :key="item.id" @click="goProducts(item.id)">
@@ -112,7 +123,7 @@
     </section>
 
     <section>
-      <h2>싼 가격순</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <h2>싼 가격순</h2> 
       <ul class="product-list">
         <li v-for="item in mainData.cheap" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -123,7 +134,7 @@
     </section>
 
     <section>
-      <h2>20대 추천</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <h2>20대 추천</h2> 
       <ul class="product-list">
         <li v-for="item in mainData.recommend['20대 베스트']" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -134,7 +145,7 @@
     </section>
 
     <section>
-      <h2>30대 추천</h2> <!-- 이건 어떻게 받아와야 하지? -->
+      <h2>30대 추천</h2> 
       <ul class="product-list">
         <li v-for="item in mainData.recommend['30대 베스트']" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -145,7 +156,7 @@
     </section>
 
     <section>
-      <h2>신상품</h2> <!-- 1월1일 동진 데이터 바인딩을 위해 작성-->
+      <h2>신상품</h2> 
       <ul class="product-list">
         <li v-for="item in mainData.newProduct" :key="item.id" @click="goProducts(item.id)">
           <img :src="item.product_image" alt="Product Image" />
@@ -153,7 +164,7 @@
           <strong>{{ item.product_name }} -</strong> <strong> {{ item.product_price }}원</strong>
         </li>
       </ul>
-    </section>
+    </section> -->
 
 </div>
 </template>
@@ -254,6 +265,7 @@ export default{
             el: '.swiper-scrollbar',
             draggable: true,
           },
+
           breakpoints: {
             1920: { slidesPerView: 3 }, // 데스크탑
             992: { slidesPerView: 3 },  // 태블릿
@@ -282,6 +294,7 @@ export default{
     },
   },
 }       
+
 </script>
 
 <style>
@@ -301,7 +314,9 @@ export default{
   /* swiper 3개씩 넘겨지는*/
   .slider {
     margin: 0 auto;
+
     max-width: 1200px;
+
     position: relative;
   }
 
@@ -337,11 +352,35 @@ export default{
   .swiper-container {
     padding-bottom: 20px;
   }
+
   .swiper-wrapper img {
     max-width: 100%;
     height: auto;
     object-fit: contain;
+
   }
+  #carouselExampleIndicators {
+    width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
+    margin: 0; /* 양옆 여백 제거 */
+    padding: 0; /* 양옆 패딩 제거 */
+  }
+
+
+  /* expensive-content */
+  .expensive-container {
+    width:100%;
+    display: flex;
+  }
+
+  .expensive-content {
+    max-width: 400px;
+    height: 600px;
+    background-color: aqua;
+  
+  }
+
+
+
 
   .swiper-slide img {
     width: auto;
@@ -397,4 +436,5 @@ export default{
   .swiper-container-good .swiper-slide-active img {
     transform: scale(1.0);
   }
+
 </style>
