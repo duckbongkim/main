@@ -80,7 +80,8 @@ export default{
     },
     setup(){},
     created(){
-      this.getUser();
+      this.getUser()
+      
     },
     mounted(){
       this.getRating();
