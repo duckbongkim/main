@@ -27,7 +27,7 @@
         <span class="visually-hidden">Next</span>
       </button>
 
-    </div>
+    </div> -->
    
     <v-carousel v-if="mainData.expensive.length > 0" height="400" show-arrows="hover" cycle hide-delimiter-background>
       <!-- 캐러셀 코드 -->
