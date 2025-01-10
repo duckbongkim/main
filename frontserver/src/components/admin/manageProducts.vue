@@ -56,7 +56,7 @@
                 <tr v-for="product in paginatedProducts" :key="product.id">
                     <td>{{product.id}}</td>
                     <td>{{product.product_name}}</td>
-                    <td>{{product.product_price}}</td>
+                    <td>{{product.product_price.toLocaleString()}}</td>
                     <td>{{product.product_description}}</td>
                     <td><img :src="product.product_description_img" class="table-image" alt="상품 설명 이미지"></td>
                     <td>{{product.product_stock}}</td>
