@@ -1,38 +1,44 @@
 <template>
   <div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3 class="text-center w-100">전체 게시판</h3>
-      <router-link to="/post/addPost" class="btn btn-primary btn-sm position-absolute" style="right: 7.5%">
-        글쓰기
-      </router-link>
-    </div>
-    <div class="table-responsive">
-      <table class="table table-hover w-85 mx-auto">
-        <thead class="table-light">
-          <tr>
-            <th scope="col" width="10%">번호</th>
-            <th scope="col" width="30%">제목</th>
-            <th scope="col" width="20%">이미지</th>
-            <th scope="col" width="20%">작성일</th>
-            <th scope="col" width="20%">내용</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(post, index) in posts" :key="post.id">
-            <td>{{ index + 1 }}</td>
-            <td>
-              <router-link :to="`/post/post_detail/${post.id}`" class="text-decoration-none text-dark">
-                {{ post.title }}
-              </router-link>
-            </td>
-            <td>
-              <img v-if="post.imageUrl" :src="post.imageUrl" alt="게시글 이미지" class="thumbnail" />
-            </td>
-            <td>{{ new Date(post.created_at).toLocaleDateString() }}</td>
-            <td>{{ post.content }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <h3 class="text-center mb-4">전체 게시판</h3>
+    <div class="w-95 mx-auto">
+      <div class="d-flex flex-column align-items-end mb-4">
+        <div class="search-container d-flex justify-content-end mb-3">
+          <input v-model="searchQuery" type="text" placeholder="검색" class="form-control form-control-sm me-2">
+          <button @click="handleSearch" class="btn btn-primary btn-sm" style="width: 80px;">검색</button>
+        </div>
+        <button @click="goToAddPost" class="btn btn-primary btn-sm mt-2" style="width: 80px;">
+          글쓰기
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover w-95 mx-auto">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" width="8%">번호</th>
+              <th scope="col" width="40%">제목</th>
+              <th scope="col" width="15%">작성자</th>
+              <th scope="col" width="15%">작성일</th>
+              <th scope="col" width="12%">수정일</th>
+              <th scope="col" width="10%">좋아요</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(post, index) in posts" :key="post.id">
+              <td>{{ index + 1 }}</td>
+              <td>
+                <router-link :to="`/post/post_detail/${post.id}`" class="text-decoration-none text-dark">
+                  {{ post.title }}
+                </router-link>
+              </td>
+              <td>{{ post.Account.nickname || '익명' }}</td>
+              <td>{{ new Date(post.created_at).toLocaleDateString() }}</td>
+              <td>{{ new Date(post.updated_at).toLocaleDateString() }}</td>
+              <td>{{ post.like_count||0 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -45,28 +51,65 @@ export default {
   data(){
     return{
       posts: [],
-      
+      originalPosts:[],
+      searchQuery: '',
+      isLogin:false,
     };
 
+  },
+  computed:{
   },
   setup(){},
   created(){
     this.AllPosts();
+    this.checkLogin();
   },
   mounted(){
     
   },
   unmounted(){},
   methods:{
+    async checkLogin(){
+      try {
+        const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
+        this.isLogin = response.data.isLoggedIn;
+      } catch(error) {
+        return false;
+      }
+    },
     async AllPosts(){
         try {
             const response = await axios.get('http://localhost:3000/post/post_list');
             this.posts = response.data; 
+            this.originalPosts = response.data;
         } catch (error) {
-            console.error('전체 게시물을 가져오는데 실패했습니다.', error);
+            // console.error('전체 게시물을 가져오는데 실패했습니다.', error);
         }
-    }
-    
+    },
+    handleSearch() {
+            // 원본 데이터로 시작
+            let filteredPosts = [...this.originalPosts];
+            // 검색어 필터
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                filteredPosts = filteredPosts.filter(post => 
+                    (post.title?.toLowerCase() || '').includes(query) ||
+                    (post.content?.toLowerCase() || '').includes(query) ||
+                    (post.post_kind?.toLowerCase() || '').includes(query) ||
+                    (post.Account.nickname?.toLowerCase() || '').includes(query)
+                );
+            }
+            // 필터링된 결과 적용
+            this.posts = filteredPosts;
+    },
+    goToAddPost() {
+      if(this.isLogin){
+        this.$router.push('/post/addPost');
+      }else{
+        alert('로그인 필요');
+        this.$router.push('/login');
+      }
+    },
   },
   watch:{
     '$route.params.post_kind':'boardList'
@@ -75,11 +118,12 @@ export default {
 </script>
 
 <style scoped>
-.w-85 {
-  width: 85% !important;
+.w-95 {
+  width: 95% !important;
 }
 
 .table {
+  width: 100%;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   border-radius: 8px;
@@ -133,10 +177,31 @@ h3 {
 }
 
 .container {
-  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .btn-primary {
   z-index: 1;
+}
+
+.search-container {
+  width: 250px;
+}
+
+.search-container input {
+  width: 180px;
+  font-size: 0.875rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.text-decoration-none:hover {
+  color: #007bff !important;
+  text-decoration: underline !important;
+  cursor: pointer;
 }
 </style>

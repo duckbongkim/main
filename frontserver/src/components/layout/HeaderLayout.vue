@@ -82,7 +82,6 @@ export default{
       async checkLogin() {
           try {
               const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
-              console.log("response",response);
               this.isLoggedIn = response.data.isLoggedIn;
               this.checkAdmin = response.data.isAdmin;
           } catch (error) {

@@ -13,6 +13,7 @@ const Replies = require('./model_replies.js');
 const Searched = require('./model_searched.js');
 const SupplyFactory = require('./model_supplyFactory.js');
 const Wishes = require ('./model_wishes.js');
+const HaveCoupons = require('./model_haveCoupons.js');
 
 
 //환경변수 설정
@@ -72,7 +73,8 @@ Wishes.initiate(sequelize);
     // DB와 Sequelize 모델을 연결하고 모델의 정의와 DB 테이블의 구조를 일치시킴.
     // 테이블을 새로 만들지 않더라도 sequelize에서 이 db테이블을 모델로 다룰 수 있도록 초기화해줘야함.
 
-
+db.HaveCoupons = HaveCoupons;
+HaveCoupons.initiate(sequelize);
 
 
 //테이블 관계 설정
@@ -105,8 +107,8 @@ db.Buckets.belongsTo(db.Products,{foreignKey: { name: 'product_id',allowNull: tr
 db.Products.hasMany(db.Buckets,{foreignKey: { name: 'product_id',allowNull: true}, sourceKey:'id'});
 
 //HaveCoupons
-db.Coupons.belongsToMany(db.Accounts, { through: 'HaveCoupons', foreignKey: 'coupon_id' }); //HaveCoupons -> 쿠폰 테이블 명
-db.Accounts.belongsToMany(db.Coupons, { through: 'HaveCoupons', foreignKey: 'account_id' });  
+db.Coupons.belongsToMany(db.Accounts, { through: db.HaveCoupons, foreignKey: 'coupon_id' });
+db.Accounts.belongsToMany(db.Coupons, { through: db.HaveCoupons, foreignKey: 'account_id' });
 
 //Postes
 db.Postes.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'id'});
@@ -134,6 +136,9 @@ db.Ratings.hasMany(db.Accounts,{foreignKey: { name: 'rating_id',defaultValue:1},
 //250103 누리) wishes
 db.Wishes.belongsTo(db.Accounts, { foreignKey: 'account_id', targetKey: 'id'});
 db.Wishes.belongsTo(db.Products, { foreignKey : 'product_id', targetKey : 'id'});
+
+db.HaveCoupons.belongsTo(db.Coupons, { foreignKey: 'coupon_id', targetKey: 'id'});
+db.HaveCoupons.belongsTo(db.Accounts, { foreignKey: 'account_id', targetKey: 'id'});
 
 
 module.exports = db;

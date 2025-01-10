@@ -40,6 +40,43 @@
       </div>
     </div>
 
+    <!-- 적립금, 쿠폰 적용 -->
+    <div class="order-section">
+      <h2 class="section-title">할인 적용</h2>
+      <div class="discount-form">
+        <!-- 쿠폰 적용 -->
+        <div class="form-group">
+          <label>쿠폰 적용</label>
+          <div class="coupon-select">
+            <select v-model="selectedCoupon">
+              <option value="">쿠폰을 선택해주세요</option>
+              <option v-for="coupon in userCoupons" 
+                      :key="coupon.id" 
+                      :value="coupon">
+                {{coupon.Coupon.coupon_name}} ({{coupon.Coupon.coupon_discount_rate*100}}% 할인)
+              </option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- 적립금 적용 -->
+        <div class="form-group">
+          <label>적립금 적용</label>
+          <div class="point-input">
+            <div class="point-input-group">
+                <input type="number" 
+                       v-model="tempUsePoint" 
+                       :max="user.savedMoney" 
+                       min="0" 
+                       placeholder="사용할 적립금을 입력해주세요">
+                <button class="btn-apply-point" @click="applyPoint">적립금 적용</button>
+            </div>
+            <span class="available-point">사용 가능한 적립금: {{user.savedMoney?.toLocaleString()}}원</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 배송지 정보 -->
     <div class="order-section">
       <h2 class="section-title">배송지 정보</h2>
@@ -68,7 +105,19 @@
       <div class="payment-summary">
         <div class="summary-row">
           <span>상품 금액</span>
-          <span class="price">{{finalTotalPrice.toLocaleString()}}원</span>
+          <span class="price">{{originalTotalPrice.toLocaleString()}}원</span>
+        </div>
+        <!-- 쿠폰 할인 표시 -->
+        <div class="summary-row discount" v-if="selectedCoupon">
+          <span>쿠폰 할인</span>
+          <span class="price discount-price">
+            -{{(originalTotalPrice * selectedCoupon.Coupon.coupon_discount_rate).toLocaleString()}}원
+          </span>
+        </div>
+        <!-- 적립금 사용 표시 -->
+        <div class="summary-row discount" v-if="usePoint > 0">
+          <span>적립금 사용</span>
+          <span class="price discount-price">-{{usePoint.toLocaleString()}}원</span>
         </div>
         <div class="summary-row">
           <span>배송비</span>
@@ -76,7 +125,7 @@
         </div>
         <div class="summary-row total">
           <span>최종 결제 금액</span>
-          <span class="price">{{(finalTotalPrice + deliveryFee).toLocaleString()}}원</span>
+          <span class="price">{{totalPaymentAmount.toLocaleString()}}원</span>
         </div>
       </div>
     </div>
@@ -94,7 +143,8 @@ import axios from 'axios';
 export default{ 
     name:'',
     components:{},
-    computed:{},
+    computed:{
+    },
     directives:{
         zipcode:{//우편번호 입력 제한
             mounted(el) {
@@ -123,12 +173,21 @@ export default{
             numberOfProducts : 0,
             finalTotalPrice: 0,
             deliveryFee : 3000,
+            user:{},
+            userCoupons:[],
+            selectedCoupon:null,
+            tempUsePoint: 0,
+            usePoint: 0,
+            originalTotalPrice: 0,
+            totalPaymentAmount: 0,
         };
     },
     setup(){},
-    created(){},
+    created(){
+      this.getUser();
+      this.getCoupons();
+    },
     mounted(){
-
         // 쿼리 선별 코드
         // 들어오는 쿼리에 따라 다른 파라메터를 넣어 같은 함수를 실행시키는 코드
         if(this.$route.query.productInfoQuery){
@@ -140,11 +199,11 @@ export default{
             console.error("주문할 제품 정보(쿼리)를 받지 못합니다.")
         }
 
+        
+
     },
     unmounted(){},
     methods:{
-
-
         //총액 계산 함수
         total_products(){
             this.numberOfProducts= this.productInfo.length
@@ -152,12 +211,31 @@ export default{
         productTotalPrice(){
             this.finalTotalPrice = this.productInfo.reduce((acc, info) => acc + info.Product.product_price * info.count, 0 )
         },
-
         calculateTotal(){
-            this.total_products()
-            this.productTotalPrice()
-        },
+            // 총 상품 개수 계산
+            this.total_products();
+            
+            // 원래 총액 계산 (모든 상품의 가격 * 수량의 합)
+            this.originalTotalPrice = this.productInfo.reduce((acc, info) => 
+                acc + (info.Product.product_price * info.count), 0);
+            
+            // 최종 가격을 원래 총액으로 초기화
+            this.finalTotalPrice = this.originalTotalPrice;
+            
+            // 쿠폰 할인 적용
+            if (this.selectedCoupon) {
+                const discountAmount = this.originalTotalPrice * this.selectedCoupon.Coupon.coupon_discount_rate;
+                this.finalTotalPrice -= discountAmount;
+            }
+            
+            // 적립금 사용 적용
+            if (this.usePoint) {
+                this.finalTotalPrice -= Number(this.usePoint);
+            }
 
+            // 최종 결제 금액 (배송비 포함)
+            this.totalPaymentAmount = this.finalTotalPrice + this.deliveryFee;
+        },
 
         // MAKE Ordering Product List 
         async getProductInfo(query){
@@ -175,8 +253,48 @@ export default{
                 console.error(err);
             }
         },
+
+        //유저도 가져와야 해
+        async getUser(){
+            try{
+              const response = await axios.get('http://localhost:3000/profile',{withCredentials:true});
+              this.user = response.data;
+            }catch(err){
+              console.error(err);
+            }
+        },
+        //쿠폰 가져와야 해
+        async getCoupons(){
+            try{
+                const response = await axios.get('http://localhost:3000/profile/coupons',{withCredentials:true});
+                this.userCoupons = response.data;
+            }catch(err){
+                console.error(err);
+            }
+        },
+        applyPoint() {
+            if (this.tempUsePoint > this.user.savedMoney) {
+                alert('보유한 적립금을 초과할 수 없습니다.');
+                this.tempUsePoint = this.user.savedMoney;
+                return;
+            }
+            if (this.tempUsePoint > this.finalTotalPrice) {
+                alert('상품 금액을 초과하여 사용할 수 없습니다.');
+                this.tempUsePoint = this.finalTotalPrice;
+                return;
+            }
+            
+            this.usePoint = Number(this.tempUsePoint);
+            this.calculateTotal();
+        },
     },
-    watch:{}
+    watch: {
+        selectedCoupon: {
+            handler() {
+                this.calculateTotal();
+            }
+        }
+    }
 }
 </script>
 
@@ -327,6 +445,15 @@ export default{
   margin-bottom: 1rem;
 }
 
+.summary-row.discount {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.discount-price {
+  color: #2b8a3e;  /* 할인 금액은 초록색으로 표시 */
+}
+
 .summary-row.total {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
@@ -359,5 +486,64 @@ export default{
 
 .btn-order:hover {
   background: #0056b3;
+}
+
+/* 할인 적용 스타일 */
+.discount-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.coupon-select select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.point-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.point-input input {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.available-point {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.point-input-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.point-input-group input {
+    width: 200px;
+    height: 40px;
+}
+
+.btn-apply-point {
+    padding: 0.5rem 1rem;
+    height: 40px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+.btn-apply-point:hover {
+    background: #5a6268;
 }
 </style>
