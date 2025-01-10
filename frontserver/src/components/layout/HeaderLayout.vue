@@ -10,7 +10,7 @@
         <i class="bi bi-cart3 icon" @click="checkLoginAndGoToPage('/cart/1')" title="장바구니"></i>
         <i class="bi bi-person icon" @click="checkLoginAndGoToPage('/mypage')" title="마이페이지"></i>
       </div>
-      <a class="navbar-brand" @click="goToMenu('/')">Home</a>
+      <a class="navbar-brand" @click="goToMenu('/')">주정뱅이</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
