@@ -258,12 +258,7 @@ const routes = [
     name: 'test',
     component: testView
   }, // startbootstrap 테스트 위해 1월 5일 동진
-  {
-    path:'/basket',
-    name:'basket',
-    component: () => import(/* webpackChunkName: "about" */ '../components/layout/basket.vue')
-    // 장바구니에서 마이페이지 장바구니 페이지로 이동하게 만들기 위해서 만든 장바구니 하하
-  },
+  
 
 
 
