@@ -6,7 +6,7 @@
     </div>
 
     <h1>상품 목록</h1>
-    <div v-for="product in paginatedProducts" :key="product.id" class="product-card">
+    <div v-for="product in fetchProducts" :key="product.id" class="product-card">
       <router-link :to="'/products/' + product.id">
         <h3>{{ product.product_name }}</h3>
         <p>{{ product.product_description }}</p>
@@ -15,20 +15,6 @@
       </router-link>
         
     </div>
-    <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                    <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
-                </li>
-                <li class="page-item" v-for="page in displayedPages" :key="page" :class="{ active: page === currentPage }">
-                    <a class="page-link" href="#" @click.prevent="currentPage = page">{{ page }}</a>
-                </li>
-                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                    <a class="page-link" href="#" @click.prevent="currentPage++">다음</a>
-                </li>
-            </ul>
-        </nav>
-
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
@@ -40,43 +26,7 @@
 import axios from 'axios';
 
 export default {
-  computed:{
-        paginatedProducts() {
-            const start = (this.currentPage - 1) * this.itemsPerPage;
-            const end = start + this.itemsPerPage;
-            return this.products.slice(start, end);
-        },
-        totalPages() {
-            return Math.ceil(this.products.length / this.itemsPerPage);//math.ceil은 소수점 이하를 올림하는 함수
-        },
-        displayedPages() {
-            const pages = [];
-            let start, end;
-            
-            if (this.totalPages <= 3) {
-                // 전체 페이지가 3개 이하인 경우
-                start = 1;
-                end = this.totalPages;
-            } else {
-                // 전체 페이지가 3개 ��과인 경우
-                if (this.currentPage === 1) {
-                    start = 1;
-                    end = 3;
-                } else if (this.currentPage === this.totalPages) {
-                    start = this.totalPages - 2;
-                    end = this.totalPages;
-                } else {
-                    start = this.currentPage - 1;
-                    end = this.currentPage + 1;
-                }
-            }
-
-            for (let i = start; i <= end; i++) {
-                pages.push(i);
-            }
-            return pages;
-        }
-    },
+  
   data() {
     return {
       products: [],
