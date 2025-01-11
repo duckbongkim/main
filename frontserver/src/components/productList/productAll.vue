@@ -169,7 +169,6 @@ export default {
         this.$router.push(`/products/${productId}`);
       },
 
-
   },
 };
 </script>
@@ -200,6 +199,7 @@ export default {
   text-align: center;
   overflow: hidden;
   transition: transform 0.3s;
+  cursor: pointer;
 }
 .product-card:hover {
   transform: scale(1.05);
