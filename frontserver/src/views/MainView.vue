@@ -1,5 +1,7 @@
 <template>
 <div>
+
+  
     <!-- 광고형 슬라이드 -->
     <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark">
       <div class="carousel-indicators">
@@ -40,7 +42,6 @@
             <div class="d-flex fill-height justify-center align-center">
               <div class="text-center">
                 <img :src="item.product_image" alt="Product Image" style="max-height: 200px; object-fit: contain;" />
-                <p class="text-h6">{{ item.product_description }}</p>
                 <strong class="text-h5">{{ item.product_name }}</strong>
                 <div class="text-h6 mt-2">{{ item.product_price }}원</div>
               </div>
@@ -49,62 +50,40 @@
         </v-carousel-item>
       </v-carousel>
     </section>
-    <!-- swiper -->
+    
+    <!-- swiper expensive-container-->
 
-    <section class="expensive-container"> 
-      
+    
       <div class="slider expensive-slider">
         <!-- 추천 배너 텍스트 추가 -->
-        
-          <img src="img\배너0.jpg" class="right-image" alt="04" />
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div 
-              class="swiper-slide expensive-slide" 
-              v-for="item in mainData.expensive" 
-              :key="item.id"
-              @click="goProducts(item.id)"
-            >
+        <div class="expensive-image">
+          <img src="img\부모님.png" class="left-image" alt="04" />
+        </div>
+        <div class="swiper-container expensive-container">
+          
+          <div class="expensive-title">
+            <h2>고가 상품추천</h2>
+            <p>아이우에오</p>
+          </div>
+          
+          <div class="swiper-wrapper expensive-wrapper">
+            <div class="swiper-slide expensive-slide" v-for="item in mainData.cheap" :key="item.id" @click="goProducts(item.id)">
               <img :src="item.product_image" alt="Product Image" />
-              <p>{{ item.product_description }}</p>
-              <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
+              <p>{{ item.product_name }}</p> 
+              <p>{{ item.product_price }}원</p>
             </div>
           </div>
 
           <!-- Navigation buttons -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
+          <!-- <div class="swiper-button-prev expensive-prev"></div> -->
+          <div class="swiper-button-next expensive-next"></div>
           <!-- Scrollbar -->
           <div class="swiper-scrollbar"></div>
         </div>
 
       </div>
-    </section>
 
-    <!--swiper 2-->
-    <section>
-        <div class="bar1"></div>
-        <div class="recommendation-banner">"20대"에게 추천</div>
-        <div class="container swiper-container-good">
-          <div class="swiper-wrapper">
-            <div 
-              class="swiper-slide" 
-              v-for="item in mainData.expensive" 
-              :key="item.id"
-              @click="goProducts(item.id)"
-            >
-              <img :src="item.product_image" alt="Product Image" />
-              <p>{{ item.product_description }}</p>
-              <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
-            </div>
-          </div>
-          <!-- Navigation buttons -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
-    </section>
-
-    <!--swiper 3-->
+  <!--swiper 3-->
     <section>
         <div class="bar1"></div>
         <div class="recommendation-banner">"30대"에게 추천</div>
@@ -117,7 +96,6 @@
               @click="goProducts(item.id)"
             >
               <img :src="item.product_image" alt="Product Image" />
-              <p>{{ item.product_description }}</p>
               <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
             </div>
           </div>
@@ -126,6 +104,35 @@
           <div class="swiper-button-next"></div>
         </div>
     </section>
+
+ 
+
+    <!--swiper 20대 추천-->
+    <section class="bar1">
+        <div class="container swiper-container-good">
+          <div class="swiper-wrapper bar1-wrapper">
+            
+            <div class="swiper-slide bar1-slide" v-for="item in mainData.expensive" :key="item.id" @click="goProducts(item.id)">
+              
+              <div class="product-content">
+                <div class="product-img">
+                  <img :src="item.product_image" alt="Product Image" />
+                </div>
+                <div class="product-text">
+                  <p>{{ item.product_name }}</p> 
+                  <p>{{ item.product_price }}원</p>
+                </div>
+              </div>
+            
+            </div>
+
+          </div>
+          <!-- Navigation buttons -->
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+    </section>
+
 
    
 
@@ -245,8 +252,8 @@ export default{
           prevEl: '.swiper-button-prev', // 이전 버튼
         },
         breakpoints: {
-          1920: { slidesPerView: 3 }, // 데스크탑 설정
-          992: { slidesPerView: 3 },  // 태블릿 설정
+          1920: { slidesPerView: 1 }, // 데스크탑 설정
+          992: { slidesPerView: 1 },  // 태블릿 설정
           320: { slidesPerView: 1 },  // 모바일 설정
         },
       });
@@ -275,187 +282,210 @@ export default{
 
 </script>
 
-<style>
-  /* body부분 - 캐러셀 */
-  /* 기본 캐러셀 스타일 */
-  .carousel-item img {
-    width: 100%; /* 이미지를 캐러셀 아이템 너비에 맞춤 */
-    height: 500px; /* 높이는 자동으로 조절 */
-    object-fit: contain; /* 이미지 비율 유지하며 최대한 크게 보여줌 */
-  }
-  .carousel-item{
-    width: 300px;
-  }
-  .test{
-    color:black;
-  }
-  /* swiper 3개씩 넘겨지는*/
-  .slider {
-    margin: 0 auto;
-
-    max-width: 1200px;
-
-    position: relative;
-  }
-
-  .swiper-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 65%; /* swiper의 너비를 65%로 설정 */
-    margin-left: 60%;
-  }
-  .swiper-section {
-    flex: 0 0 70%;  /* swiper 슬라이더는 전체의 70% 차지 */
-    padding-right: 20px;  /* 이미지와 간격을 주기 위해 */
-    display: flex;
-  }
-
-  .image-container {
-    flex: 0 0 28%;  /* 이미지 컨테이너는 30% 차지 */
-    text-align: center;
-  }
-
-  .recommendation-banner {
-    font-size: 36px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-  }
-
-  .swiper-container {
-    padding-bottom: 20px;
-  }
-
-  .swiper-wrapper img {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-
-  }
-  #carouselExampleIndicators {
-    width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
-    margin: 0; /* 양옆 여백 제거 */
-    padding: 0; /* 양옆 패딩 제거 */
-  }
+<style scoped>
 
 
-  /* expensive-content */
-  .expensive-container {
-    width:100%;
-    display: flex;
-  }
 
-  .expensive-content {
-    max-width: 400px;
-    height: 600px;
-    background-color: aqua;
+/* 기본 swiper 설정 */
+.slider {
+  margin: 0 auto;
+  /* max-width: 1200px; */
+  position: relative;
+}
+
+.swiper-container {
   
-  }
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.swiper-wrapper {
+  display: flex;
+  transition: all 0.3s ease;
+}
+
+.swiper-slide {
+  flex: 0 0 auto;
+  text-align: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+
+
+.swiper-container-good {
+  max-width: 960px;
+  margin: 0 auto;
+  /* overflow: hidden; */
+  position: relative;
+}
+
+.swiper-container-good .swiper-slide {
+  width: auto;
+  transition: all 0.25s ease-out;
+  opacity: 1;
+}
+
+.swiper-container-good .swiper-slide img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  max-width: 100%;
+  transition: all 0.25s ease-out;
+  transform: scale(0.55);
+  transform-origin: center;
+}
+
+.swiper-container-good .swiper-slide-active img {
+  transform: scale(1.0);
+} 
+
+ .swiper-container-thirties {
+  max-width: 960px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.swiper-container-thirties .swiper-slide {
+  width: auto;
+  transition: all 0.25s ease-out;
+  opacity: 1;
+}
+
+.swiper-container-thirties .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 100%;
+  transition: all 0.25s ease-out;
+  transform: scale(0.55);
+  transform-origin: center;
+}
 
 
 
 
-  .swiper-slide img {
-    width: 200px;
-    /* max-width: 100%; */
-    height: 200px;
-    object-fit: contain;
-  }
-  .bar1{
-    margin:250px;
-  }
-    /* 추천 배너 스타일 */
-  .recommendation-banner {
-    font-size: 30px; /* 글씨 크기 */
-    font-weight: bold; /* 굵은 글씨 */
-    text-align: center; /* 가운데 정렬 */
-    margin-bottom: 20px; /* 슬라이더와 배너 사이의 간격 */
-    color: #333; /* 글씨 색상 */
-    position: absolute;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10; /* 다른 요소들 위에 배치 */
-    width: 65%; /* swiper의 너비를 65%로 설정 */ 
-    margin-left: 20%;
-  }
-  #carouselExampleIndicators {
-    width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
-    margin: 0; /* 양옆 여백 제거 */
-    padding: 0; /* 양옆 패딩 제거 */
-  }
 
-  /* 오른쪽 이미지 설정 */
-  /* 오른쪽 이미지를 30% 크기로 설정 */
-  .right-image {
-    width: 40%;
-    border-radius: 15px; /* 모서리 둥글게 */
-    overflow: hidden; /* 이미지가 모서리 안에 잘리도록 */
-    margin-left: -130%;
-  }
 
-  .right-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover; /* 이미지 비율을 유지하면서 영역에 맞게 채움 */
-    border-radius: 15px;
-  }
-  /* swiper 2 */  
-  .swiper-container-good {
-    max-width: 960px;
-    margin: 0 auto;
-    overflow: hidden; /* 슬라이더 영역 밖의 이미지 숨기기 */
-    position: relative; /* 버튼 위치를 컨테이너 기준으로 설정하기 위함 */    
-  }
+/* 비싼가격순 css */
+.slider.expensive-slider {
+  margin-top: 200px;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
-  .swiper-container-good .swiper-slide {
-    width: auto; /* 슬라이드 개수를 Swiper 옵션에서 제어 */
-    transition: all 0.25s ease-out;
-    opacity: 1;
-  }
+.expensive-image {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
-  .swiper-container-good .swiper-slide img {
-    width: 100%; /* 슬라이드 영역에 맞춰 이미지 크기 조정 */
-    height: 100%; /* 이미지 높이를 일정하게 설정 */
-    object-fit: contain; /* 이미지 비율 유지하면서 슬라이드 영역에 맞게 채움 */
-    max-width: 100%;
-    transition: all 0.25s ease-out;
-    transform: scale(0.55);
-    transform-origin: center;
-  }
+.left-image {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  object-fit: cover;
+}
 
-  .swiper-container-good .swiper-slide-active img {
-    transform: scale(1.0);
-  }
-  /* swiper 3 */  
-  .swiper-container-thirties {
-    max-width: 960px;
-    margin: 0 auto;
-    overflow: hidden; /* 슬라이더 영역 밖의 이미지 숨기기 */
-    position: relative; /* 버튼 위치를 컨테이너 기준으로 설정하기 위함 */    
-  }
+.expensive-container {
+  padding-left: 20px;
+  margin-left: 50px;
+  margin-top: 100px;
+}
 
-  .swiper-container-thirties .swiper-slide {
-    width: auto; /* 슬라이드 개수를 Swiper 옵션에서 제어 */
-    transition: all 0.25s ease-out;
-    opacity: 1;
-  }
+.expensive-title {
+  float: left;
+}
 
-  .swiper-container-thirties .swiper-slide img {
-    width: 100%; /* 슬라이드 영역에 맞춰 이미지 크기 조정 */
-    height: 100%; /* 이미지 높이를 일정하게 설정 */
-    object-fit: contain; /* 이미지 비율 유지하면서 슬라이드 영역에 맞게 채움 */
-    max-width: 100%;
-    transition: all 0.25s ease-out;
-    transform: scale(0.55);
-    transform-origin: center;
-  }
+.expensive-title p {
+  float: left;
+}
+
+.expensive-wrapper {
+  width: 1000px;
+  height: 350px;
+}
+
+.swiper-wrapper img {
+  width: 250px;
+  height: 250px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.swiper-scrollbar {
+  background: #d6d6d6;
+}
+
+.swiper-container-horizontal > .swiper-scrollbar {
+  border-radius: 2px;
+  height: 5px;
+  width: 200px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.swiper-button-next.expensive-next {
+  margin-top: 10px;
+  margin-right: -10px;
+}
+
+
+/* 20대 추천 swiper */
+.bar1 {
+  width: 100%;
+  margin-top: 100px;
+}
+
+.bar1-slide{
+  width: 400px;
+}
+
+.product-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+}
+
+.product-content .product-img {
+ 
+
+}
+.product-text {
+ 
+}
+
+
+
+/* swiper-container-good */
+.swiper-container-good .swiper-wrapper img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
+
+/* recommendation-banner */
+.recommendation-banner {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 65%;
+  margin-left: 20%;
+}
+
+
 </style>

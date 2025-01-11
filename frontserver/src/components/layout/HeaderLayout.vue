@@ -25,10 +25,10 @@
             </a>
             <ul class="dropdown-menu">
 
-              <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
+              <li><a class="inner-title" @click="goToMenu('/liqueur')">모든 주류 보기</a></li>  <!-- 테스트>>모든주류보기 수정 1월11일 동진 -->           
               <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
-              <li><a class="inner-title" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>      
-              <li><a class="inner-title" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>               
+              <li><a class="inner-title" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>
+              <!-- 동양주류 삭제 1월11일 동진 -->         
             </ul>           
           </li>
           

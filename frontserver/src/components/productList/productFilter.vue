@@ -12,7 +12,7 @@
         <h3>{{ product.product_name }}</h3>
         <p>{{ product.product_description }}</p>
         <p>{{ product.drink_type }}</p>
-        <p>{{ product.product_price }}</p>
+        <p>{{ product.product_price }}원</p>
       </router-link>
     </div>
 

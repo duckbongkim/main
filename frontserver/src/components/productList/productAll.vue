@@ -12,7 +12,7 @@
         <h3>{{ product.product_name }}</h3>
         <p>{{ product.product_description }}</p>
         <p>{{ product.drink_type }}</p>
-        <p>{{ product.product_price }}</p>
+        <p>{{ product.product_price }} 원</p>
       </router-link>
         
     </div>
@@ -29,7 +29,7 @@
             <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
           </div>
           <h2 class="product-title">{{ product.product_name }}</h2>
-          <p class="product-price">{{ product.product_price }}</p>
+          <p class="product-price">{{ product.product_price }} 원</p>
           
         </div>
       </div>
