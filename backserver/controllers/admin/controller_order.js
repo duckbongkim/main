@@ -16,7 +16,7 @@ exports.getOrders = async(req,res,next)=>{
                     attributes: ['email']
                 }
             ],
-            order: [['create_at', 'DESC']]
+            order: [['created_at', 'DESC']]
         });
         res.status(200).json(orders);
     }

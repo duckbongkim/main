@@ -30,6 +30,7 @@
 
       <div class="form-group">
         <label for="postContent">내용</label>
+        <small class="markdown-hint">* 마크다운 문법을 사용할 수 있습니다.</small>
         <textarea v-model="post.post_content" id="postContent" name="content" required></textarea>
       </div>
 
@@ -186,7 +187,7 @@ select:focus {
 }
 
 textarea {
-  min-height: 150px;
+  min-height: 500px;
   resize: vertical;
 }
 
@@ -232,5 +233,11 @@ button:hover {
 button[type="submit"] {
   margin-top: 1rem;
   align-self: flex-start;
+}
+
+.markdown-hint {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.5rem;
 }
 </style>
