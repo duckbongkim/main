@@ -1,13 +1,13 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" @click="goToMenu('/')">주정뱅이</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav me-auto">
+          <ul class="navbar-nav me-auto ms-3">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" role="button">
                 주류
@@ -156,6 +156,7 @@ export default{
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
+  z-index: 1000; /* 다른 요소 위에 표시되도록 설정 */
 }
 
 .navbar-brand {
