@@ -70,14 +70,14 @@
                         
                         <h1 class="display-5 fw-bolder fs-3">{{selectedProduct.product_name}}</h1>
                         
-                        <div class="fs-5 mb-5">
+                        <div class="fs-5">
                             <p>{{selectedProduct.product_price}} 원</p>
                             <div class="product-stock"><p>남은수량</p><p> {{selectedProduct.product_stock}}개</p></div>
                             <div class="delivery-info"><p>배송예정일</p> <p>평일기준 2일</p></div>
                             <div class="delivery-corpor"><p>택배사</p><p>CJ대한통운</p></div>
                         </div>
 
-                        <p class="lead">{{selectedProduct.product_description}}</p>
+                        <p class="lead fs-6">{{selectedProduct.product_description}}</p>
 
             <div class="quantity-group gap-3 mb-3">
                 <p id="quantity-label" class="mb-0">수량</p>
@@ -373,11 +373,15 @@ export default{
   object-fit: cover;
 }
 
+p {
+    margin-bottom: 0;
+}
 
-.price-text {
+
+/* .price-text {
     font-weight: bold;
     font-size: 1.3rem;
-}
+} */
 
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -515,12 +519,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .main-content {
     text-align: left;
+    margin: 0 auto;
 }
 
 .image-container {
   width: 100%; 
-  max-width: 500px; 
-  height: 500px; 
+  max-width: 600px; 
+  height: 700px; 
   margin: 0 auto; 
   overflow: hidden; 
 }
