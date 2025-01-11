@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="div1">
     <div>
       <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
       <button @click="searchProducts">검색</button>
@@ -103,6 +103,10 @@ export default {
 </script>
 
 <style scoped>
+.div1{
+  margin-top:100px
+}
+
 .product-card {
   border: 1px solid #ddd;
   padding: 10px;

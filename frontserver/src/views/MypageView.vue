@@ -140,7 +140,7 @@ export default{
 
 .mypage-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 100px auto 0 auto;
   padding: 20px;
   display: flex;
   flex-direction: column;

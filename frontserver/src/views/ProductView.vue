@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="div1">
 
     <!-- <section class="product-main container d-flex justify-content-center align-items-center flex-wrap">
         
@@ -368,6 +368,12 @@ export default{
 </script>
 
 <style scoped>
+.card-img-top {
+  max-height: 500px;
+  object-fit: cover;
+}
+
+
 .price-text {
     font-weight: bold;
     font-size: 1.3rem;

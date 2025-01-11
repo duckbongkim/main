@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="div1">
 
   
     <!-- 광고형 슬라이드 -->
@@ -291,6 +291,9 @@ export default{
 </script>
 
 <style>
+  .div1 {
+    margin-top: 100px;
+  }
   /* recommendation-banner */
   .recommendation-banner {
     font-size: 30px;

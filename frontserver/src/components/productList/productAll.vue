@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="div1">
 
     <!-- <div>
       <input v-model="searchQuery"  type="text"  placeholder="검색어를 입력하세요"  @keyup.enter="searchProducts" />
@@ -108,7 +108,7 @@ export default {
       products: [],
       searchQuery: '',
       currentPage: 1,
-      itemsPerPage: 15,
+      itemsPerPage: 20,
       filteredProducts: [],
       noResultsMessage: '',
     };
@@ -134,7 +134,7 @@ export default {
         const response = await axios.get('http://localhost:3000/liqueur');
         this.products = response.data;
 
-        const randomIndexes = this.getRandomIndexes(this.products.length, 4);
+        const randomIndexes = this.getRandomIndexes(this.products.length, 6);
         this.products = this.products.map((product, index) => ({
           ...product,
           isTagged: randomIndexes.includes(index),
@@ -174,6 +174,10 @@ export default {
 </script>
 
 <style scoped>
+.div1 {
+  margin-top: 100px;
+}
+
 .buy-button {
   /* display: block; */
   margin-bottom: 10px; /* 구매 버튼 아래 여백 */
@@ -183,96 +187,79 @@ export default {
 }
 .container {
   padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start; /* 왼쪽 정렬 */
-  gap: 50px; /* 아이템 간의 간격 */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 반응형으로 카드 배치 */
+  gap: 20px; /* 카드 간의 간격 */
 }
 
 .product-card {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  width: 250px;
-  margin: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
   overflow: hidden;
+  text-align: center;
   transition: transform 0.3s;
   cursor: pointer;
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  justify-content: space-between; /* 공간을 균등 분배 */
+  height: 100%; /* 카드 높이를 반응형으로 조정 */
 }
+
 .product-card:hover {
   transform: scale(1.05);
 }
+
 .product-card img {
-  max-width: 100%;
-  height: 200px;
-}
-.product-details {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 수평 중앙 정렬 */
-  justify-content: center; /* 수직 중앙 정렬 */
-  text-align: center; /* 텍스트 중앙 정렬 */
-  padding: 15px;
-}
-.product-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 10px 0;
-}
-.product-price {
-  font-size: 16px;
-  color: #e63946;
-}
-.buy-button {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-.buy-button:hover {
-  background-color: #0056b3;
+  width: 100%; /* 이미지가 카드의 폭을 채우도록 설정 */
+  height: auto; /* 이미지 비율 유지 */
+  aspect-ratio: 4 / 3; /* 고정된 비율로 카드 크기 조정 */
+  object-fit: contain; /* 이미지 비율을 유지하며 카드 내부에 맞춤 */
 }
 
-/* 배지들을 세로가 아닌 가로로 나란히 배치 */
+.product-details {
+  padding: 15px;
+  display: flex;
+  flex-direction: column; /* 세로로 정렬 */
+  justify-content: space-between; /* 공간 균등 분배 */
+}
+
 .tags {
   display: flex;
-  justify-content: center; /* 배지들 가로로 중앙 정렬 */
-  margin-top: 10px; /* 배지와 버튼 간의 여백 */
+  justify-content: center; /* 배지들 가로 중앙 정렬 */
+  gap: 5px; /* 배지 간 간격 */
+  margin-bottom: 10px;
+  min-height: 20px; /* 배지 영역 높이 고정 */
 }
 
-.recommended-badge, .popular-badge {
-  font-size: 14px; /* 배지 크기 */
-  margin-right: 3px; /* 배지 간의 간격을 설정 */
+.recommended-badge,
+.popular-badge {
+  font-size: 14px;
+  padding: 5px 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 }
 
-/* 인기상품 배지 색상 */
 .popular-badge {
   color: red;
-  display: inline-block;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 5px;
-}
-/* 추천상품 배지 색상 */
-.recommended-badge {
-  display: inline-block;
-  /* background-color: #ffcc00; */
-  color: blue;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 5px;
 }
 
-/* 마지막 배지는 오른쪽 여백 없애기 */
-.popular-badge:last-child {
-  margin-right: 0;
+.recommended-badge {
+  color: blue;
 }
+
+.product-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 0;
+  min-height: 40px; /* 제목 영역 높이 고정 */
+}
+
+.product-price {
+  font-size: 14px;
+  color: #e63946;
+  min-height: 20px; /* 가격 영역 높이 고정 */
+}
+
 </style>
