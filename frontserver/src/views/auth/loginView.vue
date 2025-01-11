@@ -24,7 +24,7 @@
 
       <!-- 회원가입 링크 -->
       <div class="signup-link">
-        <p>아직 계정이 없으신가요? <router-link to="/createAccount">회원가입</router-link></p>
+        <p>아직 계정이 없으신가요? <router-link to="/agree">회원가입</router-link></p>
       </div>
 
       <!-- 로그아웃 버튼 추가 -->
