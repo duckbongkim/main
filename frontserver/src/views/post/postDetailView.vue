@@ -18,8 +18,10 @@
                     <figure class="mb-4"><img class="img-fluid rounded" :src="`${postDetail.post_image}`" alt="..." /></figure>
                     <!-- Post content-->
                     <section class="mb-5">
-                        <p class="fs-5 mb-4">{{postDetail.post_content}}</p>
+                        <div v-html="renderedContent" class="fs-5 mb-4 content-reset"></div>
                     </section>
+
+                    <!-- 수정, 삭제 버튼 보이기 -->
                     <div v-if="user.email === postDetail.Account.email || user.super_admin" class="d-flex gap-2 mb-4 justify-content-end">
                         <button class="btn btn-outline-primary" @click="$router.push(`/post/modifyPost/${postDetail.id}`)">
                             <i class="bi bi-pencil-square me-1"></i>수정
@@ -145,6 +147,8 @@
 
 <script>
 import axios from 'axios';
+import { marked } from 'marked';
+
 export default{ 
     name:'',
     components:{},
@@ -159,8 +163,10 @@ export default{
                 reply.like_count += 1;
             }
         };
+        },
+        renderedContent() {
+            return marked(this.postDetail.post_content || '');
         }
-        
     },
     data(){
         return{
@@ -373,5 +379,13 @@ export default{
 
 .container {
     margin-top: 20vh;
+}
+
+.content-reset {
+    all: unset;
+    display: block;
+    font-size: 1rem; /* 기본 폰트 크기 설정 */
+    line-height: 1.5; /* 기본 줄 간격 설정 */
+    /* 필요한 경우 추가 스타일 설정 */
 }
 </style>
