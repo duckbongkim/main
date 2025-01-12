@@ -32,7 +32,7 @@
                 <a @click="goCart(user.id)"> 장바구니 </a>
             </li>
             <li>
-                <a @click="orderBefore(user.id)"> 주문목록 </a>
+                <a @click="orderedList(user.id)"> 주문목록 </a>
             </li>
             <li>
                 <a @click="orderNow(user.id)"> 주문창(작업중) </a>
@@ -89,11 +89,11 @@ export default{
         goCart(userId){
             this.$router.push(`/cart/${userId}`)
         },
-        orderBefore(userId){
-            this.$router.push(`/order/${userId}`)
-        },
         orderNow(userId){
             this.$router.push(`/finalOrder/${userId}`)
+        },
+        orderedList(userId){
+            this.$router.push(`/order/${userId}`)
         },
 
       // 마이페이지에서 유저 정보를 받아오는 get 작성 1월5일 동진

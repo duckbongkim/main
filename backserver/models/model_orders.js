@@ -46,6 +46,17 @@ class Orders extends Sequelize.Model {
                 type: Sequelize.FLOAT,
                 allowNull: true,
             },
+
+                ///// 속성추가 상의@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            // discount_amount : {
+            //     type: Sequelize.FLOAT,
+            //     allowNull: true,
+            // },
+            // delivery_fee : {
+            //     type: Sequelize.FLOAT,
+            //     allowNull: true,
+            // },
+
         },{
             sequelize,
             timestamps: false,

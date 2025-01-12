@@ -13,6 +13,7 @@ const Replies = require('./model_replies.js');
 const Searched = require('./model_searched.js');
 const SupplyFactory = require('./model_supplyFactory.js');
 const Wishes = require ('./model_wishes.js');
+const OrderStatuses = require ('./model_orderStatuses.js'); //250112 누리 추가
 
 
 //환경변수 설정
@@ -73,6 +74,11 @@ Wishes.initiate(sequelize);
     // 테이블을 새로 만들지 않더라도 sequelize에서 이 db테이블을 모델로 다룰 수 있도록 초기화해줘야함.
 
 
+//250112 누리) orderStatus 테이블 추가
+db.OrderStatuses = OrderStatuses;
+OrderStatuses.initiate(sequelize);
+
+
 
 
 //테이블 관계 설정
@@ -97,6 +103,9 @@ db.Orders.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'i
 db.Accounts.hasMany(db.Orders,{foreignKey: { name: 'account_id'}, sourceKey:'id'});
 db.Orders.belongsTo(db.Products,{foreignKey: { name: 'product_id',allowNull: true}, targetKey:'id'});
 db.Products.hasMany(db.Orders,{foreignKey: { name: 'product_id',allowNull: true}, sourceKey:'id'});
+//250112 누리)) 주문상태 테이블 추가 
+db.Orders.belongsTo(db.OrderStatuses, {foreignKey : {name : 'status_id', defaultValue : 1}, targetKey : 'id'});
+db.OrderStatuses.hasMany(db.Orders, {foreignKey : {name : 'status_id', defaultValue : 1}, targetKey : 'id'})
 
 //Buckets
 db.Buckets.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'id'});
@@ -129,7 +138,6 @@ db.Products.hasMany(db.Replies,{foreignKey: { name: 'product_id'}, sourceKey:'id
 //account
 db.Accounts.belongsTo(db.Ratings,{foreignKey: { name: 'rating_id',defaultValue:1}, targetKey:'id'});
 db.Ratings.hasMany(db.Accounts,{foreignKey: { name: 'rating_id',defaultValue:1}, sourceKey:'id'});
-
 
 //250103 누리) wishes
 db.Wishes.belongsTo(db.Accounts, { foreignKey: 'account_id', targetKey: 'id'});
