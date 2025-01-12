@@ -25,3 +25,28 @@ exports.getOrders = async(req,res,next)=>{
         next(error);
     }
 }
+
+exports.modifyOrder = async(req,res,next)=>{
+    try{
+        const order = req.body;
+        const result = await Orders.update(order,{where:{id:order.id}});
+        res.status(200).json(result);
+    }
+    catch(error){
+        console.log("주문 수정에 실패했습니다.",error);
+        next(error);
+    }
+}
+
+exports.cancelOrder = async(req,res,next)=>{
+    try{
+        const order = req.body;
+        order.cancel_date = new Date();
+        const result = await Orders.update(order,{where:{id:order.id}});
+        res.status(200).json(result);
+    }
+    catch(error){
+        console.log("주문 취소에 실패했습니다.",error);
+        next(error);
+    }
+}

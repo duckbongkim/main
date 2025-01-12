@@ -10,7 +10,6 @@
                 <tr>
                     <th>번호</th>
                     <th>이메일</th>
-                    <th>비밀번호</th>
                     <th>이름</th>
                     <th>생년월일</th>
                     <th>닉네임</th>
@@ -32,7 +31,6 @@
                 <tr v-for="user in paginatedUsers" :key="user.id">
                     <td>{{user.id}}</td>
                     <td>{{user.email}}</td>
-                    <td>{{user.password}}</td>
                     <td>{{user.name}}</td>
                     <td>{{user.birth}}</td>
                     <td>{{user.nickname}}</td>
