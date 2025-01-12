@@ -13,7 +13,7 @@
                 주류
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" @click="goToMenu('/liqueur')">테스트</a></li>
+                <li><a class="dropdown-item" @click="goToMenu('/liqueur')">모든상품</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/wine')">와인</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>

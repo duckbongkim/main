@@ -30,7 +30,16 @@
           </div>
           <h2 class="product-title">{{ product.product_name }}</h2>
           <p class="product-price">{{ product.product_price }} 원</p>
-          
+        <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
+         <div class="product-actions">
+          <button @click.stop="addWish(product)">
+            <i class="fas fa-heart"></i> 
+          </button>
+          <button @click.stop="addCarts(product)">
+            <i class="fas fa-shopping-cart"></i> 
+          </button>
+        </div>
+        
         </div>
       </div>
     </div>
@@ -111,10 +120,12 @@ export default {
       itemsPerPage: 20,
       filteredProducts: [],
       noResultsMessage: '',
+      user: {id:null},
     };
   },
   created() {
     this.fetchProducts();
+    this.getUserProfile();
   },
   methods: {
     getRandomIndexes(arrayLength, count) {
@@ -169,6 +180,100 @@ export default {
         this.$router.push(`/products/${productId}`);
       },
 
+      checkLogin () {
+            if(!this.user || !this.user.id) {
+                alert("로그인이 필요합니다");
+                this.$router.push('/login');
+                return false;
+            }else {
+                return true;
+            }
+        },
+
+     async getUserProfile(){
+        try{
+            const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
+            //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
+            //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
+            this.user = response.data
+            console.log('유저 데이터 가져오기',response)
+            //console.log(`################userInfo${JSON.stringify(this.user)}`);
+        }catch(err){
+            console.error(err);
+            
+        }
+        },  
+
+
+     async addWish(product) {
+            try {
+
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
+
+                //1. selectedProduct.id 를 likes DB에 추가
+                    //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
+                    //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
+                //const userId = this.session.userId;
+                const userWish = {
+                    userId : this.user.id,
+                    product_Id : product.id,
+                };
+                
+                const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
+                if(response.status == 201) {
+                    console.log(response.data.message);
+                    alert("찜 리스트에 추가되었습니다.");
+                }
+            } catch(err) {
+                //찜에 중복된 상품이 들어갈 경우(409) 에러처리
+                // 에러가 있는지, 그 에러의 status가 409인지
+                if(err.response && err.response.status == 409){
+                    alert(err.response.data.message);
+                } else {
+
+                    
+                console.error(err);
+                }
+            }
+        },
+
+       async addCarts(product) {
+            try{
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
+
+            // 1. selectedProduct.id 와 orderQuantity 를 carts DB에 추가.
+                const cartingInfo = {
+                    userId : this.user.id,
+                    product_Id :product.id,
+                    quantity : this.orderQuantity, 
+                }
+                //console.log(`################userorder${JSON.stringify(cartingInfo)}`);
+
+                // data를 req.body로 백에 보내고, res받아 완료 메세지 띄우기
+                const response = await axios.post(`http://localhost:3000/orders/cart`, cartingInfo);
+
+                // "장바구니 갈래? y/n"
+                if(response) {
+                    const GotoCart = confirm(response.data.message);
+                    if(GotoCart) {
+                        this.$router.push(`/cart/${this.user.id}`);              
+                    /// frontserver/src/router/index.js 에 라우터 추가 
+                } else {
+                    alert("장바구니에 추가 되었습니다..");
+                }
+                }else{
+                    console.error(err);
+                }
+
+                
+            }catch(err){
+                console.error(err);
+            }
+            
+        },  
+
   },
 };
 </script>
@@ -179,57 +284,65 @@ export default {
 }
 
 .buy-button {
-  /* display: block; */
-  margin-bottom: 10px; /* 구매 버튼 아래 여백 */
+  margin-bottom: 10px;
   display: flex;
-  flex-direction: column; /* 세로로 배치 */
-  align-items: center; /* 중앙 정렬 */
+  flex-direction: column;
+  align-items: center;
 }
+
 .container {
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 반응형으로 카드 배치 */
-  gap: 20px; /* 카드 간의 간격 */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
 }
 
 .product-card {
+  position: relative;
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
   text-align: center;
-  transition: transform 0.3s;
+  transition: transform 0.3s, background-color 0.3s;
   cursor: pointer;
   display: flex;
-  flex-direction: column; /* 세로 정렬 */
-  justify-content: space-between; /* 공간을 균등 분배 */
-  height: 100%; /* 카드 높이를 반응형으로 조정 */
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .product-card:hover {
   transform: scale(1.05);
+  background-color: rgba(0, 0, 0, 0.6); 
+  color: white; 
 }
 
 .product-card img {
-  width: 100%; /* 이미지가 카드의 폭을 채우도록 설정 */
-  height: auto; /* 이미지 비율 유지 */
-  aspect-ratio: 4 / 3; /* 고정된 비율로 카드 크기 조정 */
-  object-fit: contain; /* 이미지 비율을 유지하며 카드 내부에 맞춤 */
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  transition: opacity 0.3s;
+}
+
+.product-card:hover img {
+  opacity: 0.5; 
 }
 
 .product-details {
   padding: 15px;
   display: flex;
-  flex-direction: column; /* 세로로 정렬 */
-  justify-content: space-between; /* 공간 균등 분배 */
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .tags {
   display: flex;
-  justify-content: center; /* 배지들 가로 중앙 정렬 */
-  gap: 5px; /* 배지 간 간격 */
+  justify-content: center;
+  gap: 5px;
   margin-bottom: 10px;
-  min-height: 20px; /* 배지 영역 높이 고정 */
+  min-height: 20px;
 }
 
 .recommended-badge,
@@ -238,7 +351,7 @@ export default {
   padding: 5px 10px;
   font-weight: bold;
   border-radius: 5px;
-  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  white-space: nowrap;
 }
 
 .popular-badge {
@@ -253,13 +366,69 @@ export default {
   font-size: 16px;
   font-weight: bold;
   margin: 10px 0;
-  min-height: 40px; /* 제목 영역 높이 고정 */
+  min-height: 40px;
 }
 
 .product-price {
   font-size: 14px;
   color: #e63946;
-  min-height: 20px; /* 가격 영역 높이 고정 */
+  min-height: 20px;
 }
+
+/* 추가된 버튼 영역 */
+.product-actions {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none; 
+  flex-direction: row; 
+  justify-content: center;
+  align-items: center;
+  gap: 20px; 
+  z-index: 2;
+}
+
+.product-card:hover .product-actions {
+  display: flex; 
+}
+
+.product-actions button {
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s, color 0.3s;
+}
+
+/* 쇼핑 카트 아이콘 */
+.product-actions button i.fa-shopping-cart {
+  color: white;
+}
+
+.product-actions button:hover i.fa-shopping-cart {
+  color: #e63946; 
+}
+
+/* 하트 아이콘 */
+.product-actions button i.fa-heart {
+  color: white;
+}
+
+.product-actions button:hover i.fa-heart {
+  color: red; 
+}
+
+/* 버튼 애니메이션 */
+.product-actions button:hover {
+  transform: scale(1.2); 
+}
+
+.product-actions button:active {
+  transform: scale(0.9); 
+}
+
+
 
 </style>

@@ -52,7 +52,7 @@
     </section> -->
 
 
-<!-- 새로운 디자인 추가 1월 11일 동진-->
+<!-- 반응형 템플릿으로 변경 1월 11일 동진-->
 <section class="py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center">
