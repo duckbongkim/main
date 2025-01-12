@@ -186,8 +186,9 @@ export default{
     },
     mounted(){
         window.scrollTo(0, 0);  // 페이지 최상단으로 스크롤
-        this.getRecommendProducts()
-        this.getUserProfile()
+        this.getRecommendProducts();
+        this.getUserProfile();
+        this.checkRecentlyProduct();
     },
     unmounted(){},
     methods:{
@@ -213,6 +214,7 @@ export default{
                 this.$router.push('/login');
                 return false;
             }else {
+                // 로그인 돼있을 때 최근 본 상품 업데이트
                 return true;
             }
         },
@@ -239,7 +241,6 @@ export default{
                 this.product_id = this.$route.params.product_id;
                 //console.log(this.product_id)
                 const response = await axios.get(`http://localhost:3000/products/${this.product_id}`);
-                console.log(response)
                 // product_id에 해당하는 제품 data object를 받아온다.
                 //console.log(response)
                 this.selectedProduct = response.data ; 
@@ -361,8 +362,20 @@ export default{
                 console.error(err);                
             }
         },
-        }        
-    }
+
+        //check recently product
+        async checkRecentlyProduct(){
+            try{
+                console.log('checkRecentlyProduct');
+                const productId = this.$route.params.product_id;
+                await axios.patch(`http://localhost:3000/products/recently/${productId}`,{},{withCredentials:true});
+                console.log('checkRecentlyProduct 완료');
+            }catch(err){
+                console.error(err);
+            }
+        },
+    }        
+}
 
 
 </script>

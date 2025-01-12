@@ -6,7 +6,7 @@ const Carts = require ('../models/model_buckets');
 const Products = require ('../models/model_products');
 const Wishes = require ('../models/model_wishes');
 const Orders = require ('../models/model_orders');
-
+const {modifyOrder, cancelOrder} = require('../controllers/admin/controller_order');
 // http://localhost:3000/orders
 
 
@@ -228,6 +228,13 @@ router.post('/order', async (req, res, next) => {
         next(err);
     }
 })
+
+// Order UPDATE
+router.patch('/modify', modifyOrder);
+
+// Order CANCEL
+router.patch('/cancel', cancelOrder);
+
 
 
 module.exports = router;
