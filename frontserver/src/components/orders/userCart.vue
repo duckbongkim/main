@@ -422,6 +422,10 @@ button:hover {
     font-size: 0.9rem; /* 폰트 크기 축소 */
   }
 
+  .cart-table td {
+    padding: 0;
+  }
+
   .count-content button {
     width: 30px; /* 버튼 너비 축소 */
     height: 30px; /* 버튼 높이 축소 */
