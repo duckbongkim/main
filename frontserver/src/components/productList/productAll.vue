@@ -121,6 +121,7 @@ export default {
       filteredProducts: [],
       noResultsMessage: '',
       user: {id:null},
+      orderQuantity:1,
     };
   },
   created() {

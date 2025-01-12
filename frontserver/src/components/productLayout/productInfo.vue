@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="product_info-div">
     
     <hr class="product-line">
 
@@ -66,7 +66,9 @@ export default{
 </script>
 
 <style scoped>
-
+.product_info-div{
+    margin-top: 100px;
+}
  .product-line {
     height: 5px;
  }

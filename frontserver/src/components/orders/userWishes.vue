@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="wish-content">
-            <h1>찜 목록</h1>
+            <h1>찜 리스트</h1>
             <table class="table wish-table">
                 <thead>
                     <tr>
@@ -125,50 +125,147 @@ export default{
 </script>
 
 <style scoped>
+/* 전체 컨테이너 스타일 */
 .wish-content {
-    margin-top: 100px;
+    margin-top: 50px;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff; /* 흰색 배경 */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* 제목 스타일 */
+h1 {
+    text-align: center;
+    color: #4A4A4A; /* 텍스트 색상 변경 */
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+/* 테이블 스타일 */
 .wish-table {
-    margin-top: 100px;
-    width: 100%; 
+    width: 100%;
     border-collapse: collapse;
     text-align: center;
+    background-color: #fff; /* 테이블 흰색 배경 */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.wish-table th{
+.wish-table th {
     text-align: center;
     vertical-align: middle;
-    font-weight: bold;
-    background-color: rgb(249,249,249); 
+    background-color: #f9f9f9; /* 연한 회색 */
+    color: #4A4A4A; /* 텍스트 색상 변경 */
+    padding: 15px;
+    font-size: 1rem;
+    border-bottom: 2px solid #ddd;
 }
 
 .wish-table td {
     text-align: center;
     vertical-align: middle;
-    font-weight: 500;
     font-size: 1rem;
-    padding: 20px 0;
+    color: #4A4A4A; /* 텍스트 색상 변경 */
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
 }
 
+.wish-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* 버튼 스타일 */
 .wish-table td button {
-    padding: 5px 10px;
+    padding: 8px 15px;
     border-radius: 5px;
-    background-color:rgb(254,245,231);
-    color: #000;
-    border: none;
+    background-color: rgb(243, 239, 224); /* 장바구니와 동일한 배경색 */
+    color: #4A4A4A; /* 텍스트 색상 변경 */
+    border: none; /* 테두리 제거 */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
 
+.wish-table td button:hover {
+    background-color: #000; /* 검은색 배경 */
+    color: rgb(243, 239, 224); /* 호버 시 텍스트 색상 변경 */
+}
 
-
+/* 이미지 스타일 */
 .product-img {
-    max-width: 100px; 
-    max-height: 100px; 
-    object-fit: contain; 
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: contain;
     display: block;
-    margin: 0 auto; 
-   
+    margin: 0 auto;
+    border: 1px solid #ddd; /* 연한 회색 테두리 */
+    border-radius: 5px;
+    padding: 5px;
 }
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .wish-content {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .wish-table th, .wish-table td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .product-img {
+        max-width: 80px;
+        max-height: 80px;
+    }
+
+    .wish-table td button {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .wish-content {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .wish-table th, .wish-table td {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+
+    .product-img {
+        max-width: 60px;
+        max-height: 60px;
+    }
+
+    .wish-table td button {
+        padding: 5px 8px;
+        font-size: 0.8rem;
+    }
+
+    .wish-table {
+        font-size: 0.8rem;
+    }
+}
+
+
 
 
 </style>
+
+
+
+
