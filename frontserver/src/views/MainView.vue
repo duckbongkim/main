@@ -11,13 +11,13 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active test">
-            <img src="img\1122.jpg" class="d-block w-100" alt="01">
+            <img src="img\배너2.jpg" class="d-block w-100" alt="01">
         </div>
         <div class="carousel-item test">
-          <img src="img\1122.jpg" class="d-block w-100" alt="02">
+          <img src="img\배너3.jpg" class="d-block w-100" alt="02">
         </div>
         <div class="carousel-item test">
-          <img src="img\1122.jpg" class="d-block w-100" alt="03">
+          <img src="img\배너4.jpg" class="d-block w-100" alt="03">
         </div>
       </div>
       <button class="carousel-control-prev" data-bs-theme="dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" >
@@ -30,9 +30,16 @@
       </button>
 
     </div>
+    <div class="bar2"></div>
+
     <section>
-      <!-- 캐러셀 코드 -->
+      <!-- 신상품 소개하는 캐러셀-->
+          <div class="swiper1-title">
+            <h2>신상품 추천</h2>
+            <p>새롭군요?!</p>
+          </div>   
       <v-carousel v-if="mainData.expensive.length > 0" height="400" show-arrows="hover" cycle hide-delimiter-background>
+        
         <v-carousel-item
           v-for="item in mainData.expensive"
           :key="item.id"
@@ -52,7 +59,7 @@
     </section>
 
     <!-- swiper expensive-container-->
-      <div class="slider expensive-slider">
+      <div class="slider expensive-slider" style="background-color: #FFF7E8; border-radius: 16px; padding: 16px;">
         <!-- 추천 배너 텍스트 추가 -->
         <div class="expensive-image">
           <img src="img\배너0.jpg" class="left-image" alt="04" />
@@ -61,7 +68,7 @@
           
           <div class="expensive-title">
             <h2>고가 상품추천</h2>
-            <p>아이우에오</p>
+            <p> mz들 픽 </p>
           </div>
           
           <div class="swiper-wrapper expensive-wrapper">
@@ -73,7 +80,7 @@
           </div>
 
           <!-- Navigation buttons -->
-          <!-- <div class="swiper-button-prev expensive-prev"></div> -->
+          <div class="swiper-button-prev expensive-prev"></div>
           <div class="swiper-button-next expensive-next"></div>
           <!-- Scrollbar -->
           <div class="swiper-scrollbar"></div>
@@ -81,13 +88,17 @@
 
       </div>
       <div class="bar1"></div>
-    <!-- swiper 3 -->
-    <section>
-      <div class="bar1"></div>
-      <div class="recommendation-banner">"30대"에게 추천</div>
-      <div class="container swiper-container-thirties">
 
-        <div class="swiper1-title">
+    <div class="bar1"></div>
+
+
+
+      <!-- swiper 3 -->
+    <section>
+      <div class="recommendation-banner">"30대"에게 추천</div>
+      <div class="container swiper-container-thirties" style="background-color: #ECECEC; border-radius: 16px; padding: 16px;">
+
+        <div class="swiper1-title" >
           <h2>30대 상품추천</h2>
           <p>30대 추천 상품</p>
         </div>
@@ -112,13 +123,24 @@
         <div class="swiper-button-next"></div>
       </div>
     </section>
-    <div class="bar1"></div>
+
+    <!-- 중간 배너  -->
+    <div class="bar2"></div>
+    <div class="img2">
+      <img src="img\배너.png" class="d-block w-100" alt="01">
+    </div>
+
     <!-- swiper 2 -->
     <section>
       <div class="bar1"></div>
       <!-- 추천 문구 추가 -->
       <div class="recommendation-banner">"20대"에게 추천</div>
+        <div class="swiper1-title">
+          <h2>20대 상품추천</h2>
+          <p>mz상품</p>
+        </div>      
       <div class="container swiper-container-good">
+
         <div class="swiper-wrapper">
           <div 
             class="swiper-slide" 
@@ -152,11 +174,11 @@ export default{
     data(){
       return{
         mainData:{
-          expensive:[],
-          cheap:[],
-          newProduct:[],
-          recommend:{},
-          slides:[],
+          expensive:[], //비싼거
+          cheap:[], // 싼거
+          newProduct:[], // 신상품
+          recommend:{}, // 20대, 30대
+          slides:[], // 
         },
         bestSeller:{
           
@@ -308,6 +330,7 @@ export default{
     z-index: 10;
     width: 65%;
     margin-left: 20%;
+    font-family: "Noto Serif KR", serif;
   }
   .container {
   width: 100vw; /* 화면 너비를 100%로 */
@@ -323,7 +346,10 @@ export default{
     overflow-x: hidden; /* 수평 스크롤 제거 */
   }
 
-
+    /* 모든 이미지의 모서리를 둥글게 설정 */
+  img {
+    border-radius: 10px; /* 모서리를 둥글게 설정 (10px 값을 원하는 값으로 조정 가능) */
+  }
   /* body부분 - 캐러셀 */
   /* 기본 캐러셀 스타일 */
   .carousel-item img {
@@ -395,10 +421,12 @@ export default{
 
   .expensive-title {
     float: left;
+    font-family: "Noto Serif KR", serif;
   }
 
   .expensive-title p {
     float: left;
+    font-family: "Noto Serif KR", serif;
   }
 
   .expensive-wrapper {
@@ -456,10 +484,11 @@ export default{
   .swiper-container-good .swiper-slide img {
     width: 300px; /* 이미지가 슬라이드 영역을 가득 채우도록 합니다. */
     height: 300px; /* 이미지 높이를 80%로 설정하여 텍스트가 들어갈 공간을 확보 */
-    object-fit: cover; /* 비율을 유지하면서 슬라이드 영역을 채우도록 설정 */
+    object-fit: contain; /* 비율을 유지하면서 슬라이드 영역을 채우도록 설정 */
     transition: all 0.25s ease-out;
     transform: scale(0.55); /* 비활성 슬라이드는 크기를 작게 만듭니다. */
     transform-origin: center; /* 이미지 크기 변형을 중앙을 기준으로 합니다. */
+    border-radius: 10px;
   }
 
   /* 활성화된 슬라이드 (가운데 이미지) */
@@ -476,6 +505,7 @@ export default{
     font-size: 16px; /* 텍스트 크기 조정 */
     text-align: center; /* 텍스트를 가운데 정렬 */
     padding: 5px; /* 텍스트 주변 여백 */
+    font-family: "Noto Serif KR", serif;
   }
 
   /* 네비게이션 버튼 위치 조정 */
@@ -489,6 +519,7 @@ export default{
     padding-left: 20px;
     margin-left: 50px;
     margin-top: 100px;
+    font-family: "Noto Serif KR", serif;
   }
 
   .s-title {
@@ -514,7 +545,7 @@ export default{
     display: flex;
     justify-content: center;
     align-items: center; /* 이미지와 텍스트를 수직, 수평 중앙 정렬 */
-    height: 250px; /* 슬라이드 높이를 일정하게 설정 */
+    height: 300px; /* 슬라이드 높이를 일정하게 설정 */
     transition: all 0.25s ease-out;
     opacity: 1;
     box-sizing: border-box;
@@ -524,10 +555,11 @@ export default{
 
   /* 이미지 크기 고정 */
   .swiper-container-thirties .swiper-slide img {
-    width: 150px; /* 이미지의 고정 크기 */
-    height: 150px; /* 이미지의 고정 크기 */
+    width: 200px; /* 이미지의 고정 크기 */
+    height: 200px; /* 이미지의 고정 크기 */
     object-fit: contain; /* 비율 유지하면서 영역을 꽉 채우기 */
     transition: all 0.25s ease-out;
+    border-radius: 10px;
   }
 
   /* 텍스트 크기 줄이기 */
@@ -546,20 +578,44 @@ export default{
     font-size: 12px; /* 텍스트 크기 조정 (이미지 크기에는 영향 주지 않음) */
     text-align: left; /* 텍스트 왼쪽 정렬 */
     padding: 0; /* 불필요한 여백 제거 */
+    font-family: "Noto Serif KR", serif;
   }
   .swiper1-title { 
     top: 50%;
+      font-family: "Noto Serif KR", serif;
   }
   .swiper1-title h2 {
     margin: 0;
     font-size: 24px; /* 타이틀 크기 */
+      font-family: "Noto Serif KR", serif;
   }
 
   .swiper1-title p {
     margin-top: 10px;
     font-size: 16px; /* 부제목 크기 */
+      font-family: "Noto Serif KR", serif;
   }
+
+/* */
+  .swiper2-title { 
+    top: 50%;
+  }
+  .swiper2-title h2 {
+    margin: 0;
+    font-size: 24px; /* 타이틀 크기 */
+    font-family: "Noto Serif KR", serif;
+  }
+
+  .swiper2-title p {
+    margin-top: 10px;
+    font-size: 16px; /* 부제목 크기 */
+    font-family: "Noto Serif KR", serif;
+  }
+
   .bar1{
     margin:200px;
+  }
+  .bar2{
+    margin:100px;
   }
 </style>
