@@ -38,7 +38,7 @@
     </table>
         
         <div class="but-content">
-            <table  class="table">
+            <table>
                 <thead>
                     <tr>
                         <th>선택상품금액 </th>
@@ -213,6 +213,7 @@ export default{
 </script>
 
 <style scoped>
+
 /* 체크박스 스타일 */
 .cart-table input[type="checkbox"] {
   display: none; /* 기본 체크박스 숨김 */
@@ -267,7 +268,7 @@ export default{
 
 h1 {
   text-align: center;
-  color: #000; /* 검은색 글자 */
+  color: #4A4A4A; /* 텍스트 색상 변경 */
   margin-bottom: 20px;
   font-size: 2rem;
 }
@@ -287,7 +288,7 @@ h1 {
   text-align: center;
   vertical-align: middle;
   background-color: #f9f9f9; /* 연한 회색 */
-  color: #000; /* 검은색 글자 */
+  color: #4A4A4A; /* 텍스트 색상 변경 */
   padding: 15px;
   font-size: 1rem;
   border-bottom: 2px solid #ddd;
@@ -297,7 +298,7 @@ h1 {
   text-align: center;
   vertical-align: middle;
   font-size: 1rem;
-  color: #000; /* 검은색 글자 */
+  color: #4A4A4A; /* 텍스트 색상 변경 */
   padding: 15px;
   border-bottom: 1px solid #ddd;
   height: 80px;
@@ -307,34 +308,30 @@ h1 {
   border-bottom: none;
 }
 
-/* 버튼 스타일 */
-.cart-table td button,
-.but-content + div button,
+/* 모든 버튼 스타일 */
 button {
   padding: 8px 15px;
   border-radius: 5px;
-  background-color: rgb(243, 239, 224); /* 기본 버튼 배경색 */
-  color: #000; /* 검은색 글자 */
+  background-color: rgb(243, 239, 224); /* 기본 배경색 */
+  color: #4A4A4A; /* 텍스트 색상 */
   border: none; /* 테두리 제거 */
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
 
-.cart-table td button:hover,
-.but-content + div button:hover,
 button:hover {
   background-color: #e5dcc3; /* 호버 시 배경색 */
-  color: #000; /* 호버 시 텍스트 색상 */
+  color: #4A4A4A; /* 텍스트 색상 유지 */
 }
 
 /* 이미지 스타일 */
 .product-img {
-  max-width: 80px;
-  max-height: 80px;
+  max-width: 100px;
+  max-height: 100px;
   object-fit: contain;
   display: block;
   margin: 0 auto;
-  border: 1px solid #ddd;
+  border: 1px solid #ddd; /* 연한 회색 테두리 */
   border-radius: 5px;
   padding: 5px;
 }
@@ -365,21 +362,6 @@ button:hover {
   margin: 0 5px;
 }
 
-.count-content button {
-  padding: 5px 10px;
-  border-radius: 5px;
-  background-color: rgb(243, 239, 224); /* 기본 버튼 배경색 */
-  color: #000; /* 검은색 글자 */
-  border: none; /* 테두리 제거 */
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.count-content button:hover {
-  background-color: #e5dcc3; /* 호버 시 배경색 */
-  color: #000; /* 호버 시 텍스트 색상 */
-}
-
 /* 주문 및 총액 섹션 스타일 */
 .but-content {
   margin-top: 30px;
@@ -390,14 +372,41 @@ button:hover {
   text-align: center;
 }
 
-.but-content table th,
-.but-content table td {
+.but-content p {
+  font-size: 1.5rem;
+  color: #4A4A4A; /* 텍스트 색상 */
+  margin-bottom: 20px;
+}
+
+.but-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #fff; /* 흰색 배경 */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.but-content th {
   font-size: 1.2rem;
+  background-color: #f9f9f9; /* 연한 회색 */
+  color: #4A4A4A; /* 텍스트 색상 */
+  padding: 15px;
+  border-bottom: 2px solid #ddd;
+}
+
+.but-content td {
+  font-size: 1.2rem;
+  color: #4A4A4A; /* 텍스트 색상 */
   padding: 15px;
   border-bottom: 1px solid #ddd;
 }
 
-/* 버튼 컨테이너 */
+.but-content tr:last-child td {
+  border-bottom: none;
+}
+
 .but-content + div {
   display: flex;
   justify-content: center;
@@ -405,22 +414,38 @@ button:hover {
   margin-top: 20px;
 }
 
-.but-content + div button {
-  padding: 8px 15px;
-  border-radius: 5px;
-  background-color: rgb(243, 239, 224); /* 기본 버튼 배경색 */
-  color: #000; /* 검은색 글자 */
-  border: none;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
+@media (max-width: 1400px) {
+  .count-content .count-box {
+    width: 40px; /* 수량 입력 칸 너비 축소 */
+    height: 30px; /* 수량 입력 칸 높이 축소 */
+    line-height: 30px; /* 텍스트 중앙 정렬 */
+    font-size: 0.9rem; /* 폰트 크기 축소 */
+  }
+
+  .count-content button {
+    width: 30px; /* 버튼 너비 축소 */
+    height: 30px; /* 버튼 높이 축소 */
+    padding: 4px; /* 버튼 내부 패딩 축소 */
+    font-size: 0.9rem; /* 버튼 폰트 크기 축소 */
+  }
 }
 
-.but-content + div button:hover {
-  background-color: #e5dcc3; /* 호버 시 배경색 */
-  color: #000; /* 호버 시 텍스트 색상 */
+
+/* 화면 너비가 1200px 이하일 때 */
+@media (max-width: 1200px) {
+  .but-content + div {
+    justify-content: space-around; /* 버튼 균등 배치 */
+    gap: 15px; /* 간격 유지 */
+  }
+
+  .but-content + div button {
+    flex: 1; /* 버튼 크기 균등 */
+    max-width: 200px; /* 버튼 최대 너비 설정 */
+    min-width: 100px; /* 버튼 최소 너비 설정 */
+  }
 }
 
-/* 반응형 스타일 */
+/* 화면 너비가 768px 이하일 때 */
 @media (max-width: 768px) {
   .cart-content {
     padding: 15px;
@@ -543,9 +568,9 @@ button:hover {
     padding: 5px 8px;
     font-size: 0.8rem;
     width: 100%; /* 버튼 전체 너비 */
+    margin: 0 auto 0 auto;
   }
 }
-
 
 
 

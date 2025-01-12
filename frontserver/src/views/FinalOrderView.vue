@@ -441,7 +441,7 @@ export default{
   border-radius: 10px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .section-title {
@@ -453,35 +453,35 @@ export default{
 
 /* 상품 테이블 스타일 */
 .product-table {
+  overflow-x: auto; /* 작은 화면에서 가로 스크롤 허용 */
   width: 100%;
-  overflow-x: auto;
 }
 
 .product-table table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  min-width: 600px; /* 작은 화면에서 테이블 최소 너비 설정 */
 }
 
-.product-table th,
+.product-table th {
+  background: #f8f9fa;
+  padding: 1rem;
+  text-align: center;
+}
+
 .product-table td {
   padding: 1rem;
   text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid #f1f1f1;
-  word-wrap: break-word;
-}
-
-.product-table th {
-  background: #f8f9fa;
-  font-size: 1rem;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  word-break: keep-all; /* 단어가 잘리지 않도록 설정 */
 }
 
 .product-info {
   display: flex;
   align-items: center;
   gap: 1rem;
-  justify-content: flex-start; /* 이미지와 텍스트 좌측 정렬 */
 }
 
 .product-info img {
@@ -492,8 +492,8 @@ export default{
 }
 
 .product-info .product-name {
-  font-size: 1rem;
   text-align: left;
+  font-size: 1rem;
   word-break: break-word; /* 긴 텍스트 줄바꿈 */
 }
 
@@ -522,11 +522,21 @@ export default{
 
 .zipcode-input {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap; /* 작은 화면에서 줄바꿈 허용 */
+  gap: 0.5rem;
 }
 
-.btn-search {
-  padding: 0.8rem 1.5rem;
+.zipcode-input input {
+  flex: 1;
+  min-width: 150px;
+}
+
+.zipcode-input button {
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+  white-space: nowrap;
+  padding: 0.8rem;
   background: #F3EFE0;
   color: #4A4A4A;
   border: none;
@@ -535,7 +545,7 @@ export default{
   transition: background-color 0.2s;
 }
 
-.btn-search:hover {
+.zipcode-input button:hover {
   background: #E5DCC3;
 }
 
@@ -558,7 +568,7 @@ export default{
 }
 
 .discount-price {
-  color: #2b8a3e;
+  color: #2b8a3e; /* 할인 금액은 초록색으로 표시 */
 }
 
 .summary-row.total {
@@ -588,82 +598,121 @@ export default{
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
 .btn-order:hover {
   background: #E5DCC3;
+  transform: scale(1.05);
 }
 
-/* 반응형 스타일 */
-@media (max-width: 770px) {
-  .content-wrapper {
-    width: 90%;
-    padding: 0 10px;
-  }
+/* 할인 적용 스타일 */
+.discount-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-  .product-table table {
-    font-size: 0.85rem;
+.coupon-select select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.point-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.point-input input {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.available-point {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.point-input-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.point-input-group input {
+  width: 200px;
+  height: 40px;
+}
+
+.btn-apply-point {
+  padding: 0.5rem 1rem;
+  height: 40px;
+  background: #F3EFE0;
+  color: #4A4A4A;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.btn-apply-point:hover {
+  background: #E5DCC3;
+}
+
+/* 반응형 설계 */
+/* 화면 너비가 768px 이하일 때 */
+@media (max-width: 768px) {
+  .zipcode-input {
+    flex-direction: column; /* 버튼이 세로로 배치 */
   }
 
   .product-info {
-    flex-direction: column;
+    flex-direction: column; /* 이미지와 텍스트를 세로로 정렬 */
     align-items: center;
-    gap: 0.5rem;
   }
 
   .product-info img {
-    width: 60px;
+    width: 60px; /* 이미지 크기 축소 */
     height: 60px;
   }
 
   .product-info .product-name {
-    text-align: center;
     font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .product-table th,
+  .product-table td {
+    font-size: 0.85rem; /* 텍스트 크기 축소 */
   }
 
   .btn-order {
-    padding: 0.6rem 1rem;
+    padding: 0.6rem 2rem;
     font-size: 0.9rem;
-    width: 100%;
-  }
-
-  .zipcode-input {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .zipcode-input input,
-  .btn-search {
-    width: 100%;
-    height: 35px;
-    font-size: 0.85rem;
   }
 }
 
+/* 화면 너비가 480px 이하일 때 */
 @media (max-width: 480px) {
+  .product-table table {
+    min-width: 400px; /* 최소 너비 축소 */
+  }
+
   .btn-order {
-    padding: 0.4rem 0.8rem;
+    padding: 0.5rem 1rem;
     font-size: 0.8rem;
   }
 
-  .product-info img {
-    width: 50px;
-    height: 50px;
-  }
-
-  .product-info .product-name {
-    font-size: 0.75rem;
-  }
-
-  .zipcode-input input,
-  .btn-search {
-    height: 30px;
-    font-size: 0.75rem;
-  }
-
-  .product-table table {
-    font-size: 0.75rem;
+  .content-wrapper {
+    width: 95%;
+    padding: 0 10px;
   }
 }
 
