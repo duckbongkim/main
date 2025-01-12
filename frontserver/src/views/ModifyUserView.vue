@@ -1,8 +1,8 @@
 <template>
-<div class="container mt-4">
-    <h2 class="mb-4">사용자 정보 수정</h2>
-    <div class="row">
-        <div class="col-md-8">
+<div class="container" style="margin-top: 20vh">
+    <h2 class="mb-4 text-center">사용자 정보 수정</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
             <form @submit.prevent="submitModifyPassword">
                 <div class="mb-3">
                     <label for="password">비밀번호(필수)</label>
@@ -29,19 +29,16 @@
                 </div>
                 <div class="mb-3">
                     <label for="account_phone_number" class="form-label">phone_number</label>
-                    <input type="text" class="form-control" id="account_phone_number" v-model="modifyUser.phone_number" required>
+                    <input type="tel" v-phone_format class="form-control" id="account_phone_number" v-model="modifyUser.phone_number" required>
                 </div>
                 <div class="mb-3">
-                    <label for="account_address" class="form-label">address</label>
-                    <input type="text" class="form-control" id="account_address" v-model="modifyUser.address" required>
-                </div>
-                <div class="mb-3">
-                    <label for="account_addressNumber" class="form-label">addressNumber</label>
-                    <input type="text" class="form-control" id="account_addressNumber" v-model="modifyUser.addressNumber" required>
-                </div>
-                <div class="mb-3">
-                    <label for="account_addressDetail" class="form-label">addressDetail</label>
-                    <input type="text" class="form-control" id="account_addressDetail" v-model="modifyUser.addressDetail" required>
+                    <label for="account_address" class="form-label">주소</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" id="account_addressNumber" v-model="modifyUser.addressNumber" placeholder="우편번호" readonly required>
+                        <button type="button" class="btn btn-secondary" @click="execDaumPostcode" id="address-search">주소 검색</button>
+                    </div>
+                    <input type="text" class="form-control mb-2" id="account_address" v-model="modifyUser.address" placeholder="기본주소" readonly required>
+                    <input type="text" class="form-control" id="account_addressDetail" v-model="modifyUser.addressDetail" placeholder="상세주소를 입력해주세요" required>
                 </div>
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary me-2">저장</button>
@@ -81,8 +78,39 @@ export default{
                     }
                     el.reportValidity(); // 유효성 메시지를 즉시 표시
                 });
+            },
+        },
+        phone_format: {
+            mounted(el) {
+                el.addEventListener('input', () => {
+                    // 숫자만 추출
+                    let number = el.value.replace(/[^0-9]/g, "");
+                    
+                    // 길이에 따라 하이픈 추가
+                    if (number.length > 3 && number.length <= 7) {
+                        number = number.slice(0, 3) + "-" + number.slice(3);
+                    } else if (number.length > 7) {
+                        number = number.slice(0, 3) + "-" + number.slice(3, 7) + "-" + number.slice(7, 11);
+                    }
+                    
+                    // 입력 값 업데이트
+                    el.value = number;
+
+                    // 유효성 검사
+                    const phonePattern = /^010-\d{4}-\d{4}$/;
+                    if (!phonePattern.test(el.value)) {
+                        el.classList.add('is-invalid');
+                        el.setCustomValidity('올바른 핸드폰 번호 형식을 입력하세요. (예: 010-1234-5678)');
+                    } else {
+                        el.classList.remove('is-invalid');
+                        el.classList.add('is-valid');
+                        el.setCustomValidity('');
+                    }
+                    el.reportValidity();
+                });
             }
-        }
+        },
+        
     },
     data(){
         return{
@@ -126,13 +154,22 @@ export default{
          },
          async submitModifyUser(){
             try{
+                if(!this.modifyUser.addressNumber || !this.modifyUser.address || !this.modifyUser.addressDetail){
+                    alert('주소를 입력해주세요.');
+                    this.$nextTick(() => {
+                        document.getElementById('address-search').focus();
+                    });
+                    return;
+                }
                 const response = await axios.patch(`http://localhost:3000/profile/modifyUser`,this.modifyUser,{withCredentials:true});
                 if(response.status === 200){
                     alert('사용자 정보가 수정되었습니다.');
                     this.$router.replace('/mypage');
                 }
             }catch(err){
-                console.error(err);
+                if(err.response.status === 400){
+                    alert(err.response.data.message);
+                }
             }
          },
          async submitModifyPassword(){
@@ -173,7 +210,57 @@ export default{
             }catch(err){
                 console.error(err);
             }
-        }
+        },
+        //주소 검색 api 메서드
+        execDaumPostcode() {
+          // Daum Postcode API 호출
+          new daum.Postcode({
+            oncomplete: (data) => {
+              let roadAddr = data.roadAddress; // 도로명 주소
+              let extraRoadAddr = ""; // 참고 항목
+
+              // 참고항목 조합 (법정동, 건물명 등)
+              if (data.bname && /[동|로|가]$/g.test(data.bname)) {
+                extraRoadAddr += data.bname;
+              }
+              if (data.buildingName && data.apartment === "Y") {
+                extraRoadAddr += extraRoadAddr
+                  ? `, ${data.buildingName}`
+                  : data.buildingName;
+              }
+              if (extraRoadAddr) {
+                extraRoadAddr = ` (${extraRoadAddr})`;
+              }
+
+              // 데이터 바인딩
+              this.modifyUser.addressNumber = data.zonecode; // 우편번호
+              this.modifyUser.address = roadAddr; // 도로명 주소
+
+              // 가이드 메시지 처리
+              if (data.autoRoadAddress) {
+                this.guide = `예상 도로명 주소: ${data.autoRoadAddress} ${extraRoadAddr}`;
+              } else if (data.autoJibunAddress) {
+                this.guide = `예상 지번 주소: ${data.autoJibunAddress}`;
+              } else {
+                this.guide = "";
+              }
+            },
+          }).open(); // 팝업 창 열기
+        },
     }
 }
 </script>
+<style scoped>
+.input-group .btn {
+    min-width: 100px;
+}
+
+.form-control[readonly] {
+    background-color: #f8f9fa;
+    cursor: default;
+}
+
+.input-group input[type="text"] {
+    max-width: 150px;
+}
+</style>

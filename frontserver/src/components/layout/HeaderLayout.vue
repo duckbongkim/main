@@ -10,7 +10,7 @@
         <i class="bi bi-cart3 icon" @click="checkLoginAndGoToPage('/cart/1')" title="장바구니"></i>
         <i class="bi bi-person icon" @click="checkLoginAndGoToPage('/mypage')" title="마이페이지"></i>
       </div>
-      <a class="navbar-brand" @click="goToMenu('/')">Home</a>
+      <a class="navbar-brand" @click="goToMenu('/')">주정뱅이</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -27,8 +27,8 @@
 
               <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
               <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
-              <li><a class="inner-title" @click="goToMenu('/whiskey')">위스키</a></li>      
-              <li><a class="inner-title" @click="goToMenu('/traditional')">동양주류</a></li>               
+              <li><a class="inner-title" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>      
+              <li><a class="inner-title" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>               
             </ul>           
           </li>
           
@@ -37,12 +37,8 @@
               etc 상품
             </a>
             <ul class="dropdown-menu">
-              <li><a class="inner-title" @click="goToMenu('/glass')">와인잔</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/holder')">와인홀더</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/opener')">와인오프너</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/onetherock')">온더락잔</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/straight')">스트레이트 잔</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/decanter')">위스키 디캔터</a></li>
+              <li><a class="inner-title" @click="goToMenu('/etc/wineglass')">와인잔</a></li> 
+              <li><a class="inner-title" @click="goToMenu('/etc/onetherock')">온더락잔</a></li> 
             </ul>
           </li>
             <!-- 커뮤니티 -->
@@ -79,7 +75,6 @@ export default{
       async checkLogin() {
           try {
               const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
-              console.log("response",response);
               this.isLoggedIn = response.data.isLoggedIn;
               this.checkAdmin = response.data.isAdmin;
           } catch (error) {

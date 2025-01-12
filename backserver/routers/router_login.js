@@ -25,7 +25,7 @@ router.get('/check',async (req, res) => {
         };
         res.status(200).json(sendData);
     } else {
-        res.status(403).json({
+        res.status(200).json({
             isLoggedIn: false,
             isAdmin: false,
             user: null

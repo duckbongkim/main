@@ -1,8 +1,9 @@
 <template>
 <div>
   <Sidebar />
+ 
   <div class="container">
-    <router-view />
+     <router-view />
   </div>
 
 </div>
@@ -36,9 +37,12 @@ export default{
 </script>
 
 <style scoped>
-.container{
-  margin-left:250px;
-  margin-top:90px;
-  width: 100%;
+.container {
+  margin-left: 250px;
+  margin-top: 90px;
+  width: calc(100% - 250px);
+  height: calc(100vh - 90px);
+  overflow-y: auto;
+  padding: 20px;
 }
 </style>
