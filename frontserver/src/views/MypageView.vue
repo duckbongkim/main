@@ -38,14 +38,14 @@
 
     <div class="frequent-purchase-section">
       <h2>최근 본 상품</h2>
-      <div class="frequent-items">
-        <div v-if="Array.isArray(frequentItems) && frequentItems.length" v-for="item in frequentItems" :key="item.id" class="frequent-item" @click="$router.push(`/products/${item.id}`)">
+      <div class="frequent-items" v-if="Array.isArray(frequentItems) && frequentItems.length">
+        <div v-for="item in frequentItems" :key="item.id" class="frequent-item" @click="$router.push(`/products/${item.id}`)">
           <img :src="item.product_image" alt="상품 이미지" />
           <p>{{ item.product_name }}</p>
           <p>{{ item.product_price.toLocaleString() }}원</p>
         </div>
-        <p v-else>최근 본 상품이 없습니다.</p>
       </div>
+      <p v-else>최근 본 상품이 없습니다.</p>
     </div>
 
     <!-- Regular Purchase Section -->
