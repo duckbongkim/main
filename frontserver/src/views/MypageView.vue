@@ -38,13 +38,14 @@
 
     <div class="frequent-purchase-section">
       <h2>최근 본 상품</h2>
-      <div class="frequent-items">
-        <div v-for="item in frequentItems" :key="item.id" class="frequent-item">
-          <img :src="item.image" alt="상품 이미지" />
-          <p>{{ item.name }}</p>
-          <p>{{ item.price }}원</p>
+      <div class="frequent-items" v-if="Array.isArray(frequentItems) && frequentItems.length">
+        <div v-for="item in frequentItems" :key="item.id" class="frequent-item" @click="$router.push(`/products/${item.id}`)">
+          <img :src="item.product_image" alt="상품 이미지" />
+          <p>{{ item.product_name }}</p>
+          <p>{{ item.product_price.toLocaleString() }}원</p>
         </div>
       </div>
+      <p v-else>최근 본 상품이 없습니다.</p>
     </div>
 
     <!-- Regular Purchase Section -->
@@ -67,13 +68,7 @@ export default{
                 email:''
             },
             rating:'',
-            frequentItems: [
-              { id: 1, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
-              { id: 2, name: '상품 E', price: 4500, image: 'https://example.com/image5.jpg' },
-              { id: 3, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
-              { id: 4, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
-              { id: 5, name: '상품 D', price: 6100, image: 'https://example.com/image4.jpg' },
-            ],
+            frequentItems: [],
            
 
         };
@@ -92,19 +87,24 @@ export default{
             try{
                 const res = await axios.get(`http://localhost:3000/profile`,{withCredentials:true});
                 this.user = res.data;
+                this.frequentItems = {
+                  id1:res.data.recently_product_1,
+                  id2:res.data.recently_product_2,
+                  id3:res.data.recently_product_3,
+                  id4:res.data.recently_product_4,
+                  id5:res.data.recently_product_5
+                };
+
+                await this.sendFrequentItems(this.frequentItems);
+                
             }catch(err){
-                if (err.status===403) {
-                alert('로그인이 필요함');
-                this.$router.push(`/login`);
-                console.error(err);
-                }  
+                return;
             }
          },
 
          async getRating(){
             try{
                 const res = await axios.get(`http://localhost:3000/profile/userRating`,{withCredentials:true});
-                console.log(res.data);
                 this.rating = res.data.rating;
             }catch(err){
                 console.error(err);
@@ -127,8 +127,17 @@ export default{
           } catch (err) {
               console.error(err);
           }
-        } // 1월7일 유저 페이지로 유저 정보를 보내는 post 작성 동진
+        }, // 1월7일 유저 페이지로 유저 정보를 보내는 post 작성 동진
 
+        async sendFrequentItems(frequentItems) {
+            try {
+                const queryParams = new URLSearchParams(frequentItems).toString();
+                const res = await axios.get(`http://localhost:3000/products/recentlyProductInfo?${queryParams}`, { withCredentials: true });
+                this.frequentItems = res.data.products;
+            } catch (err) {
+                console.error(err);
+            }
+        }
 
          
         }
@@ -140,7 +149,7 @@ export default{
 
 .mypage-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 100px auto 0 auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -263,18 +272,25 @@ export default{
 
 .frequent-items {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: space-around;
   margin-top: 40px;
 }
 
 .frequent-item {
-  margin-right: 10px;
+  width: 120px;
+  margin: 10px;
   text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.frequent-item:hover {
+  transform: scale(1.05);
 }
 
 .frequent-item img {
-  width: 80px;
-  height: 80px;
+  width: 130px;
+  height: 200px;
   object-fit: cover;
   border-radius: 5px;
 }
@@ -282,6 +298,8 @@ export default{
 .frequent-item p {
   margin: 5px 0;
   font-size: 14px;
+  white-space: normal;
+  overflow: hidden;
 }
 
 .frequent-purchase-section a {

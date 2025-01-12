@@ -1,5 +1,7 @@
 <template>
-<div>
+<div class="div1">
+
+  
     <!-- 광고형 슬라이드 -->
     <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark">
       <div class="carousel-indicators">
@@ -280,8 +282,8 @@ export default{
           },
         },
         breakpoints: {
-          1920: { slidesPerView: 3 }, // 데스크탑 설정
-          992: { slidesPerView: 3 },  // 태블릿 설정
+          1920: { slidesPerView: 1 }, // 데스크탑 설정
+          992: { slidesPerView: 1 },  // 태블릿 설정
           320: { slidesPerView: 1 },  // 모바일 설정
         },
       });
@@ -311,6 +313,9 @@ export default{
 </script>
 
 <style>
+  .div1 {
+    margin-top: 100px;
+  }
   /* recommendation-banner */
   .recommendation-banner {
     font-size: 30px;

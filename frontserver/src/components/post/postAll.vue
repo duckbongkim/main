@@ -141,7 +141,7 @@ export default {
                 const query = this.searchQuery.toLowerCase();
                 filteredPosts = filteredPosts.filter(post => 
                     (post.title?.toLowerCase() || '').includes(query) ||
-                    (post.content?.toLowerCase() || '').includes(query) ||
+                    (post.post_content?.toLowerCase() || '').includes(query) ||
                     (post.post_kind?.toLowerCase() || '').includes(query) ||
                     (post.Account.nickname?.toLowerCase() || '').includes(query)
                 );

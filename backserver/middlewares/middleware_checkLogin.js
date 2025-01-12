@@ -4,7 +4,7 @@ exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
         next();
     } else {
-        res.status(403).json({message: 'need login'});
+        res.status(200).json({message: 'need login',isLoggedIn:false});
     }
 };
 exports.isNotLoggedIn = (req,res,next)=>{
