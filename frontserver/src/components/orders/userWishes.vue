@@ -125,6 +125,7 @@ export default{
 </script>
 
 <style scoped>
+
 /* 전체 컨테이너 스타일 */
 .wish-content {
     margin-top: 50px;
@@ -190,8 +191,8 @@ h1 {
 }
 
 .wish-table td button:hover {
-    background-color: #000; /* 검은색 배경 */
-    color: rgb(243, 239, 224); /* 호버 시 텍스트 색상 변경 */
+    background-color: #e5dcc3; /* 호버 시 배경색 */
+    color: #4A4A4A; /* 호버 시 텍스트 색상 유지 */
 }
 
 /* 이미지 스타일 */

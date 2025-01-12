@@ -430,6 +430,53 @@ export default {
   transform: scale(0.9); 
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-item.disabled .page-link {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.page-item.active .page-link {
+  background-color: #f3efe0; /* 기존 버튼 배경색 */
+  color: #4a4a4a; /* 기존 버튼 텍스트 색상 */
+  border-color: #f3efe0;
+  font-weight: bold;
+}
+
+.page-link {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #fff; /* 기본 버튼 배경색 */
+  color: #4a4a4a; /* 기본 텍스트 색상 */
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.page-link:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
+}
+
+.page-item.active .page-link:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
+}
+
+
 
 
 </style>

@@ -38,8 +38,7 @@
     </table>
         
         <div class="but-content">
-            <p>주문수량 및 총액</p>
-            <table>
+            <table  class="table">
                 <thead>
                     <tr>
                         <th>선택상품금액 </th>
@@ -214,7 +213,6 @@ export default{
 </script>
 
 <style scoped>
-
 /* 체크박스 스타일 */
 .cart-table input[type="checkbox"] {
   display: none; /* 기본 체크박스 숨김 */
@@ -315,7 +313,7 @@ h1 {
 button {
   padding: 8px 15px;
   border-radius: 5px;
-  background-color: rgb(243, 239, 224); /* 변경된 버튼 배경색 */
+  background-color: rgb(243, 239, 224); /* 기본 버튼 배경색 */
   color: #000; /* 검은색 글자 */
   border: none; /* 테두리 제거 */
   cursor: pointer;
@@ -325,8 +323,8 @@ button {
 .cart-table td button:hover,
 .but-content + div button:hover,
 button:hover {
-  background-color: #000; /* 호버 시 검은 배경 */
-  color: rgb(243, 239, 224); /* 호버 시 텍스트 색상 변경 */
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
 }
 
 /* 이미지 스타일 */
@@ -370,7 +368,7 @@ button:hover {
 .count-content button {
   padding: 5px 10px;
   border-radius: 5px;
-  background-color: rgb(243, 239, 224); /* 버튼 배경색 */
+  background-color: rgb(243, 239, 224); /* 기본 버튼 배경색 */
   color: #000; /* 검은색 글자 */
   border: none; /* 테두리 제거 */
   cursor: pointer;
@@ -378,8 +376,8 @@ button:hover {
 }
 
 .count-content button:hover {
-  background-color: #000; /* 호버 시 배경색 */
-  color: rgb(243, 239, 224); /* 호버 시 텍스트 색상 */
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
 }
 
 /* 주문 및 총액 섹션 스타일 */
@@ -392,39 +390,11 @@ button:hover {
   text-align: center;
 }
 
-.but-content p {
-  font-size: 1.5rem;
-  color: #000; /* 검은색 글자 */
-  margin-bottom: 20px;
-}
-
-.but-content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  background-color: #fff; /* 흰색 배경 */
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.but-content th {
+.but-content table th,
+.but-content table td {
   font-size: 1.2rem;
-  background-color: #f9f9f9; /* 연한 회색 */
-  color: #000; /* 검은색 글자 */
-  padding: 15px;
-  border-bottom: 2px solid #ddd;
-}
-
-.but-content td {
-  font-size: 1.2rem;
-  color: #000; /* 검은색 글자 */
   padding: 15px;
   border-bottom: 1px solid #ddd;
-}
-
-.but-content tr:last-child td {
-  border-bottom: none;
 }
 
 /* 버튼 컨테이너 */
@@ -434,6 +404,149 @@ button:hover {
   gap: 15px;
   margin-top: 20px;
 }
+
+.but-content + div button {
+  padding: 8px 15px;
+  border-radius: 5px;
+  background-color: rgb(243, 239, 224); /* 기본 버튼 배경색 */
+  color: #000; /* 검은색 글자 */
+  border: none;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.but-content + div button:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .cart-content {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .cart-table {
+    display: block;
+    overflow-x: auto; /* 가로 스크롤 허용 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  }
+
+  .cart-table th,
+  .cart-table td {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .count-content .count-box {
+    width: 40px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 0.9rem;
+  }
+
+  .count-content button {
+    padding: 4px 8px;
+    font-size: 0.9rem;
+  }
+
+  .product-img {
+    max-width: 60px; /* 이미지 크기 축소 */
+    max-height: 60px;
+  }
+
+  .but-content p {
+    font-size: 1.2rem;
+  }
+
+  .but-content table th,
+  .but-content table td {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .but-content + div {
+    flex-wrap: wrap; /* 버튼 줄바꿈 허용 */
+    gap: 10px;
+    justify-content: center; /* 중앙 정렬 */
+  }
+
+  .but-content + div button {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    max-width: 180px; /* 버튼 최대 너비 설정 */
+    min-width: 100px; /* 버튼 최소 너비 설정 */
+    flex: 1; /* 버튼 크기 균등 */
+  }
+}
+
+/* 화면 너비가 480px 이하일 때 */
+@media (max-width: 480px) {
+  .cart-content {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  .cart-table {
+    display: block;
+    overflow-x: auto; /* 가로 스크롤 허용 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  }
+
+  .cart-table th,
+  .cart-table td {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .count-content .count-box {
+    width: 35px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 0.8rem;
+  }
+
+  .count-content button {
+    padding: 3px 6px;
+    font-size: 0.8rem;
+  }
+
+  .product-img {
+    max-width: 50px; /* 이미지 크기 축소 */
+    max-height: 50px;
+  }
+
+  .but-content p {
+    font-size: 1rem;
+  }
+
+  .but-content table th,
+  .but-content table td {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .but-content + div {
+    flex-direction: column; /* 버튼 세로 정렬 */
+    gap: 8px;
+    justify-content: center; /* 중앙 정렬 */
+  }
+
+  .but-content + div button {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+    width: 100%; /* 버튼 전체 너비 */
+  }
+}
+
+
 
 
 

@@ -452,28 +452,36 @@ export default{
 }
 
 /* 상품 테이블 스타일 */
+.product-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .product-table table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
-.product-table th {
-  background: #f8f9fa;
-  padding: 1rem;
-  text-align: center;
-}
-
+.product-table th,
 .product-table td {
   padding: 1rem;
   text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid #f1f1f1;
+  word-wrap: break-word;
+}
+
+.product-table th {
+  background: #f8f9fa;
+  font-size: 1rem;
 }
 
 .product-info {
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: flex-start; /* 이미지와 텍스트 좌측 정렬 */
 }
 
 .product-info img {
@@ -481,6 +489,12 @@ export default{
   height: 80px;
   object-fit: cover;
   border-radius: 4px;
+}
+
+.product-info .product-name {
+  font-size: 1rem;
+  text-align: left;
+  word-break: break-word; /* 긴 텍스트 줄바꿈 */
 }
 
 /* 배송지 폼 스타일 */
@@ -544,7 +558,7 @@ export default{
 }
 
 .discount-price {
-  color: #2b8a3e;  /* 할인 금액은 초록색으로 표시 */
+  color: #2b8a3e;
 }
 
 .summary-row.total {
@@ -581,63 +595,79 @@ export default{
   background: #E5DCC3;
 }
 
-/* 할인 적용 스타일 */
-.discount-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+/* 반응형 스타일 */
+@media (max-width: 770px) {
+  .content-wrapper {
+    width: 90%;
+    padding: 0 10px;
+  }
 
-.coupon-select select {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: white;
-}
+  .product-table table {
+    font-size: 0.85rem;
+  }
 
-.point-input {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.point-input input {
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.available-point {
-  color: #6c757d;
-  font-size: 0.9rem;
-}
-
-.point-input-group {
-    display: flex;
-    gap: 1rem;
+  .product-info {
+    flex-direction: column;
     align-items: center;
-}
+    gap: 0.5rem;
+  }
 
-.point-input-group input {
-    width: 200px;
-    height: 40px;
-}
+  .product-info img {
+    width: 60px;
+    height: 60px;
+  }
 
-.btn-apply-point {
-    padding: 0.5rem 1rem;
-    height: 40px;
-    background: #F3EFE0;
-    color: #4A4A4A;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    white-space: nowrap;
+  .product-info .product-name {
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+  .btn-order {
+    padding: 0.6rem 1rem;
     font-size: 0.9rem;
-    transition: background-color 0.2s;
+    width: 100%;
+  }
+
+  .zipcode-input {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .zipcode-input input,
+  .btn-search {
+    width: 100%;
+    height: 35px;
+    font-size: 0.85rem;
+  }
 }
 
-.btn-apply-point:hover {
-    background: #E5DCC3;
+@media (max-width: 480px) {
+  .btn-order {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .product-info img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .product-info .product-name {
+    font-size: 0.75rem;
+  }
+
+  .zipcode-input input,
+  .btn-search {
+    height: 30px;
+    font-size: 0.75rem;
+  }
+
+  .product-table table {
+    font-size: 0.75rem;
+  }
 }
+
+
+
+
 </style>

@@ -151,7 +151,6 @@ export default{
 </script>
 
 <style scoped>
-/* 기존 스타일 유지 */
 .mypage-container {
   max-width: 1200px;
   margin: 100px auto 0 auto;
@@ -200,6 +199,12 @@ export default{
   font-size: 1rem;
   margin-top: 20px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #4a4a4a; /* 호버 시 텍스트 색상 */
 }
 
 .user-balance {
@@ -216,7 +221,7 @@ export default{
   padding: 20px;
   border-radius: 10px;
   background-color: #fff;
-  min-width: 150px; /* 최소 크기 지정 */
+  min-width: 150px; /* 최소 크기 */
 }
 
 .balance-item h4,
@@ -234,6 +239,7 @@ export default{
   border-radius: 10px;
   background-color: rgb(249, 249, 249);
   margin-top: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .menu-item {
@@ -242,14 +248,19 @@ export default{
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .menu-item:hover {
-  background-color: #000;
-  color: #fff;
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #4a4a4a; /* 호버 시 텍스트 색상 */
 }
 
 /* Frequent Purchase Section */
+.frequent-purchase-section{
+  margin-top: 100px;
+}
+
 .frequent-purchase-section h2 {
   color: #4a4a4a;
 }
@@ -259,6 +270,7 @@ export default{
   flex-wrap: wrap;
   justify-content: space-around;
   margin-top: 40px;
+  cursor: pointer;
 }
 
 .frequent-item {
@@ -335,7 +347,6 @@ export default{
 
   .frequent-item p {
   font-size: 12px; /* 텍스트 크기 축소 */
-  font-size: 14px;
   white-space: normal;
   overflow: hidden;
 }
@@ -397,6 +408,5 @@ export default{
   text-align: center;
   font-size: calc(10px + 0.4vw); 
 }
-
 }
 </style>

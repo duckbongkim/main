@@ -34,9 +34,9 @@
             <li>
                 <a @click="orderBefore(user.id)"> 주문목록 </a>
             </li>
-            <li>
-                <a @click="orderNow(user.id)"> 주문창(작업중) </a>
-            </li>
+            <!-- <li>
+                <a @click="orderNow(user.id)"> 주문창</a>
+            </li> -->
             <li>
                 <a @click="goRefund()">취소/환불 목록</a>
             </li>
@@ -190,6 +190,12 @@ export default{
   font-size: 1rem;
   margin-top: 20px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #4a4a4a; /* 호버 시 텍스트 색상 */
 }
 
 .user-balance {
@@ -236,20 +242,20 @@ export default{
   background-color: rgb(243, 239, 224);
   border-radius: 10px;
   text-align: center;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
 }
 
 .order-list-ul li:hover {
-  background-color: #000;
+  background-color: #e5dcc3; /* 호버 시 배경색 */
 }
 
 .order-list-ul li:hover a {
-  color: rgb(243, 239, 224);
+  color: #4a4a4a; /* 호버 시 텍스트 색상 */
 }
 
 .order-list-ul li a {
   font-size: 1rem;
-  cursor: pointer;
   display: block;
   text-decoration: none;
   color: #4a4a4a;
