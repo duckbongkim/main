@@ -77,6 +77,19 @@ exports.getSpecificPostReplyList = async (req,res,next)=>{
     }
 }
 
+//특정 상품의 후기 조회
+exports.getSpecificProductReviewList = async (req,res,next)=>{
+    try{
+        const {product_id} = req.params;
+        console.log('product_id',product_id);
+        const reviewList = await Postes.findAll({where:{product_id:product_id},include:{model:Accounts,attributes:['email','nickname']},order:[['created_at','DESC']]});
+        res.status(200).json(reviewList);
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+}
+
 //게시글 수정
 exports.modifyPost = async (req,res,next)=>{
     try{
