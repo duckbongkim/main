@@ -9,9 +9,7 @@ exports.getUsers = async(req,res,next)=>{
     try{
         let sendDatas = {};
         const users = await Accounts.findAll({
-            where:{
-                super_admin:false,
-            },
+            
             attributes:['id','email','password','name','birth','nickname','phone_number','address','addressNumber','addressDetail','delete_time','ratingPoint','savedMoney','created_at','super_admin','rating_id'],
         });
         sendDatas.users = users;

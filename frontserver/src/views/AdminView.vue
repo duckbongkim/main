@@ -40,7 +40,7 @@ export default{
 .container {
   margin-left: 200px;
   margin-top: 90px;
-  width: calc(100% - 200px);
+  width: 100%;
   height: calc(100vh - 90px);
   overflow-y: auto;
   padding: 20px;

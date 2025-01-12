@@ -3,21 +3,25 @@
     <!-- Page content-->
     <div class="container" style="margin-top: 20vh;">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
+            <div class="col-lg-12">
                 
                 <!-- Post content-->
-                <article>
+                <article class="post-article">
                     <!-- Post header-->
                     <header class="mb-4">
                         <!-- Post title-->
                         <h1 class="fw-bolder mb-1">{{postDetail.title}}</h1>
-                        
+                        <!-- 작성자 정보 추가 -->
+                        <p class="text-muted">작성자: {{ postDetail.Account.nickname || '익명' }}</p>
                     </header>
                     
                     <!-- Preview image figure-->
-                    <figure class="mb-4"><img class="img-fluid rounded" :src="`${postDetail.post_image}`" alt="..." /></figure>
+                    <figure class="mb-4">
+                        <img class="img-fluid rounded shadow" :src="`${postDetail.post_image}`" alt="..." />
+                    </figure>
                     <!-- Post content-->
                     <section class="mb-5">
+                        <hr> <!-- 타이틀과 내용을 구별 -->
                         <div v-html="renderedContent" class="fs-5 mb-4 content-reset"></div>
                     </section>
 
@@ -40,7 +44,7 @@
                 </article>
                 <!-- Comments section-->
                 <section class="mb-5">
-                    <div class="card bg-light">
+                    <div class="card bg-light shadow-sm">
                         <div class="card-body">
                             <!-- Comment form-->
                             <form class="mb-4" @submit.prevent="addReply(null)">
@@ -353,6 +357,13 @@ export default{
 </script>
 
 <style scoped>
+.post-article {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .btn-outline-primary.active {
     background-color: #0d6efd;
     color: white;
@@ -387,5 +398,18 @@ export default{
     font-size: 1rem; /* 기본 폰트 크기 설정 */
     line-height: 1.5; /* 기본 줄 간격 설정 */
     /* 필요한 경우 추가 스타일 설정 */
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.shadow-sm {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>

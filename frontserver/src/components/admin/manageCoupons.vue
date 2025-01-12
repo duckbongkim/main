@@ -23,8 +23,8 @@
                     <td>{{coupon.id}}</td>
                     <td>{{coupon.coupon_name}}</td>
                     <td>{{coupon.coupon_discount_rate}}</td>
-                    <td>{{coupon.create_at}}</td>
-                    <td>{{coupon.update_at}}</td>
+                    <td>{{coupon.created_at}}</td>
+                    <td>{{coupon.updated_at}}</td>
                     <td>{{coupon.end_date}}</td>
                     <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifyCouponModal" @click="modifyCoupon(coupon)">수정</button></td>
                     <td><button class="btn btn-danger" @click="deleteCoupon(coupon)">삭제</button></td>
