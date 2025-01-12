@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {getPosts,getSpecificKindPostList,selectedPost,getSpecificPostReplyList,deletePost,uploadPostImage,modifyPost,addPost,addPostLike} = require('../controllers/post/controller_post');
+const {getPosts,getSpecificKindPostList,selectedPost,getSpecificPostReplyList,deletePost,uploadPostImage,modifyPost,addPost,addPostLike,getSpecificProductReviewList} = require('../controllers/post/controller_post');
 const {addReply,deleteReply,modifyReply,addReplyLike} = require('../controllers/reply/controller_reply');
 const {isLoggedIn} = require('../middlewares/middleware_checkLogin');
 const {postUpload} = require('../middlewares/middlewares_imgUpload');
@@ -17,6 +17,10 @@ router.get('/post_detail/:id',selectedPost);
 
 //특정 게시글 좋아요 추가
 router.post('/post_like/:post_id',isLoggedIn,addPostLike);
+
+//특정 상품의 후기 조회
+router.get('/product_review/:product_id',getSpecificProductReviewList);
+
 
 
 
