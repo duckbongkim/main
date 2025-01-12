@@ -103,7 +103,7 @@
         </div>
                 </div>
             </div>
-        </section>
+</section>
 
 
     
@@ -158,6 +158,11 @@ export default{
     },
     watch:{
        
+    },
+    provide(){
+      return{
+        productId: this.$route.params.product_id
+      }
     },
     data(){
         return{

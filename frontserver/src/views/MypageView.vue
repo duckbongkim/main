@@ -87,7 +87,6 @@ export default{
             try{
                 const res = await axios.get(`http://localhost:3000/profile`,{withCredentials:true});
                 this.user = res.data;
-
                 this.frequentItems = {
                   id1:res.data.recently_product_1,
                   id2:res.data.recently_product_2,
@@ -95,7 +94,7 @@ export default{
                   id4:res.data.recently_product_4,
                   id5:res.data.recently_product_5
                 };
-                console.log('this.frequentItems',this.frequentItems);
+
                 await this.sendFrequentItems(this.frequentItems);
                 
             }catch(err){
@@ -106,7 +105,6 @@ export default{
          async getRating(){
             try{
                 const res = await axios.get(`http://localhost:3000/profile/userRating`,{withCredentials:true});
-                console.log(res.data);
                 this.rating = res.data.rating;
             }catch(err){
                 console.error(err);
@@ -134,10 +132,8 @@ export default{
         async sendFrequentItems(frequentItems) {
             try {
                 const queryParams = new URLSearchParams(frequentItems).toString();
-                console.log('queryParams',queryParams);
                 const res = await axios.get(`http://localhost:3000/products/recentlyProductInfo?${queryParams}`, { withCredentials: true });
                 this.frequentItems = res.data.products;
-                console.log('this.frequentItems',this.frequentItems);
             } catch (err) {
                 console.error(err);
             }
