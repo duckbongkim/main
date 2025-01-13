@@ -38,8 +38,11 @@ export default {
 
     };
   },
+  created(){
+this.fetchProductsByType(this.drink_type);
+  },
   mounted() {
-    this.fetchProductsByType(this.drink_type);  
+      
   },
   watch: {
     '$route.query.search'(newSearch) {
