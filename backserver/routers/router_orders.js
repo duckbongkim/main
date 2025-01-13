@@ -211,6 +211,7 @@ router.post('/order', async (req, res, next) => {
             if (!info.count || !info.account_id || !info.product_id || !info.address) {
                 throw new Error("누락된 필수 주문 정보가 있습니다.");
             }
+            await Carts.destroy({where : {id : info.cart_id}})
             await Orders.create({
                 count : info.count,
                 account_id : info.account_id,

@@ -136,7 +136,7 @@
     </div>
 
     <div class="order-button">
-      <button @click="order" class="btn-order">결제하기</button>      
+      <button type="submit" class="btn-order">결제하기</button>      
     </div>
   </form>
 </div>
@@ -356,6 +356,7 @@ export default{
           try {
 
             const orderInfos = this.productInfo.map(product => ({
+              cart_id : product.id, // 주문과 동시에 카트 삭제도 해줘야함
               count : product.count,
               account_id : product.account_id,
               product_id : product.product_id,
