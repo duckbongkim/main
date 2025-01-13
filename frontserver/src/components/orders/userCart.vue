@@ -138,7 +138,7 @@ export default{
                 this.cartedProducts = response.data;
 
                 this.cartedProducts = this.cartedProducts.map(cartedProduct => ({...cartedProduct, selected : true})); // selected 기본값 true
-
+                console.log(`#####################this.cartedProducts${JSON.stringify(this.cartedProducts)}`)
                 // 선택된 제품을 selectedProducts 배열에 넣기
                 this.updateSelectedProduct();
                 //총액 계산

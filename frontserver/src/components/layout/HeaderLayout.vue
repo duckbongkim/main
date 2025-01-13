@@ -13,16 +13,13 @@
                 주류
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" @click="goToMenu('/liqueur')">테스트</a></li>
+                <li><a class="dropdown-item" @click="goToMenu('/liqueur')">모든상품</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/wine')">와인</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>
-                <li><a class="dropdown-item" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button">
-                etc 상품
-              </a>
+              <a class="nav-link dropdown-toggle" href="#" role="button">etc 상품</a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" @click="goToMenu('/etc/wineglass')">와인잔</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/etc/onetherock')">온더락잔</a></li>
