@@ -1,33 +1,35 @@
 <template>
 <div>
-    <!-- 광고형 슬라이드 -->
-    <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark">
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    <section>
+      <!-- 광고형 슬라이드 -->
+      <div id="carouselExampleIndicators" class="carousel slide centered-carousel" data-bs-ride="carousel" data-bs-theme="dark" style="width: 100vw; margin: 0; padding: 0;">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active test">
+            <img src="img\배너2.jpg" class="d-block w-100" alt="01" style="object-fit: cover; width: 100vw; height: 100%;">
+          </div>
+          <div class="carousel-item test">
+            <img src="img\배너3.jpg" class="d-block w-100" alt="02" style="object-fit: cover; width: 100vw; height: 100%;">
+          </div>
+          <div class="carousel-item test">
+            <img src="img\배너4.jpg" class="d-block w-100" alt="03" style="object-fit: cover; width: 100vw; height: 100%;">
+          </div>
+        </div>
+        <button class="carousel-control-prev" data-bs-theme="dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" style="top: 0; bottom: 0; left: 0; width: 5%; background-color: rgba(0, 0, 0, 0.5);">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" style="top: 0; bottom: 0; right: 0; width: 5%; background-color: rgba(0, 0, 0, 0.5);">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
       </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active test">
-            <img src="img\배너2.jpg" class="d-block w-100" alt="01">
-        </div>
-        <div class="carousel-item test">
-          <img src="img\배너3.jpg" class="d-block w-100" alt="02">
-        </div>
-        <div class="carousel-item test">
-          <img src="img\배너4.jpg" class="d-block w-100" alt="03">
-        </div>
-      </div>
-      <button class="carousel-control-prev" data-bs-theme="dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" >
-        <span class="carousel-control-prev-icon test" aria-hidden="true" ></span>
-        <span class="visually-hidden test" >Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-
-    </div>
+    </section>
+    
     <section>
       <!-- 캐러셀 코드 -->
       <v-carousel v-if="mainData.expensive.length > 0" height="400" show-arrows="hover" cycle hide-delimiter-background>
@@ -49,35 +51,40 @@
         </v-carousel-item>
       </v-carousel>
     </section>
+    
     <!-- swiper -->
-
-    <section class="expensive-container"> 
-      
-      <div class="slider expensive-slider">
+    <section>
+      <div class="bar1"></div>
+      <div class="slider">
         <!-- 추천 배너 텍스트 추가 -->
-        
-          <img src="img\배너0.jpg" class="right-image" alt="04" />
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div 
-              class="swiper-slide expensive-slide" 
-              v-for="item in mainData.expensive" 
-              :key="item.id"
-              @click="goProducts(item.id)"
-            >
-              <img :src="item.product_image" alt="Product Image" />
-              <p>{{ item.product_description }}</p>
-              <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
-            </div>
+        <div class="recommendation-banner">높은 가격대 추천</div>
+
+        <!-- 이미지와 swiper를 나란히 배치할 공간 -->
+        <div class="content-wrapper" style="display: flex; align-items: flex-start;">
+          <div class="left-image-container" style="width: 40%; margin-right: 2%;">
+            <img src="img\배너0.jpg" class="right-image" alt="04" style="width: 100%; height: auto; object-fit: cover; border-radius: 15px;">
           </div>
 
-          <!-- Navigation buttons -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-          <!-- Scrollbar -->
-          <div class="swiper-scrollbar"></div>
+          <div class="swiper-container" style="width: 58%;">
+            <div class="swiper-wrapper">
+              <div 
+                class="swiper-slide" 
+                v-for="item in mainData.expensive" 
+                :key="item.id"
+                @click="goProducts(item.id)"
+                style="display: flex; flex-direction: column; align-items: center; padding: 10px;">
+                <img :src="item.product_image" alt="Product Image" style="width: 100%; height: auto; border-radius: 10px;">
+                <p style="margin: 10px 0;">{{ item.product_description }}</p>
+                <strong>{{ item.product_name }} -</strong> <strong>{{ item.product_price }}원</strong>
+              </div>
+            </div>
+            <!-- Navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <!-- Scrollbar -->
+            <div class="swiper-scrollbar"></div>
+          </div>
         </div>
-
       </div>
     </section>
 
@@ -165,7 +172,7 @@ export default{
           'Third',
           'Fourth',
           'Fifth',
-      ],
+        ],
         watch: {
         'mainData.expensive': {
           handler() {
@@ -278,6 +285,11 @@ export default{
 <style>
   /* body부분 - 캐러셀 */
   /* 기본 캐러셀 스타일 */
+  .carousel-indicators {
+    width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
+    margin: 0; /* 양옆 여백 제거 */
+    padding: 0; /* 양옆 패딩 제거 */
+  } 
   .carousel-item img {
     width: 100%; /* 이미지를 캐러셀 아이템 너비에 맞춤 */
     height: 500px; /* 높이는 자동으로 조절 */
@@ -340,13 +352,6 @@ export default{
     object-fit: contain;
 
   }
-  #carouselExampleIndicators {
-    width: 100%; /* 캐러셀 컨테이너 너비를 100%로 설정 */
-    margin: 0; /* 양옆 여백 제거 */
-    padding: 0; /* 양옆 패딩 제거 */
-  }
-
-
   /* expensive-content */
   .expensive-container {
     width:100%;
