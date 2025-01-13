@@ -143,7 +143,7 @@
     </div>
 
     <div class="order-button">
-      <button type="submit" class="btn-order">결제하기</button>
+      <button type="submit" class="btn-order">결제하기</button>      
     </div>
   </form>
 </div>
@@ -187,13 +187,7 @@ export default{
             addressDetail:'',
             zipCode:'',
             productInfo :[],
-            //{"id":37,"count":2,"total_price":5580000,"createdAt":"2025-01-09T08:21:30.000Z","updatedAt":"2025-01-09T08:34:15.000Z","account_id":4,"product_id":4,
-            //"Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"},
-            //"selected":true}
 
-            //orderInfo:[],
-
-            numberOfProducts : 0,
             finalTotalPrice: 0,
             deliveryFee : 10,
             user:{},
@@ -201,6 +195,7 @@ export default{
             selectedCoupon:null,
             tempUsePoint: 0,
             usePoint: 0,
+
             originalTotalPrice: 0,
             totalPaymentAmount: 0,
             postcode:null,
@@ -217,6 +212,7 @@ export default{
     mounted(){
         // 쿼리 선별 코드
         // 들어오는 쿼리에 따라 다른 파라메터를 넣어 같은 함수를 실행시키는 코드
+
         if(this.$route.query.productInfoQuery){
             this.getProductInfo('productInfoQuery');
             
@@ -226,12 +222,14 @@ export default{
         }else {
             console.error("주문할 제품 정보(쿼리)를 받지 못합니다.")
         }
+        
 
         
 
     },
     unmounted(){},
     methods:{
+
         //총액 계산 함수
         total_products(){
             this.numberOfProducts= this.productInfo.length
@@ -272,7 +270,7 @@ export default{
                     //console.log(`############################${JSON.stringify(this.productInfo)}`)
                 }else if(query === 'orderingInfoQuary') {
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
-                    const response = await axios.get(`http://localhost:3000/orders/order/${InfoFromProductView}`);
+                    const response = await axios.get(`http://localhost:3000/orders/ordering/${InfoFromProductView}`);
                     this.productInfo = [response.data];
                 }
                 //총액 계산

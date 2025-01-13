@@ -6,7 +6,11 @@ const Carts = require ('../models/model_buckets');
 const Products = require ('../models/model_products');
 const Wishes = require ('../models/model_wishes');
 const Orders = require ('../models/model_orders');
+
+const OrderStatuses = require('../models/model_orderStatuses');
+const {Op} = require('sequelize');
 const {modifyOrder, cancelOrder} = require('../controllers/admin/controller_order');
+
 // http://localhost:3000/orders
 
 
@@ -79,11 +83,11 @@ router.post('/wish', async (req, res, next) =>{
 // user의 wish에 있는 product id를 찾고, 해당 id에 맞는 product data를 프론트로 던지기
 router.get('/wish/:userid', async (req, res, next) => {
     try{
-        //1. user의 wish DB의 product id를 찾기
+        //1. user의 wish DB 가져오기기
         const {userid} = req.params;
         const userWishes = await Wishes.findAll({where : {account_id : userid}});// userid에 해당하는 wishes 객체 모두 불러오기
         
-        //2. product id와 일치하는 product data를 front에 전달.
+        //2. 거기서 product id 뽑고, 일치하는 product data를 front에 전달.
         const productPromises = userWishes.map(async (userWish) => {
             return await Products.findOne({where : {id : userWish.product_id}}) 
             // 모든 Wishes 객체와 연계된 product객체를 찾기. (map 함수 :각 배열의 요소에 함수를 적용하여 새로운 배열 반환.)
@@ -182,7 +186,7 @@ router.delete('/cart', async (req, res, next) =>{
 })
 
 // MAKE ordering List FROM product view
-router.get('/order/:infoFromProductView', async (req, res, next)=>{
+router.get('/ordering/:infoFromProductView', async (req, res, next)=>{
     try{
         const {infoFromProductView} = req.params; //{"id":9,"count":1}
         const parsedInfo = JSON.parse(infoFromProductView);
@@ -197,21 +201,24 @@ router.get('/order/:infoFromProductView', async (req, res, next)=>{
 
 // Order CREATE
 router.post('/order', async (req, res, next) => {
+    let transaction; // transaction 변수를 try-catch 블록 외부에서 선언
     try {
-        const {orderInfos} = req.body;
-        console.log(`##########################orderInfo${orderInfos}`);
+        const orderInfos = req.body;
+        console.log(`##########################orderInfoBACK${JSON.stringify(orderInfos)}`);
 
-        const transaction = await Orders.sequelize.transaction(); 
+        transaction = await Orders.sequelize.transaction(); 
         // 트랜잭션은 모든작업이 성공적으로 완료되면 커밋하고, 실패 시 롤백
 
         for(const info of orderInfos){
             if (!info.count || !info.account_id || !info.product_id || !info.address) {
                 throw new Error("누락된 필수 주문 정보가 있습니다.");
             }
+            await Carts.destroy({where : {id : info.cart_id}})
             await Orders.create({
                 count : info.count,
                 account_id : info.account_id,
                 product_id : info.product_id,
+
                 address : info.address,              
                 addressDetail : info.addressDetail,
                 addressNumber : info.addressNumber,
@@ -224,7 +231,66 @@ router.post('/order', async (req, res, next) => {
         res.status(201).json({ message: "모든 주문이 성공적으로 처리되었습니다." });
         
     }catch(err){
-        await transaction.rollback()
+        if (transaction) {
+            await transaction.rollback(); 
+        }
+        console.error(err);
+        next(err);
+    }
+})
+
+//Order READ
+router.get('/order/:userid', async (req, res, next) => {
+    try {
+        const {userid} = req.params;
+
+        console.log(`################백userid: ${userid}`);
+        const orderList = await Orders.findAll(
+            {where : {account_id : userid},
+            include : [
+                {model:Products, attributes : ['product_name', 'product_image', 'product_price']},
+                {model: OrderStatuses, attributes : ['status']},
+            ]
+        }); 
+        console.log(`################백userid: ${JSON.stringify(orderList)}`);
+
+        res.status(200).json(orderList);
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+})
+
+//Order UPDATE
+router.patch('/cancelledOrder/:userid', async (req, res, next) => {
+    try{
+        const {cancelingOrderId} = req.body;
+
+        await Orders.update ({status_id : 6, updateted_at : new Date()}, {where : {id : cancelingOrderId }});
+        res.status(200).json()
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+})
+
+
+
+//Order - cancelled READ
+router.get('/cancelledOrder/:userid', async (req, res, next) => {
+    try {
+        const {userid} = req.params;
+
+        console.log(`################백userid: ${userid}`);
+        const orderList = await Orders.findAll(
+            {where : {account_id : userid},
+            include : [{model:Products, attributes : ['product_name', 'product_image', 'product_price']},{model: OrderStatuses, attributes : ['status', 'id']},
+            ],
+        }); 
+        console.log(`################백orderList: ${JSON.stringify(orderList)}`);
+
+        res.status(200).json(orderList);
+    }catch(err){
         console.error(err);
         next(err);
     }
