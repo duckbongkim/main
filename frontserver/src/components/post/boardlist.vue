@@ -5,9 +5,9 @@
       <div class="d-flex flex-column align-items-end mb-4">
         <div class="search-container d-flex justify-content-end mb-3">
           <input v-model="searchQuery" type="text" placeholder="검색" class="form-control form-control-sm me-2">
-          <button @click="handleSearch" class="btn btn-primary btn-sm" style="width: 80px;">검색</button>
+          <button @click="handleSearch" class="btn btn-sm" style="width: 80px;">검색</button>
         </div>
-        <button @click="goToAddPost" class="btn btn-primary btn-sm mt-2" style="width: 80px;">
+        <button @click="goToAddPost" class="btn btn-sm mt-2" style="width: 80px;">
           글쓰기
         </button>
       </div>
@@ -221,6 +221,17 @@ export default {
 .btn-sm {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
+  border-radius: 5px;
+  background-color: rgb(243, 239, 224); /* 기본 배경색 */
+  color: #4A4A4A; /* 텍스트 색상 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-sm:hover{
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #4A4A4A; /* 텍스트 색상 유지 */
 }
 
 .container {
@@ -235,42 +246,48 @@ export default {
 }
 
 .pagination {
+  display: flex;
+  justify-content: center;
   margin-top: 20px;
+  list-style: none;
+  padding: 0;
 }
 
-.page-link {
-  color: #007bff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.page-link:active {
-  background-color: #e3f2fd;
-  border-color: #90caf9;
-  color: #1976d2;
-}
-
-.page-link:focus {
-  box-shadow: none;
-  outline: none;
-}
-
-.page-item.active .page-link {
-  background-color: #e3f2fd;
-  border-color: #90caf9;
-  color: #1976d2;
-  font-weight: bold;
-}
-
-.page-link:hover {
-  background-color: #f5f9ff;
-  border-color: #90caf9;
-  color: #1976d2;
+.page-item {
+  margin: 0 5px;
 }
 
 .page-item.disabled .page-link {
-  color: #6c757d;
-  pointer-events: none;
-  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.page-item.active .page-link {
+  background-color: #f3efe0; /* 기존 버튼 배경색 */
+  color: #4a4a4a; /* 기존 버튼 텍스트 색상 */
+  border-color: #f3efe0;
+  font-weight: bold;
+}
+
+.page-link {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #fff; /* 기본 버튼 배경색 */
+  color: #4a4a4a; /* 기본 텍스트 색상 */
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.page-link:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
+}
+
+.page-item.active .page-link:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
 }
 </style>
