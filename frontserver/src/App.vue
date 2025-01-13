@@ -31,8 +31,8 @@ span{
 }
 
 .container {
+  margin-top: 200px;
   width: 100%;
-  margin-top: 90px;
 }
 </style>
 

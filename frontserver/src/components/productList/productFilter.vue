@@ -7,13 +7,29 @@
     
 
     <h1>상품 목록</h1>
-    <div v-for="product in filteredProducts" :key="product.id" class="product-card">
-      <router-link :to="'/products/' + product.id">
-        <h3>{{ product.product_name }}</h3>
-        <p>{{ product.product_description }}</p>
-        <p>{{ product.drink_type }}</p>
-        <p>{{ product.product_price }}원</p>
-      </router-link>
+    
+    <div v-if="filteredProducts && filteredProducts.length">
+      <div v-for="product in filteredProducts" :key="product.id" class="product-card" @click="goProducts(product.id)" >
+        <img :src="product.product_image" :alt="product.name" />
+        <div class="product-details">
+          <div class="tags">
+            <p v-if="product.isTagged" class="recommended-badge">👍추천상품</p>
+            <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
+          </div>
+          <h2 class="product-title">{{ product.product_name }}</h2>
+          <p class="product-price">{{ product.product_price }} 원</p>
+        <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
+         <div class="product-actions">
+          <button @click.stop="addWish(product)">
+            <i class="fas fa-heart"></i> 
+          </button>
+          <button @click.stop="addCarts(product)">
+            <i class="fas fa-shopping-cart"></i> 
+          </button>
+        </div>
+        
+        </div>
+      </div>
     </div>
 
     <div v-if="noResultsMessage" class="no-results">
@@ -63,6 +79,7 @@ export default {
         console.log('서버에서 받은 데이터:', response.data);
         this.products = response.data;
         this.filteredProducts = this.products;  // 처음에는 모든 상품을 표시
+        console.log('데이터 가져오기',response)
       } catch (error) {
         console.error('상품을 불러오는 데 실패했습니다.', error);
       }

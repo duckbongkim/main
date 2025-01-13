@@ -52,7 +52,7 @@
     </section> -->
 
 
-<!-- 새로운 디자인 추가 1월 11일 동진-->
+<!-- 반응형 템플릿으로 변경 1월 11일 동진-->
 <section class="py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center">
@@ -127,7 +127,7 @@
 
 
 <!-- 추천상품 -->
-<section class="recomend-section">
+<!-- <section class="recomend-section">
     <h3> ##어떤걸 추천해줄지 정해야합니다## // 1월1일 현재 기능만 구현한 상태(동진)</h3>
     <div class="recomend-container">
         <div v-for="pro in recommendProduct" :key="pro.id" class="recomend-product">
@@ -139,6 +139,35 @@
 
         </div>
     </div>
+</section> -->
+
+
+<!-- recommend-section 반응형으로 수정 1월 12일 동진 추가 -->
+<section class="py-5 border-top border-bottom">
+
+            <div class="container px-4 px-lg-5 mt-5 recommend-container">
+                <h2 class="fw-bolder mb-4 fs-3">이런 상품은 어떠세요?</h2>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    
+                    <div class="col mb-5" v-for="pro in recommendProduct" :key="pro.id" @click="reRendRecommend(pro.id)">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" :src="pro.product_image" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">{{pro.product_name}}</h5>
+                                    <!-- Product price-->
+                                    {{pro.product_price.toLocaleString()}} 원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
 </section>
 
 <productInfoVue :product="selectedProduct"/>
@@ -292,7 +321,6 @@ export default{
                 
                 const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
                 if(response.status == 201) {
-                    console.log(response.data.message);
                     alert("찜 리스트에 추가되었습니다.");
                 }
             } catch(err) {
@@ -557,78 +585,49 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* 추천상품 */
 
-.recomend-section{
-    width: 100%;
-    margin: 50px 0;
+/* 추천상품 섹션 */
+.recommend-container{
+    cursor: pointer;
 }
 
-.recomend-section h3 {
-    width: 40%;
-    padding: 20px 0;
-    margin: 0 auto;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-}
-
-.recomend-container{
-    display: flex;
-    justify-content: center;
-    gap: 3%;
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px 0;
-
-}
-
-.recomend-product {
-    width: 25%;
-    text-align: center;
-}
-
-.recomend-product p {
-    margin-bottom: 0;
-    padding: 5px 0 5px 0;
-    font-size: 1em;
-    font-weight: 600;
-}
-
-
-/* .recoment-product ul li {
+.card {
+    height: 100%; /* 카드 높이를 자동으로 조정 */
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-} */
-
-.recomend-product a {
-    display: block;
-    font-style: normal;
-    text-decoration: none;
-    color: #000;
 }
 
-.recomend-img{
-    height: auto;
-    width: 30%;
-    object-fit: cover;
+.card-img-top {
+    width: 100%; /* 이미지의 폭을 카드에 맞춤 */
+    height: 300px; /* 이미지 높이 고정 */
+    object-fit: contain; /* 이미지가 카드 영역에 맞게 자름 */
 }
 
-.recoment-name {
-    font-size: 0.9em;
-    font-weight: bold;
-    margin: 0 auto 0 auto;
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
     text-align: center;
-    width: fit-content;
-    
+    height: 150px; /* 내용부 고정 높이 */
 }
 
-.recoment-price{
-    font-size: 0.9em;
+.card-body h5 {
+    font-size: 1rem; /* 상품 이름 폰트 크기 */
     font-weight: bold;
-    margin: 0 auto 0 auto;
-    text-align: center;
-    width: fit-content;
+    margin: 0; /* 간격 제거 */
+    padding-bottom: 10px;
 }
+
+.card-body p {
+    font-size: 0.9rem; /* 상품 가격 폰트 크기 */
+    margin: 0; /* 간격 제거 */
+}
+
+
+
 
 
 

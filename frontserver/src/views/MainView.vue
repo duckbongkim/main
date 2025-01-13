@@ -313,6 +313,7 @@ export default{
 </script>
 
 <style>
+
   .div1 {
     margin-top: 100px;
   }
