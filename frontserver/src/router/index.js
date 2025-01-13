@@ -5,7 +5,7 @@ import AdminView from '../views/AdminView.vue'
 import ProductView from '../views/ProductView.vue'
 import MypageView from '../views/MypageView.vue'
 import OrderView from '../views/OrderView.vue'
-import productList from '../components/list/productList.vue';
+import productList from '../components/productList/productFilter.vue';
 import PostListView from '../views/PostListView.vue'
 import testView from '../views/testView.vue'
 import modifyUser from '../views/ModifyUserView.vue';
@@ -24,6 +24,11 @@ const routes = [
     path: '/products/:product_id', //products에서 products/:product_id로 변경 (25,1,1 동진)
     name: 'products',
     component: ProductView
+  },
+  {
+    path: '/products/review/:product_id',
+    name: 'review',
+    component: () => import('../views/post/AddOrModifyPostView.vue')
   }, 
   {
     path: '/createAccount', 
@@ -55,9 +60,14 @@ const routes = [
     ]
   },
   {
+    path: '/etc/:product_kind',
+    name: 'etc',
+    component: () => import('../components/etc/productsETC.vue')
+  },
+  {
     path: '/liqueur',
     name: 'liqueur',
-    component: () => import('../components/list/productAll.vue')
+    component: () => import('../components/productList/productAll.vue')
   },
   {
     path: '/liqueur/:drink_type', // 상품리스트 임시용
@@ -191,92 +201,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "finalOrder" */ '../views/FinalOrderView.vue')
   },
 
-  // 2025-01-02 김우진 nav바에서 주류사이트로 이동이 가능하게 components에 test를 만들어서 연결 시켰습니다.성공!!
-  // {
-  //   path:'/liqueur',
-  //   name:'liqueur',
-  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/liqueur.vue')
-
-  // },
-  // {
-  //   path:'/whiskey',
-  //   name:'whiskey',
-  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/whiskey.vue')
-
-  // },
-  // {
-  //   path:'/wine',
-  //   name:'wine',
-  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/wine.vue')
-
-  // },
-  // {
-  //   path:'/traditional',
-  //   name:'traditional',
-  //   component: () => import(/* webpackChunkName: "about" */ '../components/liqueurs/traditional.vue')
-
-  // },
-  // 2025-01-03 김우진 여기는 etc상품 이동 라우터 입니다.
-  {
-    path:'/glass',
-    name:'glass',
-    component: () => import(/* webpackChunkName: "about" */ '../components/etc/glass.vue')
-
-  },
-  {
-    path:'/holder',
-    name:'holder',
-    component: () => import(/* webpackChunkName: "about" */ '../components/etc/holder.vue')
-
-  },
-  {
-    path:'/opener',
-    name:'opener',
-    component: () => import(/* webpackChunkName: "about" */ '../components/etc/opener.vue')
-
-  },
-  {
-    path:'/ontherocks',
-    name:'ontherocks',
-    component: () => import(/* webpackChunkName: "about" */ '../components/etc/ontherocks.vue')
-
-  },
-  {
-    path:'/straight',
-    name:'straight',
-    component: () => import(/* webpackChunkName: "about" */ '../components/etc/straight.vue')
-
-  },
-  {
-    path:'/decanter',
-    name:'decanter',
-    component: () => import(/* webpackChunkName: "about" */ '../components/etc/decanter.vue')
-
-  },
   {
     path: '/test',
     name: 'test',
     component: testView
   }, // startbootstrap 테스트 위해 1월 5일 동진
   
-
-
-
-
-
-
-
-
-
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
-
 ]
 
 const router = createRouter({

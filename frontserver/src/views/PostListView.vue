@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="div1">
       <div class="nav-container">
         <Navbar></Navbar> 
       </div>
@@ -25,6 +25,8 @@
   </script>
   
   <style scoped>
+  
+
   .nav-container {
     position: relative;
   }

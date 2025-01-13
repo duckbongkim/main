@@ -5,9 +5,9 @@
       <h1>주문/결제</h1>
       <div class="order-steps">
         <span class="step completed">장바구니</span>
-        <span class="step-arrow">></span>
+        <span class="step-arrow"></span>
         <span class="step active">주문/결제</span>
-        <span class="step-arrow">></span>
+        <span class="step-arrow"></span>
         <span class="step">주문완료</span>
       </div>
     </div>
@@ -97,6 +97,10 @@
           <label>상세 주소</label>
           <input type="text" v-model="addressDetail" placeholder="상세주소" required>
         </div>
+        <div class="form-group">
+          <label>배송메세지</label>
+          <input type="text" v-model="orderMessage" placeholder="배송메세지">
+        </div>
       </div>
     </div>
 
@@ -166,11 +170,16 @@ export default{
     },
     data(){
         return{
-            orderList:[],
             address:'',
             addressDetail:'',
             zipCode:'',
             productInfo :[],
+            //{"id":37,"count":2,"total_price":5580000,"createdAt":"2025-01-09T08:21:30.000Z","updatedAt":"2025-01-09T08:34:15.000Z","account_id":4,"product_id":4,
+            //"Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"},
+            //"selected":true}
+
+            //orderInfo:[],
+
             numberOfProducts : 0,
             finalTotalPrice: 0,
             deliveryFee : 3000,
@@ -195,6 +204,7 @@ export default{
         // 들어오는 쿼리에 따라 다른 파라메터를 넣어 같은 함수를 실행시키는 코드
         if(this.$route.query.productInfoQuery){
             this.getProductInfo('productInfoQuery');
+            
         // orderingInfoQuary가 있으면, 문자열 'orderingInfoQuary'를 넣어서 함수 실행
         }else if (this.$route.query.orderingInfoQuary){
             this.getProductInfo('orderingInfoQuary');
@@ -244,16 +254,40 @@ export default{
             try{
                 if(query === 'productInfoQuery'){
                     this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
+                    //console.log(`############################${JSON.stringify(this.productInfo)}`)
                 }else if(query === 'orderingInfoQuary') {
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
                     const response = await axios.get(`http://localhost:3000/orders/order/${InfoFromProductView}`);
                     this.productInfo = [response.data];
+                    
                 }
                 //총액 계산
                 this.calculateTotal()
             }catch(err){
                 console.error(err);
             }
+        },
+
+
+        // Order CREATING
+        async order(){
+          try {
+            const orderInfos = this.productInfo.map(product => ({
+              count : product.count,
+              account_id : product.account_id,
+              product_id : product.product_id,
+
+              address : this.address,              
+              addressDetail : this.addressDetail,
+              addressNumber : this.zipCode,
+              orderMessage : this.orderMessage,
+            }));
+            console.log(`################orderInfos:${JSON.stringify(orderInfos)}`);
+            await axios.post(`http://localhost:3000/orders/order`, orderInfos);
+            
+          }catch(err){
+            console.error(err);
+          }
         },
         //유저도 가져와야 해
         async getUser(){
@@ -407,7 +441,7 @@ export default{
   border-radius: 10px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .section-title {
@@ -418,9 +452,15 @@ export default{
 }
 
 /* 상품 테이블 스타일 */
+.product-table {
+  overflow-x: auto; /* 작은 화면에서 가로 스크롤 허용 */
+  width: 100%;
+}
+
 .product-table table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px; /* 작은 화면에서 테이블 최소 너비 설정 */
 }
 
 .product-table th {
@@ -434,6 +474,8 @@ export default{
   text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid #f1f1f1;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  word-break: keep-all; /* 단어가 잘리지 않도록 설정 */
 }
 
 .product-info {
@@ -447,6 +489,12 @@ export default{
   height: 80px;
   object-fit: cover;
   border-radius: 4px;
+}
+
+.product-info .product-name {
+  text-align: left;
+  font-size: 1rem;
+  word-break: break-word; /* 긴 텍스트 줄바꿈 */
 }
 
 /* 배송지 폼 스타일 */
@@ -474,11 +522,21 @@ export default{
 
 .zipcode-input {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap; /* 작은 화면에서 줄바꿈 허용 */
+  gap: 0.5rem;
 }
 
-.btn-search {
-  padding: 0.8rem 1.5rem;
+.zipcode-input input {
+  flex: 1;
+  min-width: 150px;
+}
+
+.zipcode-input button {
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+  white-space: nowrap;
+  padding: 0.8rem;
   background: #F3EFE0;
   color: #4A4A4A;
   border: none;
@@ -487,7 +545,7 @@ export default{
   transition: background-color 0.2s;
 }
 
-.btn-search:hover {
+.zipcode-input button:hover {
   background: #E5DCC3;
 }
 
@@ -510,7 +568,7 @@ export default{
 }
 
 .discount-price {
-  color: #2b8a3e;  /* 할인 금액은 초록색으로 표시 */
+  color: #2b8a3e; /* 할인 금액은 초록색으로 표시 */
 }
 
 .summary-row.total {
@@ -540,11 +598,12 @@ export default{
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
 .btn-order:hover {
   background: #E5DCC3;
+  transform: scale(1.05);
 }
 
 /* 할인 적용 스타일 */
@@ -580,30 +639,84 @@ export default{
 }
 
 .point-input-group {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .point-input-group input {
-    width: 200px;
-    height: 40px;
+  width: 200px;
+  height: 40px;
 }
 
 .btn-apply-point {
-    padding: 0.5rem 1rem;
-    height: 40px;
-    background: #F3EFE0;
-    color: #4A4A4A;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    white-space: nowrap;
-    font-size: 0.9rem;
-    transition: background-color 0.2s;
+  padding: 0.5rem 1rem;
+  height: 40px;
+  background: #F3EFE0;
+  color: #4A4A4A;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
 }
 
 .btn-apply-point:hover {
-    background: #E5DCC3;
+  background: #E5DCC3;
 }
+
+/* 반응형 설계 */
+/* 화면 너비가 768px 이하일 때 */
+@media (max-width: 768px) {
+  .zipcode-input {
+    flex-direction: column; /* 버튼이 세로로 배치 */
+  }
+
+  .product-info {
+    flex-direction: column; /* 이미지와 텍스트를 세로로 정렬 */
+    align-items: center;
+  }
+
+  .product-info img {
+    width: 60px; /* 이미지 크기 축소 */
+    height: 60px;
+  }
+
+  .product-info .product-name {
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .product-table th,
+  .product-table td {
+    font-size: 0.85rem; /* 텍스트 크기 축소 */
+  }
+
+  .btn-order {
+    padding: 0.6rem 2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* 화면 너비가 480px 이하일 때 */
+@media (max-width: 480px) {
+  .product-table table {
+    min-width: 400px; /* 최소 너비 축소 */
+  }
+
+  .btn-order {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .content-wrapper {
+    width: 95%;
+    padding: 0 10px;
+  }
+}
+
+
+
+
 </style>

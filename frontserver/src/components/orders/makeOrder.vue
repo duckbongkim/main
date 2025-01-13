@@ -19,8 +19,8 @@
                             <td><img :src="info.Product.product_image"></td>
                             <td>{{info.Product.product_name}}</td>
                             <td>{{info.count}}</td>
-                            <td>{{info.Product.product_price}}</td>
-                            <td>{{info.count * info.Product.product_price}}</td>
+                            <td>{{info.Product.product_price.toLocaleString()}}</td>
+                            <td>{{info.count * info.Product.product_price.toLocaleString()}}</td>
                         </tr>
                     </tbody>
                 </table>

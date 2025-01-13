@@ -24,8 +24,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(post, index) in posts" :key="post.id">
-              <td>{{ index + 1 }}</td>
+            <tr v-for="(post, index) in paginatedPosts" :key="post.id">
+              <td>{{ calculatePostNumber(index) }}</td>
               <td>
                 <router-link :to="`/post/post_detail/${post.id}`" class="text-decoration-none text-dark">
                   {{ post.title }}
@@ -39,6 +39,19 @@
           </tbody>
         </table>
       </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" :class="{ disabled: currentPage === 1 }">
+            <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
+          </li>
+          <li class="page-item" v-for="page in displayedPages" :key="page" :class="{ active: page === currentPage }">
+            <a class="page-link" href="#" @click.prevent="currentPage = page">{{ page }}</a>
+          </li>
+          <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+            <a class="page-link" href="#" @click.prevent="currentPage++">다음</a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </template>
@@ -47,16 +60,51 @@
 import axios from 'axios';
 
 export default {
+  computed:{
+    paginatedPosts() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.posts.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.posts.length / this.itemsPerPage);
+    },
+    displayedPages() {
+      const pages = [];
+      let start, end;
+      
+      if (this.totalPages <= 3) {
+        start = 1;
+        end = this.totalPages;
+      } else {
+        if (this.currentPage === 1) {
+          start = 1;
+          end = 3;
+        } else if (this.currentPage === this.totalPages) {
+          start = this.totalPages - 2;
+          end = this.totalPages;
+        } else {
+          start = this.currentPage - 1;
+          end = this.currentPage + 1;
+        }
+      }
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+  },
   data(){
     return{
       posts: [],
       originalPosts:[],
       searchQuery: '',
       isLogin:false,
+      currentPage: 1,
+      itemsPerPage: 10,
     };
 
-  },
-  computed:{
   },
   setup(){},
   created(){
@@ -93,7 +141,7 @@ export default {
                 const query = this.searchQuery.toLowerCase();
                 filteredPosts = filteredPosts.filter(post => 
                     (post.title?.toLowerCase() || '').includes(query) ||
-                    (post.content?.toLowerCase() || '').includes(query) ||
+                    (post.post_content?.toLowerCase() || '').includes(query) ||
                     (post.post_kind?.toLowerCase() || '').includes(query) ||
                     (post.Account.nickname?.toLowerCase() || '').includes(query)
                 );
@@ -109,6 +157,9 @@ export default {
         this.$router.push('/login');
       }
     },
+    calculatePostNumber(index) {
+      return (this.currentPage - 1) * this.itemsPerPage + index + 1;
+    }
   },
   watch:{
     '$route.params.post_kind':'boardList'
@@ -202,5 +253,45 @@ h3 {
   color: #007bff !important;
   text-decoration: underline !important;
   cursor: pointer;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+
+.page-link {
+  color: #007bff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-link:active {
+  background-color: #e3f2fd;
+  border-color: #90caf9;
+  color: #1976d2;
+}
+
+.page-link:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.page-item.active .page-link {
+  background-color: #e3f2fd;
+  border-color: #90caf9;
+  color: #1976d2;
+  font-weight: bold;
+}
+
+.page-link:hover {
+  background-color: #f5f9ff;
+  border-color: #90caf9;
+  color: #1976d2;
+}
+
+.page-item.disabled .page-link {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #f8f9fa;
 }
 </style>
