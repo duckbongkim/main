@@ -153,7 +153,7 @@ export default{
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
-  z-index: 1000; /* 다른 요소 위에 표시되도록 설정 */
+  z-index: 1000; 
 }
 
 .navbar-brand {
@@ -178,20 +178,20 @@ export default{
 .nav-link:hover {
   color: #007bff;
 }
-
+/* 1월 13일 동진 추가 */
 .dropdown-item {
   padding: 0.5rem 1rem;
-  background-color: transparent; /* 기본 배경 투명 */
-  color: #4a4a4a; /* 기본 텍스트 색상 */
+  background-color: transparent; 
+  color: #4a4a4a; 
   transition: all 0.3s ease;
-  border-radius: 5px; /* 부드러운 모서리 */
+  border-radius: 5px; 
   cursor: pointer;
 }
-
+/* 1월 13일 동진 추가 */
 .dropdown-item:hover,
 .dropdown-item:active {
-  background-color: rgb(243, 239, 224); /* 클릭/호버 시 버튼 배경색 */
-  color: #4a4a4a; /* 텍스트 색상 */
+  background-color: rgb(243, 239, 224); 
+  color: #4a4a4a; 
 }
 
 .icon {

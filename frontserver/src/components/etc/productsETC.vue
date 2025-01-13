@@ -113,7 +113,8 @@ export default {
       itemsPerPage: 15,  
       searchQuery: '',  
       filteredProducts: [], 
-      noResultsMessage: '',  
+      noResultsMessage: '',
+      orderQuantity:1,
 
     };
   },
