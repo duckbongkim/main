@@ -1,3 +1,10 @@
+CREATE TABLE `OrderStatuses` (
+    `id` INT NOT NULL PRIMARY KEY,
+    `status` VARCHAR(50) NOT NULL,
+    UNIQUE KEY `status_UNIQUE` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
 INSERT INTO `OrderStatuses` (`id`, `status`) VALUES
     (1, '주문 접수'),
     (2, '결제 완료'),

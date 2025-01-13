@@ -8,13 +8,13 @@
   </div>
 </template>
 
-<script>//////더미 확인을 위해 컴포넌트들 주석처리@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//import HeaderLayout from '@/components/layout/HeaderLayout.vue'
-//import FooterLayout from '@/components/layout/FooterLayout.vue'
+<script>
+import HeaderLayout from '@/components/layout/HeaderLayout.vue'
+import FooterLayout from '@/components/layout/FooterLayout.vue'
   export default{
     components:{
-        //'HeaderLayout':HeaderLayout,
-        //'FooterLayout':FooterLayout,
+        'HeaderLayout':HeaderLayout,
+        'FooterLayout':FooterLayout,
     }
   }
 </script>

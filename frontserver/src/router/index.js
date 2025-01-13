@@ -183,19 +183,19 @@ const routes = [
         name:'wish',
         component: () => import(/* webpackChunkName: "orders" */ '../components/orders/userWishes.vue')
       },
-
+      {
+        path:'/order/:userId',
+        name:'order',
+        component: () => import(/* webpackChunkName: "orders" */ '../components/orders/orderList.vue')
+      },
+      {
+        path:'/cancelledOrder/:userId',
+        name:'cancelledOrder',
+        component: () => import(/* webpackChunkName: "orders" */ '../components/orders/cancelledList.vue')
+      },
     ]
   },
-  {
-    path:'/order/:userId',
-    name:'order',
-    component: () => import(/* webpackChunkName: "orders" */ '../components/orders/orderList.vue')
-  },
-  {
-    path:'/cancelledOrder/:userId',
-    name:'cancelledOrder',
-    component: () => import(/* webpackChunkName: "orders" */ '../components/orders/cancelledList.vue')
-  },
+
   {
     path:'/finalOrder/:userId',
     name:'finalOrder',

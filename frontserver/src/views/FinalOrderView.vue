@@ -136,7 +136,6 @@
     </div>
 
     <div class="order-button">
-      <button @click="dummy" class="btn-order">더미함수실행행</button>
       <button @click="order" class="btn-order">결제하기</button>      
     </div>
   </form>
@@ -174,41 +173,17 @@ export default{
             address:'',
             addressDetail:'',
             zipCode:'',
-            productInfo :[{
-              id: 37,
-              count: 2,
-              account_id: 1, // /:userid로 적용해야함함
-              product_id: 4,
-              Product: {
-                product_name: "달모어 25년 700ml",
-                product_price: 2790000,
-                product_image: "http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"
-              },
-              selected: true
-            },
-            {
-              id: 38,
-              count: 1,
-              account_id: 1,////더미아이디, /:userid로 적용해야함함
-              product_id: 1,
-              Product: {
-                product_name: "산토리 히비끼 30년",
-                product_price: 12000000,
-                product_image: "http://www.kajawine.kr/data/item/1499736192/7IKw7Yag66as7Z6I67mE64G83064WE.jpg"
-              },
-              selected: true
-            }],
-            //{"id":37,"count":2,"total_price":5580000,"createdAt":"2025-01-09T08:21:30.000Z","updatedAt":"2025-01-09T08:34:15.000Z","account_id":4,"product_id":4,
-            //"Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"},
-            //"selected":true}
-            //orderInfo:[],
+            productInfo :[],
+
             finalTotalPrice: 0,
             deliveryFee : 3000,
+
             user:{},
             userCoupons:[],
             selectedCoupon:null,
             tempUsePoint: 0,
             usePoint: 0,
+
             originalTotalPrice: 0,
             totalPaymentAmount: 0,
             postcode:null,
@@ -224,15 +199,15 @@ export default{
         // 쿼리 선별 코드
         // 들어오는 쿼리에 따라 다른 파라메터를 넣어 같은 함수를 실행시키는 코드
 
-        // if(this.$route.query.productInfoQuery){
-        //     this.getProductInfo('productInfoQuery');
+        if(this.$route.query.productInfoQuery){
+            this.getProductInfo('productInfoQuery');
             
-        // // orderingInfoQuary가 있으면, 문자열 'orderingInfoQuary'를 넣어서 함수 실행
-        // }else if (this.$route.query.orderingInfoQuary){
-        //     this.getProductInfo('orderingInfoQuary');
-        // }else {
-        //     console.error("주문할 제품 정보(쿼리)를 받지 못합니다.")
-        // }
+        // orderingInfoQuary가 있으면, 문자열 'orderingInfoQuary'를 넣어서 함수 실행
+        }else if (this.$route.query.orderingInfoQuary){
+            this.getProductInfo('orderingInfoQuary');
+        }else {
+            console.error("주문할 제품 정보(쿼리)를 받지 못합니다.")
+        }
         
 
         
@@ -240,10 +215,6 @@ export default{
     },
     unmounted(){},
     methods:{
-        dummy(){
-          console.log(`############################${JSON.stringify(this.productInfo)}`);
-          this.calculateTotal()
-        },
 
         //총액 계산 함수
         total_products(){
@@ -296,32 +267,6 @@ export default{
         },
 
 
-        // Order CREATING
-        async order(){
-          try {
-            const orderInfos = this.productInfo.map(product => ({
-              count : product.count,
-              account_id : product.account_id,
-              product_id : product.product_id,
-
-              address : this.address,              
-              addressDetail : this.addressDetail,
-              addressNumber : this.zipCode,
-              orderMessage : this.orderMessage,
-
-              final_paid_price : product.count * product.Product.product_price, //final_paid_price 속성이름 바꿀지?
-
-              // 제품별 오더 하나하나에 배송비, 할인 속성 만들지 회의.
-              //discount_amount : ((로직짜야됨됨))
-              //deliveryFee : this.deliveryFee,
-            }));
-            console.log(`################orderInfos:${JSON.stringify(orderInfos)}`);
-            const reaponse = await axios.post('http://localhost:3000/orders/order', orderInfos);
-            
-          }catch(err){
-            console.error(err);
-          }
-        },
         //유저도 가져와야 해
         async getUser(){
             try{
@@ -405,9 +350,29 @@ export default{
           }).open(); // 팝업 창 열기
         },
 
-        order(){
-            //결제 전에 주문지 들어갔는지 확인 코드 필요함.!
-        }
+        //결제 전에 주문지 들어갔는지 확인 코드 필요함.!
+        // Order CREATING
+        async order(){
+          try {
+
+            const orderInfos = this.productInfo.map(product => ({
+              count : product.count,
+              account_id : product.account_id,
+              product_id : product.product_id,
+
+              address : this.roadAddress,              
+              addressDetail : this.addressDetail,
+              addressNumber : this.postcode,
+              orderMessage : this.orderMessage,
+            }));
+            console.log(`################orderInfosFRONT:${JSON.stringify(orderInfos)}`);
+            const reaponse = await axios.post('http://localhost:3000/orders/order', orderInfos);
+            
+          }catch(err){
+            console.error(err);
+          }
+        },
+
     },
     watch: {
         selectedCoupon: {

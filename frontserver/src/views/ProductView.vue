@@ -167,29 +167,29 @@ export default{
 
         // // Check Login
 
-        // checkLogin () {
-        //     if(!this.user.id) {
-        //         alert("로그인이 필요합니다");
-        //         this.$router.push('/login');
-        //         return false;
-        //     }else {
-        //         return true;
-        //     }
-        // },
+        checkLogin () {
+            if(!this.user.id) {
+                alert("로그인이 필요합니다");
+                this.$router.push('/login');
+                return false;
+            }else {
+                return true;
+            }
+        },
 
-        // // GET user profile
-        // async getUserProfile(){
-        // try{
-        //     const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
-        //     //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
-        //     //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
-        //     this.user = response.data
-        //     //console.log(`################userInfo${JSON.stringify(this.user)}`);
-        // }catch(err){
-        //     console.error(err);
+        // GET user profile
+        async getUserProfile(){
+        try{
+            const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
+            //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
+            //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
+            this.user = response.data
+            //console.log(`################userInfo${JSON.stringify(this.user)}`);
+        }catch(err){
+            console.error(err);
             
-        // }
-        // },  
+        }
+        },  
 
 
         // Product info READ

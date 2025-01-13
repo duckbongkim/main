@@ -15,14 +15,14 @@
                 </thead>
                 <tbody>
                     <tr v-for="info in cancelledList" :key="info.id" >
-                        <td>{{ formatDate(info.cancel_date) }}</td>
+                        <td>{{ formatDate(info.updated_at) }}</td>
                         <td>{{ info.id }}</td>
                         <td>
                             <img :src="info.Product.product_image" alt="info.Product.product_name">
                             <span>{{ info.Product.product_name }}</span>
                         </td>
                         <td>{{ info.count }}</td>
-                        <td>{{ info.final_paid_price.toLocaleString() }}</td>
+                        <td>{{ (info.count * info.Product.product_price).toLocaleString()}}</td>
                         <td>{{ info.OrderStatus.status }}</td>
                         <td>
                         </td>
@@ -66,8 +66,9 @@ export default{
             try{
                 this.userid = this.$route.params.userId;
                 const response = await axios.get(`http://localhost:3000/orders/cancelledOrder/${this.userid}`);
-                this.cancelledList = response.data.sort((a, b) => b.id - a.id); // 주문번호순으로 정렬
-                this.cancelledList = this.cancelledList.filter(cancel => cancel.OrderStatuses.id > 5);
+                this.cancelledList = response.data //.sort((a, b) => b.id - a.id); // 주문번호순으로 정렬
+                this.cancelledList = this.cancelledList.filter(cancel => cancel.OrderStatus.id > 5);
+                console.log(`################cancelledList: ${JSON.stringify(this.cancelledList)}`);
             }catch(err){
                 console.error(err);
             }

@@ -202,7 +202,7 @@ router.post('/order', async (req, res, next) => {
     let transaction; // transaction 변수를 try-catch 블록 외부에서 선언
     try {
         const orderInfos = req.body;
-        console.log(`##########################orderInfo${JSON.stringify(orderInfos)}`);
+        console.log(`##########################orderInfoBACK${JSON.stringify(orderInfos)}`);
 
         transaction = await Orders.sequelize.transaction(); 
         // 트랜잭션은 모든작업이 성공적으로 완료되면 커밋하고, 실패 시 롤백
@@ -220,10 +220,7 @@ router.post('/order', async (req, res, next) => {
                 addressDetail : info.addressDetail,
                 addressNumber : info.addressNumber,
                 orderMessage : info.orderMessage,
-
-                final_paid_price : info.final_paid_price, //final_paid_price 속성이름 ( => final_price) 변경이 낫나? : 최종가가 아니라 제품별 총액이니까
-                //discount_amount : info.discount_amount
-                //deliveryFee : info.deliveryFee
+                
             }, { transaction }
             );
         }
@@ -248,7 +245,7 @@ router.get('/order/:userid', async (req, res, next) => {
         const orderList = await Orders.findAll(
             {where : {account_id : userid},
             include : [
-                {model:Products, attributes : ['product_name', 'product_image']},
+                {model:Products, attributes : ['product_name', 'product_image', 'product_price']},
                 {model: OrderStatuses, attributes : ['status']},
             ]
         }); 
@@ -266,7 +263,7 @@ router.patch('/cancelledOrder/:userid', async (req, res, next) => {
     try{
         const {cancelingOrderId} = req.body;
 
-        await Orders.update ({status_id : 6, cancel_date : new Date()}, {where : {id : cancelingOrderId }});
+        await Orders.update ({status_id : 6, updateted_at : new Date()}, {where : {id : cancelingOrderId }});
         res.status(200).json()
     }catch(err){
         console.error(err);
@@ -284,10 +281,10 @@ router.get('/cancelledOrder/:userid', async (req, res, next) => {
         console.log(`################백userid: ${userid}`);
         const orderList = await Orders.findAll(
             {where : {account_id : userid},
-            include : [{model:Products, attributes : ['product_name', 'product_image']},{model: OrderStatuses, attributes : ['status', 'id']},
+            include : [{model:Products, attributes : ['product_name', 'product_image', 'product_price']},{model: OrderStatuses, attributes : ['status', 'id']},
             ],
         }); 
-        console.log(`################백userid: ${JSON.stringify(orderList)}`);
+        console.log(`################백orderList: ${JSON.stringify(orderList)}`);
 
         res.status(200).json(orderList);
     }catch(err){

@@ -13,7 +13,7 @@
     <div class="user-balance">
          <div class="balance-item">
             <h4 class="rating_name">예치금</h4>
-            <p><span>{{ user.savedMoney }}</span>원</p>
+            <p><span>{{ user.savedMoney}}</span>원</p>
         </div> 
        
         <div class="balance-item">
@@ -38,7 +38,7 @@
                 <a @click="orderNow(user.id)"> 주문창(작업중) </a>
             </li>
             <li>
-                <a @click="goRefund()">취소/환불 목록</a>
+                <a @click="goRefund(user.id)">취소/환불 목록</a>
             </li>
         </ul>
 
@@ -94,6 +94,9 @@ export default{
         },
         orderedList(userId){
             this.$router.push(`/order/${userId}`)
+        },
+        goRefund(userId){
+            this.$router.push(`/cancelledOrder/${userId}`)
         },
 
       // 마이페이지에서 유저 정보를 받아오는 get 작성 1월5일 동진

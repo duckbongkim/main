@@ -22,8 +22,8 @@
                             <img :src="info.Product.product_image" alt="info.Product.product_name">
                             <span>{{ info.Product.product_name }}</span>
                         </td>
-                        <td>{{ info.count }}</td>
-                        <td>{{ info.final_paid_price.toLocaleString() }}</td>
+                        <td>{{ info.count }}개</td>
+                        <td>{{ (info.count * info.Product.product_price).toLocaleString()}}원</td>
                         <td>{{ info.OrderStatus.status }}</td>
                         <td>
                             <!-- 주문상태가 주문접수, 결제 완료, 배송준비중 일 경우에만 '주문취소'버튼 활성화 -->
@@ -73,6 +73,7 @@ export default{
                 this.userid = this.$route.params.userId;
                 const response = await axios.get(`http://localhost:3000/orders/order/${this.userid}`);
                 this.orderList = response.data.sort((a, b) => b.id - a.id); // 주문번호순으로 정렬렬
+                console.log(`################orderList: ${JSON.stringify(this.orderList)}`);
             }catch(err){
                 console.error(err);
             }

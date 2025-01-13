@@ -34,26 +34,12 @@ class Orders extends Sequelize.Model {
                 allowNull: true,
                 defaultValue: Sequelize.NOW,
             },
-            cancel_date:{
-                type: Sequelize.DATE,
-                allowNull: true,
-            },
-            cancel_reason:{
-                type: Sequelize.TEXT,
-                allowNull: true,
-            },
-            final_paid_price:{
-                type: Sequelize.FLOAT,
-                allowNull: true,
-            },
-
-                ///// 속성추가 상의@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            // discount_amount : {
-            //     type: Sequelize.FLOAT,
+            // cancel_date:{
+            //     type: Sequelize.DATE,
             //     allowNull: true,
             // },
-            // delivery_fee : {
-            //     type: Sequelize.FLOAT,
+            // cancel_reason:{
+            //     type: Sequelize.TEXT,
             //     allowNull: true,
             // },
 
