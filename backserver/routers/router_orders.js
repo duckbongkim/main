@@ -216,6 +216,7 @@ router.post('/order', async (req, res, next) => {
                 addressDetail : info.addressDetail,
                 addressNumber : info.addressNumber,
                 orderMessage : info.orderMessage,
+                payment_id : info.payment_id,
             }, { transaction }
             );
         }

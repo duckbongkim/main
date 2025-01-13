@@ -46,6 +46,9 @@ class Orders extends Sequelize.Model {
                 type: Sequelize.FLOAT,
                 allowNull: true,
             },
+            payment_id:{
+                type:Sequelize.STRING(100),
+            }
         },{
             sequelize,
             timestamps: false,

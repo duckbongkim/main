@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <form class="content-wrapper" @submit.prevent="order">
+  <form class="content-wrapper" @submit.prevent="KGpay">
     <div class="order-header">
       <h1>주문/결제</h1>
       <div class="order-steps">
@@ -134,6 +134,13 @@
         </div>
       </div>
     </div>
+    <div class="order-section">
+      <h2 class="section-title">이용약관</h2>
+      <div class="contract-form">
+        <input type="checkbox" v-model="contractformcheck" required>
+        <label>이용약관에 동의합니다.</label>
+      </div>
+    </div>
 
     <div class="order-button">
       <button type="submit" class="btn-order">결제하기</button>
@@ -149,6 +156,12 @@ export default{
     name:'',
     components:{},
     computed:{
+      fulladdress() {
+        return `${this.roadAddress}/${this.addressDetail}`;
+      },
+      fullProductName(){
+        return this.productInfo.map(product => product.Product.product_name).join(', ');
+      }
     },
     directives:{
         zipcode:{//우편번호 입력 제한
@@ -182,7 +195,7 @@ export default{
 
             numberOfProducts : 0,
             finalTotalPrice: 0,
-            deliveryFee : 3000,
+            deliveryFee : 10,
             user:{},
             userCoupons:[],
             selectedCoupon:null,
@@ -192,6 +205,8 @@ export default{
             totalPaymentAmount: 0,
             postcode:null,
             roadAddress:'',
+            contractformcheck:false,
+            orderMessage : "",
         };
     },
     setup(){},
@@ -259,7 +274,6 @@ export default{
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
                     const response = await axios.get(`http://localhost:3000/orders/order/${InfoFromProductView}`);
                     this.productInfo = [response.data];
-                    
                 }
                 //총액 계산
                 this.calculateTotal()
@@ -267,28 +281,78 @@ export default{
                 console.error(err);
             }
         },
-
-
         // Order CREATING
-        async order(){
+        async order(rsp){
+          console.log("왜 안돼!!!");
           try {
+            console.log("order 호출");
             const orderInfos = this.productInfo.map(product => ({
               count : product.count,
               account_id : product.account_id,
               product_id : product.product_id,
-
+              payment_id : rsp.imp_uid,
               address : this.address,              
               addressDetail : this.addressDetail,
-              addressNumber : this.zipCode,
+              addressNumber : this.postcode,
               orderMessage : this.orderMessage,
             }));
             console.log(`################orderInfos:${JSON.stringify(orderInfos)}`);
-            await axios.post(`http://localhost:3000/orders/order`, orderInfos);
+            await axios.post(`http://localhost:3000/orders/order`, orderInfos, {withCredentials:true});
             
           }catch(err){
             console.error(err);
           }
         },
+        KGpay() {
+          console.log("KGpay 호출");
+          if (!this.postcode || !this.roadAddress || !this.addressDetail) {
+            alert("주소를 입력해주세요.");
+            this.$nextTick(() => {
+                this.$refs.addressSearch.focus();
+            });
+            return;
+          }
+
+          if (!this.contractformcheck) {
+            alert("이용약관에 동의해주세요");
+            this.$nextTick(() => {
+                this.$refs.contractformcheck.focus();
+            });
+            return;
+          }
+
+          // 아임포트 초기화
+          IMP.init("imp00267421"); // 식별코드 변경
+          IMP.request_pay(
+            {
+              //필수
+              pg: "html5_inicis", // KG이니시스
+              pay_method: "card", //결제 수단 (짜피 사용자가 고르는 수단이 적용됨)
+              merchant_uid: `${this.user.email}_${new Date().getTime()}`,//주문번호(고유값)
+              name: this.fullProductName,//제품명
+              amount: this.totalPaymentAmount,//가격
+              //선택
+              buyer_email: this.user.email,
+              buyer_name: this.user.email,
+              buyer_addr: this.fulladdress,
+              buyer_postcode: this.postcode,
+              custom_data: { message: this.orderMessage },//pg사에서 만들어놓지 않은 파라미터를 전달하는 경우 custom_data에 넣어서 보내면 됨.
+            },
+            (rsp) => {
+              console.log("결제 응답:", rsp); // 디버깅용 출력
+              if (rsp.success) {
+                alert("결제 성공! 결제 정보: " + JSON.stringify(rsp));
+                // 결제 성공 시 서버로 데이터 전송
+                this.order(rsp);
+              } else {
+                alert("결제 실패! 오류: " + rsp.error_msg);
+              }
+            }
+          );
+        },
+
+
+        
         //유저도 가져와야 해
         async getUser(){
             try{
@@ -371,10 +435,6 @@ export default{
             },
           }).open(); // 팝업 창 열기
         },
-
-        order(){
-            //결제 전에 주문지 들어갔는지 확인 코드 필요함.!
-        }
     },
     watch: {
         selectedCoupon: {
