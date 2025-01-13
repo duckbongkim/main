@@ -1,17 +1,14 @@
 <template>
-  <div class="div1">
-    <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
+  <div calss="div1">
+
     <h1>상품 목록</h1>
-    <div v-if="filteredProducts && filteredProducts.length">
-      <div v-for="product in filteredProducts" :key="product.id" class="product-card" @click="goProducts(product.id)" >
-        <img :src="product.product_image" :alt="product.name" />
+   <div class="container">
+      <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
+        <img :src="product.product_image" :alt="product.product_name" />
         <div class="product-details">
           <div class="tags">
-            <p v-if="product.isTagged" class="recommended-badge">👍추천상품</p>
-            <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
+            <p v-if="product.isTagged" class="recommended-badge">👍 추천상품</p>
+            <p v-if="product.isTagged" class="popular-badge">🔥 인기상품</p>
           </div>
           <h2 class="product-title">{{ product.product_name }}</h2>
           <p class="product-price">{{ product.product_price }} 원</p>
@@ -24,16 +21,19 @@
             <i class="fas fa-shopping-cart"></i> 
           </button>
         </div>
-        
+       
         </div>
       </div>
-    </div>
 
+    <div>
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
-
+    
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
@@ -49,8 +49,8 @@
       </ul>
     </nav>
   </div>
+  </div>
 </template>
-
 <script>
 import axios from 'axios';
 

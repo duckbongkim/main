@@ -9,7 +9,7 @@ router.get('/liqueur',getProducts);
 router.get('/liqueur/:drink_type',getDrinkTpye);
 
 //상품 품목별 상품리스트 조회
-router.get('/liqueur/:product_kind',getProductKind);
+router.get('/:product_kind',getProductKind);
 
 //검색결과 상품리스트 조회
 router.get('/liqueur/search',searchProducts);

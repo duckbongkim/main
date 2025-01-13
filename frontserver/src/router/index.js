@@ -62,7 +62,8 @@ const routes = [
   {
     path: '/etc/:product_kind',
     name: 'etc',
-    component: () => import('../components/etc/productsETC.vue')
+    component: () => import('../components/etc/productsETC.vue'),
+    props: true
   },
   {
     path: '/liqueur',
