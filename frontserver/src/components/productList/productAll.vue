@@ -1,34 +1,14 @@
 <template>
-  <div class="div1">
-
-    <!-- <div>
-      <input v-model="searchQuery"  type="text"  placeholder="검색어를 입력하세요"  @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
-    
-    <h1>상품 목록</h1>
-    <div v-for="product in fetchProducts" :key="product.id" class="product-card">
-      <router-link :to="'/products/' + product.id">
-        <h3>{{ product.product_name }}</h3>
-        <p>{{ product.product_description }}</p>
-        <p>{{ product.drink_type }}</p>
-        <p>{{ product.product_price }} 원</p>
-      </router-link>
-        
-    </div>
-    <div v-if="noResultsMessage" class="no-results">
-      {{ noResultsMessage }}
-    </div> -->
-
-    <div class="container">
-      <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)" >
-        <img :src="product.product_image" :alt="product.name" />
+   <div class="container">
+      <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
+        <img :src="product.product_image" :alt="product.product_name" />
         <div class="product-details">
           <div class="tags">
-            <p v-if="product.isTagged" class="recommended-badge">👍추천상품</p>
-            <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
+            <p v-if="product.isTagged" class="recommended-badge">👍 추천상품</p>
+            <p v-if="product.isTagged" class="popular-badge">🔥 인기상품</p>
           </div>
           <h2 class="product-title">{{ product.product_name }}</h2>
+
           <p class="product-price">{{ product.product_price }} 원</p>
         <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
          <div class="product-actions">
@@ -39,35 +19,34 @@
             <i class="fas fa-shopping-cart"></i> 
           </button>
         </div>
-        
+       
         </div>
       </div>
     </div>
 
     <div>
-      <input v-model="searchQuery"  type="text"  placeholder="검색어를 입력하세요"  @keyup.enter="searchProducts" />
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
       <button @click="searchProducts">검색</button>
     </div>
 
-     <div v-if="noResultsMessage" class="no-results">
+    <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
 
+    <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li class="page-item" :class="{ disabled: currentPage === 1 }">
-            <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
-          </li>
-          <li class="page-item" v-for="page in displayedPages" :key="page" :class="{ active: page === currentPage }">
-            <a class="page-link" href="#" @click.prevent="currentPage = page">{{ page }}</a>
-          </li>
-          <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-            <a class="page-link" href="#" @click.prevent="currentPage++">다음</a>
-          </li>
-        </ul>
-      </nav>
-
-
+      <ul class="pagination justify-content-center">
+        <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
+        </li>
+        <li class="page-item" v-for="page in displayedPages" :key="page" :class="{ active: page === currentPage }">
+          <a class="page-link" href="#" @click.prevent="currentPage = page">{{ page }}</a>
+        </li>
+        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+          <a class="page-link" href="#" @click.prevent="currentPage++">다음</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -75,45 +54,9 @@
 import axios from 'axios';
 
 export default {
-   computed:{
-        paginatedProducts() {
-            const start = (this.currentPage - 1) * this.itemsPerPage;
-            const end = start + this.itemsPerPage;
-            return this.products.slice(start, end);
-        },
-        totalPages() {
-            return Math.ceil(this.products.length / this.itemsPerPage);//math.ceil은 소수점 이하를 올림하는 함수
-        },
-        displayedPages() {
-            const pages = [];
-            let start, end;
-            
-            if (this.totalPages <= 3) {
-                // 전체 페이지가 3개 이하인 경우
-                start = 1;
-                end = this.totalPages;
-            } else {
-                // 전체 페이지가 3개 ��과인 경우
-                if (this.currentPage === 1) {
-                    start = 1;
-                    end = 3;
-                } else if (this.currentPage === this.totalPages) {
-                    start = this.totalPages - 2;
-                    end = this.totalPages;
-                } else {
-                    start = this.currentPage - 1;
-                    end = this.currentPage + 1;
-                }
-            }
-
-            for (let i = start; i <= end; i++) {
-                pages.push(i);
-            }
-            return pages;
-        }
-    },
-    data() {
+  data() {
     return {
+
       products: [],
       searchQuery: '',
       currentPage: 1,
@@ -137,15 +80,22 @@ export default {
           indexes.push(randomIndex);
         }
       }
-      return indexes;
-    },
 
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+  },
+  created() {
+    this.fetchProducts();  // 컴포넌트 생성 시 상품 데이터를 가져옵니다.
+  },
+  methods: {
     // 상품 목록 조회
     async fetchProducts() {
       try {
-        const response = await axios.get('http://localhost:3000/liqueur');
+        const response = await axios.get('http://localhost:3000/liqueur/liqueur'); // 상품 데이터 가져오기
         this.products = response.data;
-
         const randomIndexes = this.getRandomIndexes(this.products.length, 6);
         this.products = this.products.map((product, index) => ({
           ...product,
@@ -153,30 +103,40 @@ export default {
         }));
 
         this.filteredProducts = this.products;  // 처음엔 모든 상품을 표시
+
       } catch (error) {
         console.error(error);
       }
     },
-    // 상품 검색
+
+    // 검색 기능
     searchProducts() {
       if (this.searchQuery.trim() === '') {
-        this.filteredProducts = this.products;
+        // 검색어가 없으면 전체 상품 목록을 표시
+        this.filteredProducts = this.products;  
+        this.noResultsMessage = '';  // 메시지 초기화
+        this.currentPage = 1;  // 첫 페이지로 리셋
       } else {
+        // 검색어가 있을 경우 필터링
         this.filteredProducts = this.products.filter(product =>
           product.product_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           product.product_description.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           product.drink_type.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
 
+        // 검색 결과 메시지 처리
         if (this.filteredProducts.length === 0) {
-          this.noResultsMessage = '검색 내용이 없습니다.';
-          this.noResultsMessage = '';
+          this.noResultsMessage = '검색 내용이 없습니다.';  
+        } else {
+          this.noResultsMessage = '';  
         }
+        this.currentPage = 1;  // 검색 후 첫 페이지로 이동
       }
-      this.searchQuery = '';
     },
 
+    // 상품 상세 페이지로 이동
     goProducts(productId) {
+
         // 제품 페이지 이동 로직 (예: 라우터 사용)
         this.$router.push(`/products/${productId}`);
       },
@@ -283,7 +243,6 @@ export default {
 .div1 {
   margin-top: 100px;
 }
-
 .buy-button {
   margin-bottom: 10px;
   display: flex;

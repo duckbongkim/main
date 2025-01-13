@@ -1,49 +1,4 @@
 <template>
-<<<<<<< HEAD
-<div>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <div class="clear">
-        <div class="welcome-message" v-show="isLoggedIn">환영합니다!</div>
-        <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/login')">로그인</button>
-        <button class="login-button" v-show="!isLoggedIn" @click="$router.push('/agree')">회원가입</button>
-        <button class="login-button" v-show="isLoggedIn" @click="logout">로그아웃</button>
-        <i class="bi bi-cart3 icon" @click="checkLoginAndGoToPage('/cart/1')" title="장바구니"></i>
-        <i class="bi bi-person icon" @click="checkLoginAndGoToPage('/mypage')" title="마이페이지"></i>
-      </div>
-      <a class="navbar-brand" @click="goToMenu('/')">주정뱅이</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item" v-if="checkAdmin">
-            <a class="nav-link active" aria-current="page" @click="goToAdmin('/admin')">Admin</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" role="button" aria-expanded="false">
-              주류
-            </a>
-            <ul class="dropdown-menu">
-
-              <li><a class="inner-title" @click="goToMenu('/liqueur')">테스트</a></li>            
-              <li><a class="inner-title" @click="goToMenu('/liqueur/wine')">와인</a></li>     
-              <li><a class="inner-title" @click="goToMenu('/liqueur/whisky')">위스키</a></li>      
-              <li><a class="inner-title" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>               
-            </ul>           
-          </li>
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" aria-expanded="false">
-              etc 상품
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="inner-title" @click="goToMenu('/etc/wineglass')">와인잔</a></li> 
-              <li><a class="inner-title" @click="goToMenu('/etc/onetherock')">온더락잔</a></li> 
-            </ul>
-          </li>
-            <!-- 커뮤니티 -->
-=======
   <div>
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
       <div class="container-fluid">
@@ -58,22 +13,18 @@
                 주류
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" @click="goToMenu('/liqueur')">테스트</a></li>
+                <li><a class="dropdown-item" @click="goToMenu('/liqueur')">모든상품</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/wine')">와인</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/whiskey')">위스키</a></li>
-                <li><a class="dropdown-item" @click="goToMenu('/liqueur/traditional')">동양주류</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button">
-                etc 상품
-              </a>
+              <a class="nav-link dropdown-toggle" href="#" role="button">etc 상품</a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" @click="goToMenu('/etc/wineglass')">와인잔</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/etc/onetherock')">온더락잔</a></li>
               </ul>
             </li>
->>>>>>> 67ff7033eae52d78fd85b27711b525705ab4cc69
             <li class="nav-item">
               <a class="nav-link" @click="goToMenu('/postlist')">커뮤니티</a>
             </li>
