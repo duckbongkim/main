@@ -10,14 +10,17 @@
       <div 
         v-for="product in paginatedProducts" 
         :key="product.id" 
-        class="product-card">
+        class="product-card"
+        :class="{ 'out-of-stock': product.isOutOfStock }"
+        @click="goProducts(product.id)"
+        :disabled="product.isOutOfStock">
         <img :src="product.product_image" :alt="product.name" />
         <div class="product-details">
           <h2 class="product-title">{{ product.product_name }}</h2>
           <p class="product-price">{{ product.product_price }}</p>
-          <button @click="addToCart(product)" class="buy-button">구매</button>
+          <button @click="addToCart(product)" class="buy-button" :disabled="product.isOutOfStock">구매</button>
           <!-- 추천상품 표시 -->
-          <div v-if="product.isRecommended" class="item_icon_box">
+          <div v-if="product.isRecommended" class="item_icon_box" >
               <!-- 추천상품 아이콘을 특정 상품에만 추가 -->
               <img src="https://pobsmbsool.cdn-nhncommerce.com/data/icon/goods_icon/good_icon_recomm.gif" alt="추천상품" title="추천상품" class="middle recomm">
               <!-- 신상품 아이콘은 다른 상품에만 추가 -->
@@ -94,7 +97,41 @@ export default {
   data() {
     
     return {
-      products: [],
+      products: [
+      {
+        id: 1,
+        product_name: '고급 와인잔',
+        product_description: '고급스러운 디자인의 와인잔',
+        product_price: '30,000원',
+        product_image: 'https://via.placeholder.com/150?text=Wine+Glass+1',
+        product_kind: 'wine_glass',
+        isRecommended: true,
+        stack: 0,  // 품절
+        isOutOfStock: true  // 품절 상태
+      },
+      {
+        id: 2,
+        product_name: '클래식 와인잔',
+        product_description: '세련된 클래식 와인잔 세트',
+        product_price: '45,000원',
+        product_image: 'https://via.placeholder.com/150?text=Wine+Glass+2',
+        product_kind: 'wine_glass',
+        isRecommended: false,
+        stack: 10,  // 재고 있음
+        isOutOfStock: false  // 품절 상태 아님
+      },
+      {
+        id: 3,
+        product_name: '럭셔리 크리스탈 와인잔',
+        product_description: '럭셔리한 크리스탈 와인잔으로 우아함을 더하세요',
+        product_price: '80,000원',
+        product_image: 'https://via.placeholder.com/150?text=Wine+Glass+3',
+        product_kind: 'wine_glass',
+        isRecommended: true,
+        stack: 5,  // 재고 있음
+        isOutOfStock: false  // 품절 상태 아님
+      }
+      ],
       currentPage: 1,
       itemsPerPage: 15,  
       searchQuery: '',  
@@ -125,13 +162,32 @@ export default {
       console.log('axios 준비즁')
       try {
         const response = await axios.get(`http://localhost:3000/etc/${productKind}`);
-        console.log('서버에서 받은 데이터:', response.data);
-        this.products = response.data;
+        this.products = response.data.map(product => {
+      return {
+        ...product,
+        isOutOfStock: product.stack === 0 // stack이 0이면 품절로 처리
+      };
+    });
         this.filteredProducts = this.products;  // 처음에는 모든 상품을 표시
       } catch (error) {
         console.error('상품을 불러오는 데 실패했습니다.', error);
       }
     },
+     
+    //품절기능 
+    addToCart(product) {
+      if (product.isOutOfStock) {
+        alert('품절된 상품입니다.');
+        return;
+      }
+      console.log(`상품 ${product.product_name}을(를) 장바구니에 추가했습니다.`);
+    },
+
+    goProducts(productId) {
+        // 제품 페이지 이동 로직 (예: 라우터 사용)
+        this.$router.push(`/products/${productId}`);
+      },
+
     
     // 검색 기능
     searchProducts() {
@@ -279,6 +335,10 @@ export default {
   overflow: hidden;
   transition: transform 0.3s;
 }
+.product-card.out-of-stock {
+  opacity: 0.5; /* 흐리게 만들기 */
+  background-color: #f0f0f0; /* 배경색 변경 */
+}
 .product-card:hover {
   transform: scale(1.05);
 }
@@ -311,4 +371,6 @@ export default {
 .buy-button:hover {
   background-color: #0056b3;
 }
+
+
 </style>

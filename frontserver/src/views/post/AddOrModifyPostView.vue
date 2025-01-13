@@ -12,14 +12,19 @@
 
     <!-- 게시글 작성 폼 -->
     <form @submit.prevent="handleSubmit">
-      <div class="form-group">
+      <div v-if="!product_id && !isModify" class="form-group">
         <label for="postType">게시글 종류</label>
         <select v-model="post.post_kind" id="postType" name="postType" required>
           <option value="entire">전체게시판</option>
           <option value="free">자유게시판</option>
-          <option value="review">리뷰게시판</option>
           <option value="inquiry">문의 게시판</option>
           <option value="report">신고 게시판</option>
+        </select>
+      </div>
+      <div v-else-if="product_id" class="form-group">
+        <label for="postType">게시글 종류</label>
+        <select v-model="post.post_kind" id="postType" name="postType" required>
+          <option value="review">리뷰게시판</option>
         </select>
       </div>
 
@@ -30,6 +35,7 @@
 
       <div class="form-group">
         <label for="postContent">내용</label>
+        <small class="markdown-hint">* 마크다운 문법을 사용할 수 있습니다.</small>
         <textarea v-model="post.post_content" id="postContent" name="content" required></textarea>
       </div>
 
@@ -53,22 +59,26 @@ export default {
         post_kind:null,
         title:null,
         post_content:null,
-      }
+        product_id:null,
+      },
+      product_id:null,
     }
   },
   created(){
     if(this.$route.params.id){
-        console.log(this.$route.params.id);
         this.isModify = true;
         const postID = this.$route.params.id;
         axios.get(`http://localhost:3000/post/post_detail/${postID}`,{withCredentials:true})
         .then(response => {
-            console.log(response);
             this.post = response.data;
         })
         .catch(error => {
             console.log("게시글 조회에 실패했습니다.",error);
         });
+    }
+    else if(this.$route.params.product_id){
+        this.product_id = this.$route.params.product_id;
+        this.post.product_id = this.$route.params.product_id;
     }
   },
   methods: {
@@ -186,7 +196,7 @@ select:focus {
 }
 
 textarea {
-  min-height: 150px;
+  min-height: 500px;
   resize: vertical;
 }
 
@@ -232,5 +242,11 @@ button:hover {
 button[type="submit"] {
   margin-top: 1rem;
   align-self: flex-start;
+}
+
+.markdown-hint {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.5rem;
 }
 </style>

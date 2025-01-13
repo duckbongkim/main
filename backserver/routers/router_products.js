@@ -8,7 +8,14 @@ const {Products,ProductLocations} = require('../models/model_index')
 const {Op} = require('sequelize');
 const Accounts = require ('../models/model_accounts');
 const Carts = require ('../models/model_buckets');
+const {isLoggedIn} = require('../middlewares/middleware_checkLogin.js');
+const {updateRecentlyProduct,getRecentlyProductInfo} = require('../controllers/admin/controller_product.js');
 
+// 최근 본 상품 업데이트
+router.patch('/recently/:product_id',isLoggedIn,updateRecentlyProduct);
+
+// 최근 본 상품 조회(순서 주의)
+router.get('/recentlyProductInfo',isLoggedIn,getRecentlyProductInfo);
 
      // ##################  const wish = require ('') wish 모델은 어떻게 불러와야하지?? ////
 
@@ -22,7 +29,7 @@ router.get('/:product_id',async(req,res,next)=>{
         console.error(err)
         next(err)
     }
-})
+});
 
 
 router.get('/:product_id/recommend',async(req,res,next)=>{
@@ -56,7 +63,11 @@ router.get('/:product_id/recommend',async(req,res,next)=>{
         console.error(err)
         next(err)
     }
-})
+});
+
+
+
+
 
 
 module.exports = router;

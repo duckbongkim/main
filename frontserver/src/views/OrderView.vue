@@ -34,9 +34,9 @@
             <li>
                 <a @click="orderedList(user.id)"> 주문목록 </a>
             </li>
-            <li>
-                <a @click="orderNow(user.id)"> 주문창(작업중) </a>
-            </li>
+            <!-- <li>
+                <a @click="orderNow(user.id)"> 주문창</a>
+            </li> -->
             <li>
                 <a @click="goRefund(user.id)">취소/환불 목록</a>
             </li>
@@ -147,121 +147,165 @@ export default{
 <style scoped>
 .mypage-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 100px auto 0 auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-
-
+/* User Info Section */
 .user-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 50px;
   border-radius: 8px;
-  font-size: calc(12px + 0.5vw); 
-  gap: 20px;
-  margin: 50px 0 50px 0;
   background-color: rgb(249, 249, 249);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap; /* 화면이 좁을 때 줄바꿈 */
 }
 
 .user-details,
 .user-balance {
-  flex: 1; 
-  text-align: center; 
-}
-
-.user-details {
-  flex-direction: column;
-}
-
-.user-details div {
-  gap: 10px; 
+  flex: 1;
+  text-align: center;
+  margin: 10px 0;
 }
 
 .user-details h3 {
-  margin: 0; 
-  line-height: 1.2; 
+  margin: 0;
+  line-height: 1.2;
   font-size: 1.1em;
+  color: #4a4a4a;
 }
 
 .user-details h3 span {
-  font-weight: 700;
-  color: black;
+  color: #4a4a4a;
 }
 
+.edit-btn {
+  color: #4a4a4a;
+  background-color: rgb(243, 239, 224);
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #4a4a4a; /* 호버 시 텍스트 색상 */
+}
 
 .user-balance {
   display: flex;
   justify-content: center;
   gap: 10%;
+  flex-wrap: wrap; /* 줄바꿈 허용 */
 }
 
 .balance-item {
-  display: flex; 
+  display: flex;
   flex-direction: column;
   align-items: center;
-  gap:50px;
   padding: 20px;
   border-radius: 10px;
   background-color: #fff;
+  min-width: 150px; /* 최소 크기 */
 }
 
-.balance-item h4 {
-  margin: 0; 
-  font-size: 1rem;
-}
-
-
+.balance-item h4,
 .balance-item p {
-  margin: 0; 
-  text-align: right;
-  font-weight: 700;
+  margin: 0;
+  color: #4a4a4a;
 }
 
-.balance-item p span {
-  color: rgb(80,80,80);
-}
-
-.balance-line {
-  border-bottom: 1px solid #ccc; 
-  margin: 10px 0 10px 0;
-}
-
+/* 주문 목록 섹션 */
 .order-list {
-    margin-top: 100px;
+  margin-top: 50px;
 }
 
-.order-list-ul{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    padding: 30px 30px;
-    background-color: rgb(249,249,249);
-    border-radius: 10px;
-    gap: 10px;
-    
+.order-list-ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  padding: 30px;
+  background-color: rgb(249, 249, 249);
+  border-radius: 10px;
+  gap: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .order-list-ul li {
-    list-style: none;
-    padding: 10px;
-    background-color: rgb(254,245,231);
-    border-radius: 10px;
+  list-style: none;
+  padding: 10px;
+  background-color: rgb(243, 239, 224);
+  border-radius: 10px;
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.order-list-ul li:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+}
+
+.order-list-ul li:hover a {
+  color: #4a4a4a; /* 호버 시 텍스트 색상 */
 }
 
 .order-list-ul li a {
-    font-size: 1rem;
-    cursor: pointer;
-    display: block;
-    text-decoration: none;
-    color: #000;
+  font-size: 1rem;
+  display: block;
+  text-decoration: none;
+  color: #4a4a4a;
+  transition: color 0.3s ease;
 }
 
-.order-list-com {
-    margin-top: 50px;
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .user-info {
+    flex-direction: column; /* 세로 배치 */
+    align-items: center; /* 중앙 정렬 */
+  }
+
+  .user-details {
+    margin-bottom: 20px; /* 하단 여백 추가 */
+  }
+
+  .user-balance {
+    justify-content: space-around; /* 균등 배치 */
+  }
+
+  .order-list-ul {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* 작은 버튼 크기 */
+  }
+}
+
+@media (max-width: 480px) {
+  .user-info {
+    padding: 30px;
+  }
+
+  .balance-item {
+    min-width: 100px; /* 더 작은 크기 */
+  }
+
+  .edit-btn {
+    font-size: 0.8rem; /* 버튼 텍스트 크기 축소 */
+    margin: 10px auto; /* 상하 여백 추가 및 가운데 정렬 */
+  }
+
+  .order-list-ul {
+    padding: 20px;
+  }
+
+  .order-list-ul li {
+    font-size: 0.9rem; /* 텍스트 크기 축소 */
+  }
 }
 
 

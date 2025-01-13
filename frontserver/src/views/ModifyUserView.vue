@@ -253,14 +253,61 @@ export default{
 <style scoped>
 .input-group .btn {
     min-width: 100px;
+    background-color: #f3efe0; 
+    color: #4a4a4a; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.form-control[readonly] {
-    background-color: #f8f9fa;
-    cursor: default;
+.input-group .btn:hover {
+    background-color: #e5dcc3; 
+    color: #000; 
 }
 
 .input-group input[type="text"] {
     max-width: 150px;
 }
+
+.form-control[readonly] {
+    background-color: #f8f9fa; 
+    cursor: default;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    background-color: #f3efe0; 
+    color: #4a4a4a; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #f3efe0; 
+    color: #4a4a4a; 
+}
+
+.btn-primary:hover {
+    background-color: #e5dcc3; 
+    color: #000; 
+}
+
+.btn-secondary {
+    background-color: #f3efe0; 
+    color: #4a4a4a; 
+}
+
+.btn-secondary:hover {
+    background-color: #e5dcc3; 
+    color: #000; 
+}
+
+.btn:focus, .btn:active {
+    outline: none; 
+    box-shadow: none; 
+}
+
 </style>
