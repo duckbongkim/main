@@ -1,6 +1,5 @@
 <template>
   <div calss="div1">
-
     <h1>상품 목록</h1>
    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
@@ -25,17 +24,25 @@
         </div>
       </div>
 
-    <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
+    
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
     
-    <!-- 페이지네이션 -->
-    <nav aria-label="Page navigation">
+
+    
+    
+  </div>
+<!-- 검색기능 -->
+  <div>
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
+
+<!-- 페이지네이션 -->
+  <nav aria-label="Page navigation">
+
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
@@ -48,8 +55,11 @@
         </li>
       </ul>
     </nav>
+  
   </div>
-  </div>
+
+
+
 </template>
 
 <script>
@@ -269,9 +279,11 @@ export default {
 </script>
 
 <style scoped>
-.div1 {
+
+h1 {
   margin-top: 100px;
 }
+
 .buy-button {
   margin-bottom: 10px;
   display: flex;
