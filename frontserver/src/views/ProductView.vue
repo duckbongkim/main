@@ -397,8 +397,6 @@ export default{
             try{
                 //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
                 if(!this.checkLogin()) return; 
-
-                // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
                 const orderingInfo = {
                     //userId : this.user.id,
                     id :this.selectedProduct.id,

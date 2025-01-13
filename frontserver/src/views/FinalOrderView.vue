@@ -137,6 +137,8 @@
 
     <div class="order-button">
       <button type="submit" class="btn-order">결제하기</button>      
+      <p>  </p>
+      <button @click="checkIdentify()" class="btn-order">인증하기</button>      
     </div>
   </form>
 </div>
@@ -253,11 +255,19 @@ export default{
             try{
                 if(query === 'productInfoQuery'){
                     this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
-                    //console.log(`############################${JSON.stringify(this.productInfo)}`)
+                    console.log(`############################Cart${JSON.stringify(this.productInfo)}`)
+                    //{"id":63,"count":1,"total_price":109000,"createdAt":"2025-01-13T07:40:49.000Z","updatedAt":"2025-01-13T07:40:49.000Z","account_id":4,"product_id":23,
+                    //"Product":{"product_name":"카듀 12년","product_price":109000,"product_image":"https://dailyshot.co/m/_next/image?url=https%3A%2F%2Fd1e2y5wc27crnp.cloudfront.net%2Fmedia%2Fcore%2Fproduct%2Fthumbnail%2F6c06d723-d199-41ef-bdbd-9d0b8c69a809.webp&w=640&q=85"},
+                    //"selected":true}
+
                 }else if(query === 'orderingInfoQuary') {
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
                     const response = await axios.get(`http://localhost:3000/orders/ordering/${InfoFromProductView}`);
                     this.productInfo = [response.data];
+                    console.log(`############################ProductView${JSON.stringify(this.productInfo)}`)
+                    //{"id":23,"count":1,
+                    //"Product":{"id":23,"product_name":"카듀 12년","product_price":109000,"product_description":"비번과 셰리를 담았던 통에서 숙성된 달콤하고 매운 맛의 위스키, 토피, 바닐라, 계피 향이 어우러져 부드러운 맛을 냅니다.","product_description_img":null,"product_stock":15,"product_image":"https://dailyshot.co/m/_next/image?url=https%3A%2F%2Fd1e2y5wc27crnp.cloudfront.net%2Fmedia%2Fcore%2Fproduct%2Fthumbnail%2F6c06d723-d199-41ef-bdbd-9d0b8c69a809.webp&w=640&q=85","drink_type":"whisky","product_kind":"drink","created_at":"2025-01-10T17:09:42.000Z","updated_at":"2025-01-10T17:09:42.000Z","product_location_id":null,"supply_factory_id":null}}
+                    
                 }
                 //총액 계산
                 this.calculateTotal()
@@ -373,6 +383,63 @@ export default{
             console.error(err);
           }
         },
+
+
+
+
+        // 인증함수
+        checkIdentify() {
+            //포트원 초기화
+            IMP.init('imp07771767');
+
+            // 사용자 인증 요청, 응답으로 'success'나 'error'를 보냄
+            IMP.certification(
+                {
+                    pg : 'inicis_unified', // 사용할 PG사
+                    merchant_id: `order_${new Date().getTime()}`, // 주문번호
+                    m_redirect_url : `http://localhost:3000/`, // 리디렉션 URL (모바일 고려)
+                    popup : true, // pc에서는 팝업이가능, 모바일에선 안됨. 그래서 redir 해줘야함
+                },
+                // callback, 인증성공데이터 (인증고유id와 주문번호 등이 돌아온다) 포함해 다음 함수 실행
+                (rsp) => { 
+                    if (rsp.success) {
+                        console.log('인증성공', rsp);
+
+                        ///인증성공시 사용자 정보를 불러와 나이를 확인하는 함수 실행
+                        this.sendVerificationData(rsp);
+
+                    } else {
+                        console.error('인증실패', rsp.error_msg);
+                        alert(`사용자 인증 실패 : ${rsp.error_msg}`);
+                    }
+                }
+            )
+        },
+
+        //인증성공한 유저의 rsp(안에 imp_uid, merchant_uid 포함)를 받아, 포트원에 유저 data 요청하는 함수
+        async sendVerificationData(rsp) {
+            try{
+                console.log('##############################sendVerificationData 실행시작');
+                const response = await axios.post('http://localhost:3000/verify', {
+                    imp_uid: rsp.imp_uid, // 인증 고유 id
+                    merchant_uid : rsp.merchant_uid, //주문번호
+                });
+                if(response.status === 200) {
+                    console.log('포트원에 인증데이터 전송 성공 :', response.data);
+                    alert('인증 성공')
+                } else {
+                    console.error('서버 응답 오류:', response.status);
+                    alert('서버오류로 인증 실패')
+                }
+            } catch (error) {
+                console.error('인증데이터 전송 중 오류:', error);
+                alert('네트워크 오류로 인증 데이터를 전송하지 못했습니다.');
+            }
+        },
+
+
+
+        
 
     },
     watch: {

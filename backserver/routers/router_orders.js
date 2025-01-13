@@ -163,8 +163,14 @@ router.post('/cart', async(req, res, next) => {
 router.get('/cart/:userid', async(req, res, next) => {
     try{
         const{userid} = req.params;
-        const cartList = await Carts.findAll({where : {account_id : userid}, include:{model:Products, attributes : ['product_name', 'product_price', 'product_image']}});
-        res.status(200).json(cartList);
+        const cartList = await Carts.findAll({where : {account_id : userid}, include:{model:Products, attributes : ['id', 'product_name', 'product_price', 'product_image']}});
+        const addCartIdCartList = cartList.map(cartItem => {
+            cartItem.cart_id = cartItem.id; // id를 cart_id로 변경
+            return cartItem;
+        });
+
+       
+        res.status(200).json(addCartIdCartList);
     }catch(err) {
         console.error(err);
         next(err);
