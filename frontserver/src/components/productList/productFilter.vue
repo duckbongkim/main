@@ -66,15 +66,6 @@ export default {
       noResultsMessage: '',     // 검색 결과가 없을 때 메시지
     };
   },
-<<<<<<< HEAD
-  created(){
-this.fetchProductsByType(this.drink_type);
-  },
-  mounted() {
-      
-  },
-=======
->>>>>>> 9d5a3790eacfc60886d7ec3cf8dab8e9c08e9604
   watch: {
     '$route.query.search'(newSearch) {
       if (newSearch) {
