@@ -38,9 +38,9 @@ export default{
 
 <style scoped>
 .container {
-  margin-left: 250px;
+  margin-left: 200px;
   margin-top: 90px;
-  width: calc(100% - 250px);
+  width: 100%;
   height: calc(100vh - 90px);
   overflow-y: auto;
   padding: 20px;

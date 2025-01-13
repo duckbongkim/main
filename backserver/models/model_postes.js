@@ -41,6 +41,10 @@ class Postes extends Sequelize.Model {
                 type: Sequelize.STRING(20),
                 allowNull: false,
             },
+            product_id:{
+                type: Sequelize.INTEGER,
+                allowNull: true,
+            },
         },{
             sequelize,
             timestamps: false,
