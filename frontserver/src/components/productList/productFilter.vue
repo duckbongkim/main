@@ -6,29 +6,29 @@
     </div>
     <h1>상품 목록</h1>
     <div v-if="filteredProducts && filteredProducts.length">
-      <div v-for="product in filteredProducts" :key="product.id" class="product-card" @click="goProducts(product.id)" >
-        <img :src="product.product_image" :alt="product.name" />
-        <div class="product-details">
-          <div class="tags">
-            <p v-if="product.isTagged" class="recommended-badge">👍추천상품</p>
-            <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
+      <!-- 그리드 레이아웃 적용: .container 클래스 추가 -->
+      <div class="container">
+        <div v-for="product in filteredProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
+          <img :src="product.product_image" :alt="product.name" />
+          <div class="product-details">
+            <div class="tags">
+              <p v-if="product.isTagged" class="recommended-badge">👍추천상품</p>
+              <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
+            </div>
+            <h2 class="product-title">{{ product.product_name }}</h2>
+            <p class="product-price">{{ product.product_price }} 원</p>
+            <div class="product-actions">
+              <button @click.stop="addWish(product)">
+                <i class="fas fa-heart"></i> 
+              </button>
+              <button @click.stop="addCarts(product)">
+                <i class="fas fa-shopping-cart"></i> 
+              </button>
+            </div>
           </div>
-          <h2 class="product-title">{{ product.product_name }}</h2>
-          <p class="product-price">{{ product.product_price }} 원</p>
-        <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
-         <div class="product-actions">
-          <button @click.stop="addWish(product)">
-            <i class="fas fa-heart"></i> 
-          </button>
-          <button @click.stop="addCarts(product)">
-            <i class="fas fa-shopping-cart"></i> 
-          </button>
-        </div>
-        
         </div>
       </div>
     </div>
-
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
@@ -48,8 +48,10 @@
         </li>
       </ul>
     </nav>
+
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -158,173 +160,274 @@ export default {
     },
 
     // 상품 상세 페이지로 이동
-    goProducts(productId) {
-      this.$router.push(`/products/${productId}`);
-    }
+        async addWish(product) {
+          try {
+            // 로그인 체크
+            if (!this.checkLogin()) {
+              alert("로그인이 필요합니다.");
+              this.$router.push('/login');  // 로그인 화면으로 이동
+              return;
+            }
+
+            const userWish = {
+              userId: this.user.id,
+              product_Id: product.id,
+            };
+
+            const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
+
+            if (response.status === 201) {
+              console.log(response.data.message);
+              alert("찜 리스트에 추가되었습니다.");
+            }
+          } catch (err) {
+            if (err.response && err.response.status === 409) {
+              alert(err.response.data.message); // 중복된 상품 처리
+            } else {
+              console.error(err);
+            }
+          }
+        },
+
+        async addCarts(product) {
+          try {
+            // 로그인 체크
+            if (!this.checkLogin()) {
+              alert("로그인이 필요합니다.");
+              this.$router.push('/login');  // 로그인 화면으로 이동
+              return;
+            }
+
+            const cartingInfo = {
+              userId: this.user.id,
+              product_Id: product.id,
+              quantity: this.orderQuantity,
+            };
+
+            const response = await axios.post(`http://localhost:3000/orders/cart`, cartingInfo);
+
+            if (response) {
+              const GotoCart = confirm(response.data.message);
+              if (GotoCart) {
+                this.$router.push(`/cart/${this.user.id}`); // 장바구니로 이동
+              } else {
+                alert("장바구니에 추가 되었습니다.");
+              }
+            } else {
+              console.error(err);
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        },
+
+        checkLogin() {
+          if (!this.user || !this.user.id) {
+            return false;  // 로그인되지 않은 경우
+          }
+          return true;  // 로그인된 경우
+        },
+
+
   },
 };
 </script>
 
-
 <style scoped>
-/* 스타일링을 필요에 맞게 수정해주세요 */
-.div1{
-  margin-top:100px
+.div1 {
+  margin-top: 100px;
 }
-.product-card {
-  border: 1px solid #ddd;
+.buy-button {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
   padding: 20px;
-  margin: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  position: relative;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s, background-color 0.3s;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+  background-color: rgba(0, 0, 0, 0.6); 
+  color: white; 
 }
 
 .product-card img {
   width: 100%;
   height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  transition: opacity 0.3s;
+}
+
+.product-card:hover img {
+  opacity: 0.5; 
 }
 
 .product-details {
-  padding: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.product-title {
-  font-size: 1.2em;
-  font-weight: bold;
+.tags {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  min-height: 20px;
 }
 
-.product-price {
-  color: #888;
-}
-
-.tags p {
-  display: inline-block;
-  margin-right: 10px;
+.recommended-badge,
+.popular-badge {
+  font-size: 14px;
   padding: 5px 10px;
-  background-color: #f0f0f0;
-  border-radius: 3px;
-}
-
-.recommended-badge {
-  background-color: #ffeb3b;
+  font-weight: bold;
+  border-radius: 5px;
+  white-space: nowrap;
 }
 
 .popular-badge {
-  background-color: #ff5722;
+  color: red;
 }
 
-.no-results {
-  text-align: center;
-  color: #888;
+.recommended-badge {
+  color: blue;
+}
+
+.product-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 0;
+  min-height: 40px;
+}
+
+.product-price {
+  font-size: 14px;
+  color: #e63946;
+  min-height: 20px;
+}
+
+/* 추가된 버튼 영역 */
+.product-actions {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none; 
+  flex-direction: row; 
+  justify-content: center;
+  align-items: center;
+  gap: 20px; 
+  z-index: 2;
+}
+
+.product-card:hover .product-actions {
+  display: flex; 
+}
+
+.product-actions button {
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s, color 0.3s;
+}
+
+/* 쇼핑 카트 아이콘 */
+.product-actions button i.fa-shopping-cart {
+  color: white;
+}
+
+.product-actions button:hover i.fa-shopping-cart {
+  color: #e63946; 
+}
+
+/* 하트 아이콘 */
+.product-actions button i.fa-heart {
+  color: white;
+}
+
+.product-actions button:hover i.fa-heart {
+  color: red; 
+}
+
+/* 버튼 애니메이션 */
+.product-actions button:hover {
+  transform: scale(1.2); 
+}
+
+.product-actions button:active {
+  transform: scale(0.9); 
 }
 
 .pagination {
+  display: flex;
+  justify-content: center;
   margin-top: 20px;
+  list-style: none;
+  padding: 0;
 }
 
-.page-item .page-link {
-  cursor: pointer;
-}
-</style>
-
-<style scoped>
-.buy-button {
-  /* display: block; */
-  margin-bottom: 10px; /* 구매 버튼 아래 여백 */
-  display: flex;
-  flex-direction: column; /* 세로로 배치 */
-  align-items: center; /* 중앙 정렬 */
-}
-.container {
-  padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start; /* 왼쪽 정렬 */
-  gap: 50px; /* 아이템 간의 간격 */
+.page-item {
+  margin: 0 5px;
 }
 
-.product-card {
-  background-color: white;
+.page-item.disabled .page-link {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.page-item.active .page-link {
+  background-color: #f3efe0; /* 기존 버튼 배경색 */
+  color: #4a4a4a; /* 기존 버튼 텍스트 색상 */
+  border-color: #f3efe0;
+  font-weight: bold;
+}
+
+.page-link {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 5px;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 250px;
-  margin: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  overflow: hidden;
-  transition: transform 0.3s;
-}
-.product-card:hover {
-  transform: scale(1.05);
-}
-.product-card img {
-  max-width: 100%;
-  height: 200px;
-}
-.product-details {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 수평 중앙 정렬 */
-  justify-content: center; /* 수직 중앙 정렬 */
-  text-align: center; /* 텍스트 중앙 정렬 */
-  padding: 15px;
-}
-.product-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 10px 0;
-}
-.product-price {
-  font-size: 16px;
-  color: #e63946;
-}
-.buy-button {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+  background-color: #fff; /* 기본 버튼 배경색 */
+  color: #4a4a4a; /* 기본 텍스트 색상 */
   text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-.buy-button:hover {
-  background-color: #0056b3;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-/* 배지들을 세로가 아닌 가로로 나란히 배치 */
-.tags {
-  display: flex;
-  justify-content: center; /* 배지들 가로로 중앙 정렬 */
-  margin-top: 10px; /* 배지와 버튼 간의 여백 */
+.page-link:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
 }
 
-.recommended-badge, .popular-badge {
-  font-size: 14px; /* 배지 크기 */
-  margin-right: 3px; /* 배지 간의 간격을 설정 */
+.page-item.active .page-link:hover {
+  background-color: #e5dcc3; /* 호버 시 배경색 */
+  color: #000; /* 호버 시 텍스트 색상 */
 }
 
-/* 인기상품 배지 색상 */
-.popular-badge {
-  color: red;
-  display: inline-block;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 5px;
-}
-/* 추천상품 배지 색상 */
-.recommended-badge {
-  display: inline-block;
-  /* background-color: #ffcc00; */
-  color: blue;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 5px;
-}
 
-/* 마지막 배지는 오른쪽 여백 없애기 */
-.popular-badge:last-child {
-  margin-right: 0;
-}
 </style>

@@ -30,6 +30,7 @@
       {{ noResultsMessage }}
     </div>
     
+
     
     
   </div>
@@ -41,6 +42,7 @@
 
 <!-- 페이지네이션 -->
   <nav aria-label="Page navigation">
+
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
@@ -55,6 +57,8 @@
     </nav>
   
   </div>
+
+
 
 </template>
 
