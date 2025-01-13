@@ -82,6 +82,7 @@ export default {
 
   created() {
     this.fetchProducts();  // 컴포넌트 생성 시 상품 데이터를 가져옵니다.
+    this.getUserProfile()
   },
   computed: {
     // 현재 페이지에 맞게 상품 목록을 잘라서 보여줌

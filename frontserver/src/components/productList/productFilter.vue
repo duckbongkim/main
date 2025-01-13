@@ -6,9 +6,10 @@
     </div>
     <h1>상품 목록</h1>
     <div v-if="filteredProducts && filteredProducts.length">
+
       <!-- 그리드 레이아웃 적용: .container 클래스 추가 -->
       <div class="container">
-        <div v-for="product in filteredProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
+        <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
           <img :src="product.product_image" :alt="product.name" />
           <div class="product-details">
             <div class="tags">
@@ -17,11 +18,12 @@
             </div>
             <h2 class="product-title">{{ product.product_name }}</h2>
             <p class="product-price">{{ product.product_price }} 원</p>
+            <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 13일 규태 -->
             <div class="product-actions">
-              <button @click.stop="addWish(product)">
+              <button @click.stop="goWish(product)">
                 <i class="fas fa-heart"></i> 
               </button>
-              <button @click.stop="addCarts(product)">
+              <button @click.stop="goCarts(product)">
                 <i class="fas fa-shopping-cart"></i> 
               </button>
             </div>
@@ -64,8 +66,10 @@ export default {
       filteredProducts: [],     // 필터된 상품 목록
       searchQuery: '',          // 검색어
       currentPage: 1,           // 현재 페이지
-      itemsPerPage: 15,         // 한 페이지에 보여줄 상품 수
+      itemsPerPage: 20,         // 한 페이지에 보여줄 상품 수
       noResultsMessage: '',     // 검색 결과가 없을 때 메시지
+      orderQuantity:1,
+      user: {id:null}
     };
   },
   watch: {
@@ -120,6 +124,7 @@ export default {
   },
   mounted() {
     this.fetchProductsByType(this.drink_type);  // 초기 로드 시 drink_type에 맞는 상품들만 불러오기
+    this.getUserProfile()
   },
   methods: {
     // drink_type에 맞는 상품 목록을 불러오는 메서드
@@ -144,6 +149,12 @@ export default {
       }
     },
 
+    // 상품 상세 페이지로 이동
+    goProducts(productId) {
+        // 제품 페이지 이동 로직 (예: 라우터 사용)
+        this.$router.push(`/products/${productId}`);
+      },
+
     // 검색어로 상품 필터링
     filterProductsBySearch() {
       const query = this.searchQuery.toLowerCase();
@@ -158,74 +169,94 @@ export default {
         this.noResultsMessage = '';
       }
     },
-
-    // 상품 상세 페이지로 이동
-        async addWish(product) {
-          try {
-            // 로그인 체크
-            if (!this.checkLogin()) {
-              alert("로그인이 필요합니다.");
-              this.$router.push('/login');  // 로그인 화면으로 이동
-              return;
-            }
-
-            const userWish = {
-              userId: this.user.id,
-              product_Id: product.id,
-            };
-
-            const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
-
-            if (response.status === 201) {
-              console.log(response.data.message);
-              alert("찜 리스트에 추가되었습니다.");
-            }
-          } catch (err) {
-            if (err.response && err.response.status === 409) {
-              alert(err.response.data.message); // 중복된 상품 처리
-            } else {
-              console.error(err);
-            }
-          }
-        },
-
-        async addCarts(product) {
-          try {
-            // 로그인 체크
-            if (!this.checkLogin()) {
-              alert("로그인이 필요합니다.");
-              this.$router.push('/login');  // 로그인 화면으로 이동
-              return;
-            }
-
-            const cartingInfo = {
-              userId: this.user.id,
-              product_Id: product.id,
-              quantity: this.orderQuantity,
-            };
-
-            const response = await axios.post(`http://localhost:3000/orders/cart`, cartingInfo);
-
-            if (response) {
-              const GotoCart = confirm(response.data.message);
-              if (GotoCart) {
-                this.$router.push(`/cart/${this.user.id}`); // 장바구니로 이동
-              } else {
-                alert("장바구니에 추가 되었습니다.");
-              }
-            } else {
-              console.error(err);
-            }
-          } catch (err) {
-            console.error(err);
-          }
-        },
+ 
 
         checkLogin() {
           if (!this.user || !this.user.id) {
             return false;  // 로그인되지 않은 경우
           }
+          console.log('유저아이디', this.user.id);
           return true;  // 로그인된 경우
+        },
+
+      async getUserProfile(){
+        try{
+            const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
+            //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
+            //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
+            this.user = response.data
+            console.log('유저 데이터 가져오기',response)
+            //console.log(`################userInfo${JSON.stringify(this.user)}`);
+        }catch(err){
+            console.error(err);
+            
+        }
+        },  
+
+        async goCarts(product) {
+            try{
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
+
+            // 1. selectedProduct.id 와 orderQuantity 를 carts DB에 추가.
+                const cartingInfo = {
+                    userId : this.user.id,
+                    product_Id :product.id,
+                    quantity : this.orderQuantity, 
+                }
+                console.log(`################userorder${JSON.stringify(cartingInfo)}`);
+
+                // data를 req.body로 백에 보내고, res받아 완료 메세지 띄우기
+                const response = await axios.post(`http://localhost:3000/orders/cart`, cartingInfo);
+                console.log(response)
+                // "장바구니 갈래? y/n"
+                if(response) {
+                    const GotoCart = confirm(response.data.message);
+                    if(GotoCart) {
+                        this.$router.push(`/cart/${this.user.id}`);              
+                    /// frontserver/src/router/index.js 에 라우터 추가 
+                } else {
+                    alert("장바구니에 추가 되었습니다..");
+                }
+                }else{
+                    console.error(err);
+                }
+
+                
+            }catch(err){
+                console.error(err);
+            }
+            
+        },  
+
+        async goWish(product) {
+            try {
+                //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+                if(!this.checkLogin()) return; 
+                //1. selectedProduct.id 를 likes DB에 추가
+                    //먼저 백단에서 사용자 인증 정보를 세션에 저장한 상태여야함.
+                    //세션에서 userid를, data에서 productid를 따와 params으로 만들기.
+                //const userId = this.session.userId;
+                const userWish = {
+                    userId : this.user.id,
+                    product_Id : product.id,
+                };
+                console.log(userWish)
+                const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
+                if(response.status == 201) {
+                    console.log(response.data.message);
+                    alert("찜 리스트에 추가되었습니다.");
+                }
+                console.log(response)
+            } catch(err) {
+                //찜에 중복된 상품이 들어갈 경우(409) 에러처리
+                // 에러가 있는지, 그 에러의 status가 409인지
+                if(err.response && err.response.status == 409){
+                    alert(err.response.data.message);
+                } else {     
+                console.error(err);
+                }
+            }
         },
 
 
@@ -236,12 +267,6 @@ export default {
 <style scoped>
 .div1 {
   margin-top: 100px;
-}
-.buy-button {
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .container {

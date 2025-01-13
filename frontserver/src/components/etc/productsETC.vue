@@ -97,41 +97,7 @@ export default {
   data() {
     
     return {
-      products: [
-      {
-        id: 1,
-        product_name: '고급 와인잔',
-        product_description: '고급스러운 디자인의 와인잔',
-        product_price: '30,000원',
-        product_image: 'https://via.placeholder.com/150?text=Wine+Glass+1',
-        product_kind: 'wine_glass',
-        isRecommended: true,
-        stack: 0,  // 품절
-        isOutOfStock: true  // 품절 상태
-      },
-      {
-        id: 2,
-        product_name: '클래식 와인잔',
-        product_description: '세련된 클래식 와인잔 세트',
-        product_price: '45,000원',
-        product_image: 'https://via.placeholder.com/150?text=Wine+Glass+2',
-        product_kind: 'wine_glass',
-        isRecommended: false,
-        stack: 10,  // 재고 있음
-        isOutOfStock: false  // 품절 상태 아님
-      },
-      {
-        id: 3,
-        product_name: '럭셔리 크리스탈 와인잔',
-        product_description: '럭셔리한 크리스탈 와인잔으로 우아함을 더하세요',
-        product_price: '80,000원',
-        product_image: 'https://via.placeholder.com/150?text=Wine+Glass+3',
-        product_kind: 'wine_glass',
-        isRecommended: true,
-        stack: 5,  // 재고 있음
-        isOutOfStock: false  // 품절 상태 아님
-      }
-      ],
+      products: [],
       currentPage: 1,
       itemsPerPage: 15,  
       searchQuery: '',  
