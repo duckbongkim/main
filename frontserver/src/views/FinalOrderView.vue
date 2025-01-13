@@ -267,12 +267,13 @@ export default{
             try{
                 if(query === 'productInfoQuery'){
                     this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
-                    //console.log(`############################${JSON.stringify(this.productInfo)}`)
+                    
                 }else if(query === 'orderingInfoQuary') {
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
                     const response = await axios.get(`http://localhost:3000/orders/ordering/${InfoFromProductView}`);
                     this.productInfo = [response.data];
                 }
+                console.log("this.productInfo",this.productInfo);
                 //총액 계산
                 this.calculateTotal()
             }catch(err){
@@ -281,21 +282,24 @@ export default{
         },
         // Order CREATING
         async order(rsp){
-          console.log("왜 안돼!!!");
           try {
-            console.log("order 호출");
             const orderInfos = this.productInfo.map(product => ({
               count : product.count,
-              account_id : product.account_id,
-              product_id : product.product_id,
+              account_id : this.user.id,
+              product_id : product.Product.id,
               payment_id : rsp.imp_uid,
-              address : this.address,              
+              address : this.roadAddress,              
               addressDetail : this.addressDetail,
               addressNumber : this.postcode,
               orderMessage : this.orderMessage,
+              cart_id : product.cart_id,
             }));
-            console.log(`################orderInfos:${JSON.stringify(orderInfos)}`);
-            await axios.post(`http://localhost:3000/orders/order`, orderInfos, {withCredentials:true});
+            await axios.post(`http://localhost:3000/orders/order`, {
+              orderInfos,
+              hasCouponId : this.selectedCoupon,
+              usePoint : this.usePoint,
+              }, {withCredentials:true}
+            );
             
           }catch(err){
             console.error(err);

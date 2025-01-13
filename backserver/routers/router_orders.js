@@ -6,6 +6,7 @@ const Carts = require ('../models/model_buckets');
 const Products = require ('../models/model_products');
 const Wishes = require ('../models/model_wishes');
 const Orders = require ('../models/model_orders');
+const HasCoupon = require('../models/model_haveCoupons.js');
 
 const OrderStatuses = require('../models/model_orderStatuses');
 const {Op} = require('sequelize');
@@ -163,8 +164,14 @@ router.post('/cart', async(req, res, next) => {
 router.get('/cart/:userid', async(req, res, next) => {
     try{
         const{userid} = req.params;
-        const cartList = await Carts.findAll({where : {account_id : userid}, include:{model:Products, attributes : ['product_name', 'product_price', 'product_image']}});
-        res.status(200).json(cartList);
+        const cartList = await Carts.findAll({where : {account_id : userid}, include:{model:Products, attributes : ['id', 'product_name', 'product_price', 'product_image']}});
+        const addCartIdCartList = cartList.map(cartItem => {
+            cartItem.cart_id = cartItem.id;
+            return cartItem;
+        });
+
+
+        res.status(200).json(addCartIdCartList);
     }catch(err) {
         console.error(err);
         next(err);
@@ -203,29 +210,42 @@ router.get('/ordering/:infoFromProductView', async (req, res, next)=>{
 router.post('/order', async (req, res, next) => {
     let transaction; // transaction 변수를 try-catch 블록 외부에서 선언
     try {
-        const orderInfos = req.body;
-        console.log(`##########################orderInfoBACK${JSON.stringify(orderInfos)}`);
+        const orderInfos = req.body.orderInfos;
+        const hasCoupon = req.body.hasCouponId;
 
         transaction = await Orders.sequelize.transaction(); 
         // 트랜잭션은 모든작업이 성공적으로 완료되면 커밋하고, 실패 시 롤백
-
         for(const info of orderInfos){
             if (!info.count || !info.account_id || !info.product_id || !info.address) {
                 throw new Error("누락된 필수 주문 정보가 있습니다.");
             }
-            await Carts.destroy({where : {id : info.cart_id}})
+            if(info.cart_id){
+                await Carts.destroy({where : {id : info.cart_id}})
+            }
             await Orders.create({
                 count : info.count,
                 account_id : info.account_id,
                 product_id : info.product_id,
-
                 address : info.address,              
                 addressDetail : info.addressDetail,
                 addressNumber : info.addressNumber,
                 orderMessage : info.orderMessage,
                 payment_id : info.payment_id,
-            }, { transaction }
-            );
+            });
+            const cartId = await Carts.findOne({where : {account_id : info.account_id, product_id : info.product_id}});
+            if(cartId){
+                await Carts.destroy({where : {id : cartId.id}});
+            }
+        }
+        if(hasCoupon){
+            await HasCoupon.destroy({where : {coupon_id : hasCoupon.coupon_id,account_id : hasCoupon.account_id}});
+        }
+        if(req.body.usePoint > 0){
+            console.log("usePoint:",req.body.usePoint);
+            const user = await Accounts.findOne({where : {email : req.user.email}});
+            const changedPoint = user.savedMoney - req.body.usePoint;
+            console.log("changedPoint:",changedPoint);
+            await Accounts.update({savedMoney : changedPoint}, {where : {email : req.user.email}});
         }
         await transaction.commit(); // 모든 작업 성공 시 커밋
         res.status(201).json({ message: "모든 주문이 성공적으로 처리되었습니다." });

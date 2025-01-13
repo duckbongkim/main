@@ -1,4 +1,6 @@
 <template>
+  <div calss="div1">
+    <h1>상품 목록</h1>
    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
@@ -8,7 +10,6 @@
             <p v-if="product.isTagged" class="popular-badge">🔥 인기상품</p>
           </div>
           <h2 class="product-title">{{ product.product_name }}</h2>
-
           <p class="product-price">{{ product.product_price }} 원</p>
         <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
          <div class="product-actions">
@@ -22,19 +23,24 @@
        
         </div>
       </div>
-    </div>
 
-    <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
+    
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
+    
+    
+    
+  </div>
+<!-- 검색기능 -->
+  <div>
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
 
-    <!-- 페이지네이션 -->
-    <nav aria-label="Page navigation">
+<!-- 페이지네이션 -->
+  <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
@@ -47,7 +53,9 @@
         </li>
       </ul>
     </nav>
+  
   </div>
+
 </template>
 
 <script>
@@ -67,17 +75,37 @@ export default {
       orderQuantity:1,
     };
   },
+
   created() {
-    this.fetchProducts();
-    this.getUserProfile();
+    this.fetchProducts();  // 컴포넌트 생성 시 상품 데이터를 가져옵니다.
   },
-  methods: {
-    getRandomIndexes(arrayLength, count) {
-      const indexes = [];
-      while (indexes.length < count) {
-        const randomIndex = Math.floor(Math.random() * arrayLength);
-        if (!indexes.includes(randomIndex)) {
-          indexes.push(randomIndex);
+  computed: {
+    // 현재 페이지에 맞게 상품 목록을 잘라서 보여줌
+    paginatedProducts() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredProducts.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+    },
+    displayedPages() {
+      const pages = [];
+      let start, end;
+
+      if (this.totalPages <= 3) {
+        start = 1;
+        end = this.totalPages;
+      } else {
+        if (this.currentPage === 1) {
+          start = 1;
+          end = 3;
+        } else if (this.currentPage === this.totalPages) {
+          start = this.totalPages - 2;
+          end = this.totalPages;
+        } else {
+          start = this.currentPage - 1;
+          end = this.currentPage + 1;
         }
       }
 
@@ -86,9 +114,6 @@ export default {
       }
       return pages;
     }
-  },
-  created() {
-    this.fetchProducts();  // 컴포넌트 생성 시 상품 데이터를 가져옵니다.
   },
   methods: {
     // 상품 목록 조회
@@ -108,6 +133,16 @@ export default {
         console.error(error);
       }
     },
+    getRandomIndexes(arrayLength, count) {
+    const indexes = [];
+    while (indexes.length < count) {
+      const randomIndex = Math.floor(Math.random() * arrayLength);
+      if (!indexes.includes(randomIndex)) {
+        indexes.push(randomIndex);
+      }
+    }
+    return indexes;
+  },
 
     // 검색 기능
     searchProducts() {
@@ -240,9 +275,11 @@ export default {
 </script>
 
 <style scoped>
-.div1 {
+
+h1 {
   margin-top: 100px;
 }
+
 .buy-button {
   margin-bottom: 10px;
   display: flex;
