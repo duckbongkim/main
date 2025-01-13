@@ -1,12 +1,13 @@
 <template>
   <div class="div1">
+    
     <div>
       <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
       <button @click="searchProducts">검색</button>
     </div>
     <h1>상품 목록</h1>
+    
     <div v-if="filteredProducts && filteredProducts.length">
-
       <!-- 그리드 레이아웃 적용: .container 클래스 추가 -->
       <div class="container">
         <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
@@ -132,12 +133,29 @@ export default {
       try {
         const response = await axios.get(`http://localhost:3000/liqueur/liqueur/${drinkType}`);
         this.products = response.data;
+          
+          const randomIndexes = this.getRandomIndexes(this.products.length, 3);
+          this.products = this.products.map((product, index) => ({
+          ...product,
+          isTagged: randomIndexes.includes(index),
+          }));
         this.filteredProducts = this.products;  // 초기에는 모든 상품을 표시
         this.searchProducts();  // 검색어가 있다면 필터링
       } catch (error) {
         console.error('상품을 불러오는 데 실패했습니다.', error);
       }
     },
+
+        getRandomIndexes(arrayLength, count) {
+          const indexes = [];
+        while (indexes.length < count) {
+          const randomIndex = Math.floor(Math.random() * arrayLength);
+        if (!indexes.includes(randomIndex)) {
+          indexes.push(randomIndex);
+        }
+      }
+        return indexes;
+        },
     
     // 검색 기능
     searchProducts() {
@@ -173,6 +191,7 @@ export default {
 
         checkLogin() {
           if (!this.user || !this.user.id) {
+            alert("로그인이 필요합니다");
             return false;  // 로그인되지 않은 경우
           }
           console.log('유저아이디', this.user.id);
@@ -185,13 +204,14 @@ export default {
             //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
             //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
             this.user = response.data
-            console.log('유저 데이터 가져오기',response)
             //console.log(`################userInfo${JSON.stringify(this.user)}`);
         }catch(err){
             console.error(err);
             
         }
         },  
+
+
 
         async goCarts(product) {
             try{
@@ -204,7 +224,6 @@ export default {
                     product_Id :product.id,
                     quantity : this.orderQuantity, 
                 }
-                console.log(`################userorder${JSON.stringify(cartingInfo)}`);
 
                 // data를 req.body로 백에 보내고, res받아 완료 메세지 띄우기
                 const response = await axios.post(`http://localhost:3000/orders/cart`, cartingInfo);
@@ -244,7 +263,6 @@ export default {
                 console.log(userWish)
                 const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
                 if(response.status == 201) {
-                    console.log(response.data.message);
                     alert("찜 리스트에 추가되었습니다.");
                 }
                 console.log(response)

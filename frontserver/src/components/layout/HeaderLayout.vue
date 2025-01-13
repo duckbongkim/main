@@ -180,7 +180,18 @@ export default{
 }
 
 .dropdown-item {
+  padding: 0.5rem 1rem;
+  background-color: transparent; /* 기본 배경 투명 */
+  color: #4a4a4a; /* 기본 텍스트 색상 */
+  transition: all 0.3s ease;
+  border-radius: 5px; /* 부드러운 모서리 */
   cursor: pointer;
+}
+
+.dropdown-item:hover,
+.dropdown-item:active {
+  background-color: rgb(243, 239, 224); /* 클릭/호버 시 버튼 배경색 */
+  color: #4a4a4a; /* 텍스트 색상 */
 }
 
 .icon {
@@ -213,4 +224,5 @@ export default{
     margin-right: 0;
   }
 }
+
 </style>
