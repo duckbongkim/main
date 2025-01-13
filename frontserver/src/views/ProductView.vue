@@ -1,6 +1,7 @@
 <template>
-<div>
-    <section class="product-main container d-flex justify-content-center align-items-center flex-wrap">
+<div class="div1">
+
+    <!-- <section class="product-main container d-flex justify-content-center align-items-center flex-wrap">
         
         <div class="product-image-container text-center">
             <img :src="selectedProduct.product_image" alt="product_img" class="product-img img-fluid">
@@ -48,7 +49,64 @@
 
 
         </div>
-    </section>
+    </section> -->
+
+
+<!-- 반응형 템플릿으로 변경 1월 11일 동진-->
+<section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    
+
+                    <div class="col-md-6 image-container">
+                        <img
+                        class="product-image"
+                        :src="selectedProduct.product_image"
+                        alt="product_img"
+                        />
+                    </div>
+                   
+                    <div class="col-md-6 main-content">
+                        
+                        <h1 class="display-5 fw-bolder fs-3">{{selectedProduct.product_name}}</h1>
+                        
+                        <div class="fs-5">
+                            <p>{{selectedProduct.product_price}} 원</p>
+                            <div class="product-stock"><p>남은수량</p><p> {{selectedProduct.product_stock}}개</p></div>
+                            <div class="delivery-info"><p>배송예정일</p> <p>평일기준 2일</p></div>
+                            <div class="delivery-corpor"><p>택배사</p><p>CJ대한통운</p></div>
+                        </div>
+
+                        <p class="lead fs-6">{{selectedProduct.product_description}}</p>
+
+            <div class="quantity-group gap-3 mb-3">
+                <p id="quantity-label" class="mb-0">수량</p>
+                <div class="quantity-controls d-flex align-items-center">
+                    <button @click="minusQ" class="btn btn-light border">-</button>
+                    <input type="number" v-model="orderQuantity" class="input-box form-control text-center" style="width: 50px;">
+                    <button @click="plusQ" class="btn btn-light border">+</button>
+                </div>
+            </div>
+
+            <div class="total-price-container">
+                    <p>총 합계금액</p>
+                    <p class="price-txt">{{(selectedProduct.product_price * orderQuantity).toLocaleString()}}원</p>
+            </div>
+
+                        <div class="button-group d-flex flex-wrap gap-3">
+                <button @click="addWish()" class="btn btn-outline-secondary heart-button">
+                    <i class="bi bi-heart wish-heart"></i>
+                </button>
+                <button @click="addCarts()" class="btn btn-outline-dark cart-button">장바구니</button>
+                <button @click="makeOrder()" class="btn btn-dark buy-button">구매하기</button>
+            </div>
+        </div>
+                </div>
+            </div>
+</section>
+
+
+    
 
 
 
@@ -69,7 +127,7 @@
 
 
 <!-- 추천상품 -->
-<section class="recomend-section">
+<!-- <section class="recomend-section">
     <h3> ##어떤걸 추천해줄지 정해야합니다## // 1월1일 현재 기능만 구현한 상태(동진)</h3>
     <div class="recomend-container">
         <div v-for="pro in recommendProduct" :key="pro.id" class="recomend-product">
@@ -81,6 +139,35 @@
 
         </div>
     </div>
+</section> -->
+
+
+<!-- recommend-section 반응형으로 수정 1월 12일 동진 추가 -->
+<section class="py-5 border-top border-bottom">
+
+            <div class="container px-4 px-lg-5 mt-5 recommend-container">
+                <h2 class="fw-bolder mb-4 fs-3">이런 상품은 어떠세요?</h2>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    
+                    <div class="col mb-5" v-for="pro in recommendProduct" :key="pro.id" @click="reRendRecommend(pro.id)">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" :src="pro.product_image" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">{{pro.product_name}}</h5>
+                                    <!-- Product price-->
+                                    {{pro.product_price.toLocaleString()}} 원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
 </section>
 
 <productInfoVue :product="selectedProduct"/>
@@ -100,6 +187,11 @@ export default{
     },
     watch:{
        
+    },
+    provide(){
+      return{
+        productId: this.$route.params.product_id
+      }
     },
     data(){
         return{
@@ -128,8 +220,9 @@ export default{
     },
     mounted(){
         window.scrollTo(0, 0);  // 페이지 최상단으로 스크롤
-        this.getRecommendProducts()
-        this.getUserProfile()
+        this.getRecommendProducts();
+        this.getUserProfile();
+        this.checkRecentlyProduct();
     },
     unmounted(){},
     methods:{
@@ -155,6 +248,7 @@ export default{
                 this.$router.push('/login');
                 return false;
             }else {
+                // 로그인 돼있을 때 최근 본 상품 업데이트
                 return true;
             }
         },
@@ -181,7 +275,6 @@ export default{
                 this.product_id = this.$route.params.product_id;
                 //console.log(this.product_id)
                 const response = await axios.get(`http://localhost:3000/products/${this.product_id}`);
-                console.log(response)
                 // product_id에 해당하는 제품 data object를 받아온다.
                 //console.log(response)
                 this.selectedProduct = response.data ; 
@@ -228,7 +321,6 @@ export default{
                 
                 const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
                 if(response.status == 201) {
-                    console.log(response.data.message);
                     alert("찜 리스트에 추가되었습니다.");
                 }
             } catch(err) {
@@ -303,20 +395,39 @@ export default{
                 console.error(err);                
             }
         },
-        }        
-    }
+
+        //check recently product
+        async checkRecentlyProduct(){
+            try{
+                console.log('checkRecentlyProduct');
+                const productId = this.$route.params.product_id;
+                await axios.patch(`http://localhost:3000/products/recently/${productId}`,{},{withCredentials:true});
+                console.log('checkRecentlyProduct 완료');
+            }catch(err){
+                console.error(err);
+            }
+        },
+    }        
+}
 
 
 </script>
 
 <style scoped>
+.card-img-top {
+  max-height: 500px;
+  object-fit: cover;
+}
+
+p {
+    margin-bottom: 0;
+}
 
 
-
-.price-text {
+/* .price-text {
     font-weight: bold;
     font-size: 1.3rem;
-}
+} */
 
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -350,7 +461,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .input-box{
     width: 50px;
     border: none;
-    background-color: #f1f1f1;
 }
 
 .product-img {
@@ -383,7 +493,7 @@ input[type="number"]::-webkit-outer-spin-button {
     align-items: center;
     padding: 0 20px 0 20px;
     height: 70px;
-    background-color: #f1f1f1;
+    
     border-radius: 10px;
 }
 
@@ -453,81 +563,71 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 
+.main-content {
+    text-align: left;
+    margin: 0 auto;
+}
+
+.image-container {
+  width: 100%; 
+  max-width: 600px; 
+  height: 700px; 
+  margin: 0 auto; 
+  overflow: hidden; 
+}
+
+.product-image {
+  width: 100%; 
+  height: 100%; 
+  /* object-fit: cover;  */
+}
+
 
 /* 추천상품 */
 
-.recomend-section{
-    width: 100%;
-    margin: 50px 0;
+/* 추천상품 섹션 */
+.recommend-container{
+    cursor: pointer;
 }
 
-.recomend-section h3 {
-    width: 40%;
-    padding: 20px 0;
-    margin: 0 auto;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-}
-
-.recomend-container{
-    display: flex;
-    justify-content: center;
-    gap: 3%;
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px 0;
-
-}
-
-.recomend-product {
-    width: 25%;
-    text-align: center;
-}
-
-.recomend-product p {
-    margin-bottom: 0;
-    padding: 5px 0 5px 0;
-    font-size: 1em;
-    font-weight: 600;
-}
-
-
-/* .recoment-product ul li {
+.card {
+    height: 100%; /* 카드 높이를 자동으로 조정 */
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-} */
-
-.recomend-product a {
-    display: block;
-    font-style: normal;
-    text-decoration: none;
-    color: #000;
 }
 
-.recomend-img{
-    height: auto;
-    width: 30%;
-    object-fit: cover;
+.card-img-top {
+    width: 100%; /* 이미지의 폭을 카드에 맞춤 */
+    height: 300px; /* 이미지 높이 고정 */
+    object-fit: contain; /* 이미지가 카드 영역에 맞게 자름 */
 }
 
-.recoment-name {
-    font-size: 0.9em;
-    font-weight: bold;
-    margin: 0 auto 0 auto;
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
     text-align: center;
-    width: fit-content;
-    
+    height: 150px; /* 내용부 고정 높이 */
 }
 
-.recoment-price{
-    font-size: 0.9em;
+.card-body h5 {
+    font-size: 1rem; /* 상품 이름 폰트 크기 */
     font-weight: bold;
-    margin: 0 auto 0 auto;
-    text-align: center;
-    width: fit-content;
+    margin: 0; /* 간격 제거 */
+    padding-bottom: 10px;
 }
+
+.card-body p {
+    font-size: 0.9rem; /* 상품 가격 폰트 크기 */
+    margin: 0; /* 간격 제거 */
+}
+
+
+
 
 
 

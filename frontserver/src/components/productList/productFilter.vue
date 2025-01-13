@@ -1,25 +1,34 @@
 <template>
-  <div>
-    <!-- 상품 목록 -->
-    <div class="container">
-      <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
-        <img :src="product.product_image" :alt="product.product_name" />
-        <div class="product-details">
-          <div class="tags">
-            <p v-if="product.isTagged" class="recommended-badge">👍 추천상품</p>
-            <p v-if="product.isTagged" class="popular-badge">🔥 인기상품</p>
-          </div>
-          <h2 class="product-title">{{ product.product_name }}</h2>
-          <p class="product-price">{{ product.product_price }}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 검색창 -->
+  <div class="div1">
     <div>
       <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
       <button @click="searchProducts">검색</button>
     </div>
+    <h1>상품 목록</h1>
+    <div v-if="filteredProducts && filteredProducts.length">
+      <div v-for="product in filteredProducts" :key="product.id" class="product-card" @click="goProducts(product.id)" >
+        <img :src="product.product_image" :alt="product.name" />
+        <div class="product-details">
+          <div class="tags">
+            <p v-if="product.isTagged" class="recommended-badge">👍추천상품</p>
+            <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
+          </div>
+          <h2 class="product-title">{{ product.product_name }}</h2>
+          <p class="product-price">{{ product.product_price }} 원</p>
+        <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
+         <div class="product-actions">
+          <button @click.stop="addWish(product)">
+            <i class="fas fa-heart"></i> 
+          </button>
+          <button @click.stop="addCarts(product)">
+            <i class="fas fa-shopping-cart"></i> 
+          </button>
+        </div>
+        
+        </div>
+      </div>
+    </div>
+
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
@@ -159,6 +168,9 @@ export default {
 
 <style scoped>
 /* 스타일링을 필요에 맞게 수정해주세요 */
+.div1{
+  margin-top:100px
+}
 .product-card {
   border: 1px solid #ddd;
   padding: 20px;

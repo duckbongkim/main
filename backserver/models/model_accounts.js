@@ -63,6 +63,31 @@ class Accounts extends Sequelize.Model {
             allowNull: true,
             defaultValue: Sequelize.NOW,
         },
+        recently_product_1:{
+            type: Sequelize.INTEGER,
+            allowNull: true,
+            defaultValue: 0,
+        },
+        recently_product_2:{
+            type: Sequelize.INTEGER,
+            allowNull: true,
+            defaultValue: 0,
+        },
+        recently_product_3:{
+            type: Sequelize.INTEGER,
+            allowNull: true,
+            defaultValue: 0,
+        },
+        recently_product_4:{
+            type: Sequelize.INTEGER,
+            allowNull: true,
+            defaultValue: 0,
+        },
+        recently_product_5:{
+            type: Sequelize.INTEGER,
+            allowNull: true,
+            defaultValue: 0,
+        },
         super_admin:{
             type: Sequelize.BOOLEAN,
             allowNull: false,
