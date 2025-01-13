@@ -24,6 +24,26 @@
         </div>
       </div>
 
+
+    
+
+    <div v-if="noResultsMessage" class="no-results">
+      {{ noResultsMessage }}
+    </div>
+    
+    
+    
+  </div>
+<!-- 검색기능 -->
+  <div>
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
+
+<!-- 페이지네이션 -->
+  <nav aria-label="Page navigation">
+
+
     
 
     <div v-if="noResultsMessage" class="no-results">
@@ -43,6 +63,7 @@
 <!-- 페이지네이션 -->
   <nav aria-label="Page navigation">
 
+
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
@@ -57,8 +78,6 @@
     </nav>
   
   </div>
-
-
 
 </template>
 
