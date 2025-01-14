@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <form class="content-wrapper" @submit.prevent="order">
+  <form class="content-wrapper" @submit.prevent="KGpay">
     <div class="order-header">
       <h1>주문/결제</h1>
       <div class="order-steps">
@@ -134,9 +134,16 @@
         </div>
       </div>
     </div>
+    <div class="order-section">
+      <h2 class="section-title">이용약관</h2>
+      <div class="contract-form">
+        <input type="checkbox" v-model="contractformcheck" required>
+        <label>이용약관에 동의합니다.</label>
+      </div>
+    </div>
 
     <div class="order-button">
-      <button type="submit" class="btn-order">결제하기</button>
+      <button type="submit" class="btn-order">결제하기</button>      
     </div>
   </form>
 </div>
@@ -149,6 +156,12 @@ export default{
     name:'',
     components:{},
     computed:{
+      fulladdress() {
+        return `${this.roadAddress}/${this.addressDetail}`;
+      },
+      fullProductName(){
+        return this.productInfo.map(product => product.Product.product_name).join(', ');
+      }
     },
     directives:{
         zipcode:{//우편번호 입력 제한
@@ -174,24 +187,21 @@ export default{
             addressDetail:'',
             zipCode:'',
             productInfo :[],
-            //{"id":37,"count":2,"total_price":5580000,"createdAt":"2025-01-09T08:21:30.000Z","updatedAt":"2025-01-09T08:34:15.000Z","account_id":4,"product_id":4,
-            //"Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"},
-            //"selected":true}
 
-            //orderInfo:[],
-
-            numberOfProducts : 0,
             finalTotalPrice: 0,
-            deliveryFee : 3000,
+            deliveryFee : 10,
             user:{},
             userCoupons:[],
             selectedCoupon:null,
             tempUsePoint: 0,
             usePoint: 0,
+
             originalTotalPrice: 0,
             totalPaymentAmount: 0,
             postcode:null,
             roadAddress:'',
+            contractformcheck:false,
+            orderMessage : "",
         };
     },
     setup(){},
@@ -202,6 +212,7 @@ export default{
     mounted(){
         // 쿼리 선별 코드
         // 들어오는 쿼리에 따라 다른 파라메터를 넣어 같은 함수를 실행시키는 코드
+
         if(this.$route.query.productInfoQuery){
             this.getProductInfo('productInfoQuery');
             
@@ -211,12 +222,14 @@ export default{
         }else {
             console.error("주문할 제품 정보(쿼리)를 받지 못합니다.")
         }
+        
 
         
 
     },
     unmounted(){},
     methods:{
+
         //총액 계산 함수
         total_products(){
             this.numberOfProducts= this.productInfo.length
@@ -254,41 +267,99 @@ export default{
             try{
                 if(query === 'productInfoQuery'){
                     this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
-                    //console.log(`############################${JSON.stringify(this.productInfo)}`)
+                    
                 }else if(query === 'orderingInfoQuary') {
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
-                    const response = await axios.get(`http://localhost:3000/orders/order/${InfoFromProductView}`);
+                    const response = await axios.get(`http://localhost:3000/orders/ordering/${InfoFromProductView}`);
                     this.productInfo = [response.data];
-                    
                 }
+                console.log("this.productInfo",this.productInfo);
                 //총액 계산
                 this.calculateTotal()
             }catch(err){
                 console.error(err);
             }
         },
-
-
         // Order CREATING
-        async order(){
+        async order(rsp){
           try {
             const orderInfos = this.productInfo.map(product => ({
               count : product.count,
-              account_id : product.account_id,
-              product_id : product.product_id,
-
-              address : this.address,              
+              account_id : this.user.id,
+              product_id : product.Product.id,
+              payment_id : rsp.imp_uid,
+              address : this.roadAddress,              
               addressDetail : this.addressDetail,
-              addressNumber : this.zipCode,
+              addressNumber : this.postcode,
               orderMessage : this.orderMessage,
+              cart_id : product.cart_id,
             }));
-            console.log(`################orderInfos:${JSON.stringify(orderInfos)}`);
-            await axios.post(`http://localhost:3000/orders/order`, orderInfos);
+            const response = await axios.post(`http://localhost:3000/orders/order`, {
+              orderInfos,
+              hasCouponId : this.selectedCoupon,
+              usePoint : this.usePoint,
+              }, {withCredentials:true}
+            );
+            if(response.status === 200 || response.status === 201){
+              alert(response.data.message);
+              this.$router.push(`/order/${this.user.id}`);
+            }else{
+              alert("결제 실패!");
+            }
             
           }catch(err){
             console.error(err);
           }
         },
+        KGpay() {
+          console.log("KGpay 호출");
+          if (!this.postcode || !this.roadAddress || !this.addressDetail) {
+            alert("주소를 입력해주세요.");
+            this.$nextTick(() => {
+                this.$refs.addressSearch.focus();
+            });
+            return;
+          }
+
+          if (!this.contractformcheck) {
+            alert("이용약관에 동의해주세요");
+            this.$nextTick(() => {
+                this.$refs.contractformcheck.focus();
+            });
+            return;
+          }
+
+          // 아임포트 초기화
+          IMP.init("imp00267421"); // 식별코드 변경
+          IMP.request_pay(
+            {
+              //필수
+              pg: "html5_inicis", // KG이니시스
+              pay_method: "card", //결제 수단 (짜피 사용자가 고르는 수단이 적용됨)
+              merchant_uid: `${this.user.email}_${new Date().getTime()}`,//주문번호(고유값)
+              name: this.fullProductName,//제품명
+              amount: this.totalPaymentAmount,//가격
+              //선택
+              buyer_email: this.user.email,
+              buyer_name: this.user.email,
+              buyer_addr: this.fulladdress,
+              buyer_postcode: this.postcode,
+              custom_data: { message: this.orderMessage },//pg사에서 만들어놓지 않은 파라미터를 전달하는 경우 custom_data에 넣어서 보내면 됨.
+            },
+            (rsp) => {
+              console.log("결제 응답:", rsp); // 디버깅용 출력
+              if (rsp.success) {
+                // 결제 성공 시 서버로 데이터 전송
+                this.order(rsp);
+              } else {
+                alert("결제 실패!");
+              }
+            }
+          );
+        },
+
+
+        
         //유저도 가져와야 해
         async getUser(){
             try{
@@ -371,10 +442,6 @@ export default{
             },
           }).open(); // 팝업 창 열기
         },
-
-        order(){
-            //결제 전에 주문지 들어갔는지 확인 코드 필요함.!
-        }
     },
     watch: {
         selectedCoupon: {

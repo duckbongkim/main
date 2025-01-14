@@ -1,6 +1,5 @@
 <template>
   <div calss="div1">
-
     <h1>상품 목록</h1>
    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
@@ -20,11 +19,12 @@
           <button @click.stop="addCarts(product)">
             <i class="fas fa-shopping-cart"></i> 
           </button>
-        </div>
-       
+         </div>
         </div>
       </div>
-
+  </div>
+  
+<!-- 검색기능 -->
     <div>
       <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
       <button @click="searchProducts">검색</button>
@@ -34,8 +34,8 @@
       {{ noResultsMessage }}
     </div>
     
-    <!-- 페이지네이션 -->
-    <nav aria-label="Page navigation">
+<!-- 페이지네이션 -->
+  <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
@@ -48,7 +48,6 @@
         </li>
       </ul>
     </nav>
-  </div>
   </div>
 </template>
 
@@ -103,11 +102,13 @@ export default {
       itemsPerPage: 15,  
       searchQuery: '',  
       filteredProducts: [], 
-      noResultsMessage: '',  
+      noResultsMessage: '',
+      orderQuantity:1,
 
     };
   },
   mounted() {
+    this.getUserProfile()
     this.fetchProductsByType(this.product_kind);  
   },
   watch: {
@@ -297,7 +298,8 @@ export default {
 </script>
 
 <style scoped>
-.div1 {
+
+h1 {
   margin-top: 100px;
 }
 .buy-button {
@@ -341,8 +343,8 @@ export default {
   aspect-ratio: 4 / 3;
   object-fit: contain;
   transition: opacity 0.3s;
-}
 
+}
 .product-card:hover img {
   opacity: 0.5; 
 }
@@ -352,7 +354,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
 
 .tags {
   display: flex;
@@ -480,7 +481,6 @@ export default {
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-}
 
 .page-link:hover {
   background-color: #e5dcc3; /* 호버 시 배경색 */
@@ -491,8 +491,5 @@ export default {
   background-color: #e5dcc3; /* 호버 시 배경색 */
   color: #000; /* 호버 시 텍스트 색상 */
 }
-
-
-
 
 </style>

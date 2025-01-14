@@ -63,7 +63,7 @@ const routes = [
     path: '/etc/:product_kind',
     name: 'etc',
     component: () => import('../components/etc/productsETC.vue'),
-    props: true
+    props: true,
   },
   {
     path: '/liqueur',
@@ -192,10 +192,16 @@ const routes = [
       {
         path:'/order/:userId',
         name:'order',
-        component: () => import(/* webpackChunkName: "orders" */ '../components/orders/makeOrder.vue')
+        component: () => import(/* webpackChunkName: "orders" */ '../components/orders/orderList.vue')
+      },
+      {
+        path:'/cancelledOrder/:userId',
+        name:'cancelledOrder',
+        component: () => import(/* webpackChunkName: "orders" */ '../components/orders/cancelledList.vue')
       },
     ]
   },
+
   {
     path:'/finalOrder/:userId',
     name:'finalOrder',

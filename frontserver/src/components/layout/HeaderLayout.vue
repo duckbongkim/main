@@ -13,15 +13,13 @@
                 주류
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" @click="goToMenu('/liqueur')">테스트</a></li>
+                <li><a class="dropdown-item" @click="goToMenu('/liqueur')">모든상품</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/wine')">와인</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/liqueur/whisky')">위스키</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button">
-                etc 상품
-              </a>
+              <a class="nav-link dropdown-toggle" href="#" role="button">etc 상품</a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" @click="goToMenu('/etc/wineglass')">와인잔</a></li>
                 <li><a class="dropdown-item" @click="goToMenu('/etc/onetherock')">온더락잔</a></li>
@@ -155,7 +153,7 @@ export default{
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
-  z-index: 1000; /* 다른 요소 위에 표시되도록 설정 */
+  z-index: 1000; 
 }
 
 .navbar-brand {
@@ -180,9 +178,20 @@ export default{
 .nav-link:hover {
   color: #007bff;
 }
-
+/* 1월 13일 동진 추가 */
 .dropdown-item {
+  padding: 0.5rem 1rem;
+  background-color: transparent; 
+  color: #4a4a4a; 
+  transition: all 0.3s ease;
+  border-radius: 5px; 
   cursor: pointer;
+}
+/* 1월 13일 동진 추가 */
+.dropdown-item:hover,
+.dropdown-item:active {
+  background-color: rgb(243, 239, 224); 
+  color: #4a4a4a; 
 }
 
 .icon {
@@ -215,4 +224,5 @@ export default{
     margin-right: 0;
   }
 }
+
 </style>
