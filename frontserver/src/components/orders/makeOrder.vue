@@ -40,38 +40,7 @@ export default{
     components:{},
     data(){
         return{
-            productInfo :[
-
-                     {
-          id: 8,
-          count: 1,
-          total_price: 2790000,
-          createdAt: '2025-01-08T04:14:53.000Z',
-          updatedAt: '2025-01-08T04:14:53.000Z',
-          account_id: 4,
-          product_id: 4,
-          Product: {
-            product_name: '달모어 25년 700ml',
-            product_price: 2790000,
-            product_image: 'http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg'
-          }
-        },
-        {
-          id: 10,
-          count: 1,
-          total_price: 1100000,
-          createdAt: '2025-01-07T15:00:35.000Z',
-          updatedAt: '2025-01-07T15:00:35.000Z',
-          account_id: 5,
-          product_id: 10,
-          Product: {
-            product_name: '글렌피딕 30년산',
-            product_price: 1100000,
-            product_image: 'http://www.kajawine.kr/data/item/1219550509/thumb-6riA66CM7ZS865SV30_360x480.jpg'
-          }
-        }
-
-    ],
+            productInfo :[{}],
             //{"id":8,"count":1,"total_price":2790000,"createdAt":"2025-01-08T04:14:53.000Z","updatedAt":"2025-01-08T04:14:53.000Z","account_id":4,"product_id":4,
             // "Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"}},
             //{"id":10,"count":1,

@@ -5,7 +5,7 @@
     <!-- 이미지 업로드 폼 -->
     <form @submit.prevent="uploadPostImage">
       <div class="image-upload-container">
-        <label for="imageUpload">이미지 업로드</label>
+        <label for="imageUpload" class="imgUpload">이미지 업로드</label>
         <img v-if="post.post_image" :src="post.post_image" alt="게시글 이미지" class="img-preview">
         <input @change="handleImageUpload" type="file" id="imageUpload" name="image" accept="image/*" />
         <button type="submit" v-if="postImage">이미지 업로드</button>
@@ -152,7 +152,7 @@ export default {
 <style scoped>
 .container {
   max-width: 800px;
-  margin: 160px auto 2rem auto;
+  margin:2rem auto;
   padding: 2rem;
   background-color: #ffffff;
   border-radius: 8px;

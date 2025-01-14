@@ -68,7 +68,6 @@ export default{
                 const response = await axios.get(`http://localhost:3000/orders/cancelledOrder/${this.userid}`);
                 this.cancelledList = response.data //.sort((a, b) => b.id - a.id); // 주문번호순으로 정렬
                 this.cancelledList = this.cancelledList.filter(cancel => cancel.OrderStatus.id > 5);
-                console.log(`################cancelledList: ${JSON.stringify(this.cancelledList)}`);
             }catch(err){
                 console.error(err);
             }

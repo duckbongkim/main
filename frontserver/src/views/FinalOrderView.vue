@@ -365,7 +365,6 @@ export default{
             try{
               const response = await axios.get('http://localhost:3000/profile',{withCredentials:true});
               this.user = response.data;
-              console.log("user@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",this.user);
             }catch(err){
               console.error(err);
             }
