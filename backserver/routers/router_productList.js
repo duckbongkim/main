@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const {getProducts,getProductKind,searchProducts,getDrinkTpye} =require('../controllers/productList/controller_productList')
+const {getProducts,getProductKind,searchProducts,getDrinkTpye,searchDrinks} =require('../controllers/productList/controller_productList')
 
 //전체 상품리스트 조회
 router.get('/liqueur',getProducts);

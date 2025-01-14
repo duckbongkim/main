@@ -58,45 +58,48 @@ exports.getProductKind =  async (req, res, next) => {
   }
   };
 
-// 상품 검색
-exports.searchProducts = async (req, res, next) => {
+  exports.searchProducts = async (req, res, next) => {
     console.log('검색 쿼리 파라미터:', req.query);
     const { product_name, product_description, drink_type, product_kind } = req.query;
-  
-    const searchConditions = {};
-  
-    if (product_name) {
-      searchConditions.product_name = {
-        [Op.like]: `%${product_name}%`, 
-      };
-    }
-  
-    if (product_description) {
-      searchConditions.product_description = {
-        [Op.like]: `%${product_description}%`, 
-      };
-    }
-  
-    if (drink_type) {
-      searchConditions.drink_type = {
-        [Op.like]: `%${drink_type}%`, 
-      };
-    }
-  
-    if (product_kind) {
-      searchConditions.product_kind = {
-        [Op.like]: `%${product_kind}%`,
-      };
-    }
-  
-    try {
-      const results = await Products.findAll({
-        where: searchConditions,
-      });
-      res.json(results);
-    } catch (err) {
-      console.error('상품 검색 실패:', err);
-      next(err);
-    }
-  };
 
+    // 필터링 조건 설정
+    const searchConditions = {};
+
+    if (product_name) {
+        searchConditions.product_name = {
+            [Op.like]: `%${product_name}%`,  // LIKE 쿼리로 이름 검색
+        };
+    }
+
+    if (product_description) {
+        searchConditions.product_description = {
+            [Op.like]: `%${product_description}%`,  // LIKE 쿼리로 설명 검색
+        };
+    }
+
+    if (drink_type) {
+        searchConditions.drink_type = {
+            [Op.like]: `%${drink_type}%`,  // LIKE 쿼리로 drink_type 검색
+        };
+    }
+
+    // product_kind 필터링, 'wineglass' 또는 'ontherock'만 허용
+    if (product_kind) {
+        searchConditions.product_kind = product_kind;  // 정확히 일치하는 값만 검색
+    }
+
+    try {
+        const results = await Products.findAll({
+            where: searchConditions,
+        });
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: '검색 내용이 없습니다.' });
+        }
+
+        res.json(results);
+    } catch (err) {
+        console.error('상품 검색 실패:', err);
+        next(err);
+    }
+};
