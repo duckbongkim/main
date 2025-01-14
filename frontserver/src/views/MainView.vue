@@ -46,7 +46,7 @@
           @click="goProducts(item.id)"
         >
           <v-sheet color="white lighten-2" height="100%">
-            <div class="d-flex fill-height justify-center align-center">
+            <div class="d-flex fill-height justify-center align-center ">
               <div class="text-center">
                 <img :src="item.product_image" alt="Product Image" style="max-height: 200px; object-fit: contain;" />
                 <strong class="text-h5">{{ item.product_name }}</strong>
