@@ -1,12 +1,10 @@
 <template>
   <div class="div1">
    <h1>상품 목록</h1>
-   
    <div class="search-container">
       <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
       <button @click="searchProducts">검색</button>
     </div>
-
    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
@@ -28,14 +26,14 @@
          </div>       
         </div>
       </div>
+
   </div>
-  
-<!-- 검색기능 -->
-  
+
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
+
 
 
     <!-- 페이지네이션 -->
@@ -53,7 +51,9 @@
       </ul>
     </nav>
   
+
 </div>
+
 
 </template>
 
@@ -78,6 +78,7 @@ export default {
   created() {
     this.fetchProducts();  // 컴포넌트 생성 시 상품 데이터를 가져옵니다.
     this.getUserProfile()
+
   },
   computed: {
     // 현재 페이지에 맞게 상품 목록을 잘라서 보여줌
@@ -271,7 +272,6 @@ export default {
 </script>
 
 <style scoped>
-
 .div1 {
   margin-top: 100px;
 }
