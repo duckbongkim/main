@@ -19,18 +19,10 @@
           <button @click.stop="addCarts(product)">
             <i class="fas fa-shopping-cart"></i> 
           </button>
-<<<<<<< HEAD
-         </div>
-        </div>
-      </div>
-  </div>
-  
-=======
          </div>       
         </div>
       </div>
   </div>
->>>>>>> 5bb7022 (etc 검색기능개선)
 <!-- 검색기능 -->
     <div>
       <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
@@ -40,11 +32,6 @@
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 5bb7022 (etc 검색기능개선)
 <!-- 페이지네이션 -->
   <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
@@ -181,7 +168,7 @@ export default {
   }
 },
 
-filterProductsBySearch(searchQuery) {
+  filterProductsBySearch(searchQuery) {
   const query = searchQuery.toLowerCase();
 
   // 상품을 필터링
@@ -370,7 +357,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+}
 .tags {
   display: flex;
   justify-content: center;
@@ -497,6 +484,7 @@ h1 {
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
+}
 
 .page-link:hover {
   background-color: #e5dcc3; /* 호버 시 배경색 */

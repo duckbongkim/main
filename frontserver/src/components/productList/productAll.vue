@@ -1,10 +1,6 @@
 <template>
-<<<<<<< HEAD
-  <div class="div1">    
-=======
   <div class="div1">
     <!-- 검색기능 -->
->>>>>>> 5bb7022 (etc 검색기능개선)
    <h1>상품 목록</h1>
    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
@@ -16,22 +12,6 @@
           </div>
           <h2 class="product-title">{{ product.product_name }}</h2>
           <p class="product-price">{{ product.product_price }} 원</p>
-<<<<<<< HEAD
-          <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
-          <div class="product-actions">
-            <button @click.stop="addWish(product)">
-              <i class="fas fa-heart"></i>
-            </button>
-            <button @click.stop="addCarts(product)">
-              <i class="fas fa-shopping-cart"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-</div>
-    <!-- 검색기능 -->
-    <div>
-=======
         <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
          <div class="product-actions">
           <button @click.stop="addWish(product)">
@@ -47,27 +27,16 @@
   </div>
 <!-- 검색기능 -->
   <div>
->>>>>>> 5bb7022 (etc 검색기능개선)
       <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
       <button @click="searchProducts">검색</button>
     </div>
 
-<<<<<<< HEAD
-    <div v-if="noResultsMessage" class="no-results">
-      {{ noResultsMessage }}
-    </div>
-=======
     
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
 
-
-<!-- 페이지네이션 -->
-  <nav aria-label="Page navigation">
-
->>>>>>> 5bb7022 (etc 검색기능개선)
 
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
@@ -83,13 +52,9 @@
         </li>
       </ul>
     </nav>
-<<<<<<< HEAD
-  </div>
-=======
   
 </div>
 
->>>>>>> 5bb7022 (etc 검색기능개선)
 </template>
 
 <script>
