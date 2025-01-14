@@ -208,7 +208,6 @@ export default {
             //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
             //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
             this.user = response.data
-            //console.log(`################userInfo${JSON.stringify(this.user)}`);
         }catch(err){
             console.error(err);
             
@@ -264,7 +263,6 @@ export default {
                     userId : this.user.id,
                     product_Id : product.id,
                 };
-                console.log(userWish)
                 const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
                 if(response.status == 201) {
                     alert("찜 리스트에 추가되었습니다.");

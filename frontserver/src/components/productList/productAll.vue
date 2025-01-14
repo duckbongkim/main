@@ -333,9 +333,9 @@ export default {
   object-fit: contain;
   transition: opacity 0.3s; */
 
-  width: 100%; /* 컨테이너에 맞춤 */
-  max-width: 250px; /* 최대 크기 */
-  height: auto; /* 비율 유지 */
+  width: 100%; 
+  max-width: 250px; 
+  height: auto; 
   margin: 0 auto 10px;
   display: block;
 }

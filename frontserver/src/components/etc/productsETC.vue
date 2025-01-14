@@ -522,5 +522,4 @@ h1 {
 .search-container button:hover {
   background-color: #f3efe0;
 }
-
 </style>

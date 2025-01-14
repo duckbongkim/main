@@ -210,25 +210,7 @@ export default{
 
             product_id: null,
             orderQuantity : 1,
-            user : [{
-                id: 21,
-                email: "kim123@example.com",
-                password: "password1",
-                name: "김철수",
-                birth: "1990-05-15",
-                nickname: "철수김",
-                phone_number: "010-1234-5678",
-                address: "서울특별시 강남구 테헤란로",
-                addressNumber: 123,
-                addressDetail: "아파트 101호",
-                delete_time: null,
-                ratingPoint: 0,
-                savedMoney: 5000,
-                created_at: "2025-01-05 10:49:36",
-                updated_at: null,
-                super_admin: 0,
-                rating_id: 1
-            }],
+            user : [],
             
         };
     },
