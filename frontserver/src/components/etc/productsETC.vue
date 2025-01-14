@@ -1,15 +1,6 @@
 <template>
   <div class="div1">
     <h1>상품 목록</h1>
-    <!-- 검색기능 -->
-    <div class="search-container">
-      <input
-        v-model="searchQuery"
-        placeholder="검색어를 입력하세요"
-        @keyup.enter="searchProducts"
-      />
-      <button @click="searchProducts">검색</button>
-    </div>
     <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
@@ -28,14 +19,21 @@
           <button @click.stop="addCarts(product)">
             <i class="fas fa-shopping-cart"></i> 
           </button>
-         </div>
+         </div>       
         </div>
       </div>
   </div>
+
+<!-- 검색기능 -->
+    <div>
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
+
+
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
-    
 <!-- 페이지네이션 -->
   <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
@@ -66,7 +64,7 @@ export default {
             return this.products.slice(start, end);
         },
         totalPages() {
-            return Math.ceil(this.products.length / this.itemsPerPage);//math.ceil은 소수점 이하를 올림하는 함수
+            return Math.ceil(this.products.length / this.itemsPerPage);
         },
         displayedPages() {
             const pages = [];
@@ -162,37 +160,42 @@ export default {
 
     // 검색 기능
     searchProducts() {
-      if (this.searchQuery.trim() === '') {
-        // 검색어가 없으면 전체 상품 목록을 표시
-        this.filteredProducts = this.products;  
-        this.noResultsMessage = '';  // 메시지 초기화
-        this.currentPage = 1;  // 첫 페이지로 리셋
-      } else {
-        // 검색어가 있을 경우 필터링
-        this.filteredProducts = this.products.filter(product =>
-          product.product_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          product.product_description.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          product.drink_type.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-        
-        //검색 메세지 설정
-        if (this.filteredProducts.length === 0) {
-          this.noResultsMessage = '검색 내용이 없습니다.';  
-        } else {
-          this.noResultsMessage = '';  
-        }
-      }
-    },
+  if (this.searchQuery.trim() === '') {
+    // 검색어가 없을 때, 필터링된 상품을 원래의 상품 목록으로 초기화
+    this.filteredProducts = this.products;
+    this.noResultsMessage = '';  // 메시지 초기화
+  } else {
+    // 검색어가 있을 때, 필터링된 상품을 searchQuery로 검색
+    this.filterProductsBySearch(this.searchQuery);
+  }
+},
 
-    // 검색어로 상품 필터링
-    filterProductsBySearch(searchQuery) {
-      const query = searchQuery.toLowerCase();
-      this.products = this.products.filter(product => 
-        product.product_name.toLowerCase().includes(query) ||
-        product.product_description.toLowerCase().includes(query) ||
-        product.product_kind.toLowerCase().includes(query)
-      );
-    },
+  filterProductsBySearch(searchQuery) {
+  const query = searchQuery.toLowerCase();
+
+  // 상품을 필터링
+  this.filteredProducts = this.products.filter(product => {
+    const productName = product.product_name ? product.product_name.toLowerCase() : '';
+    const productDescription = product.product_description ? product.product_description.toLowerCase() : '';
+    const productKind = product.product_kind ? product.product_kind.toLowerCase() : '';
+    const drinkType = product.drink_type ? product.drink_type.toLowerCase() : '';
+
+    // 검색어가 제품명, 설명, 종류 중 하나라도 포함되면 true
+    return (
+      productName.includes(query) ||
+      productDescription.includes(query) ||
+      productKind.includes(query) ||
+      drinkType.includes(query)
+    );
+  });
+
+  // 검색 결과가 없으면 메시지를 표시
+  if (this.filteredProducts.length === 0) {
+    this.noResultsMessage = '검색 내용이 없습니다.';
+  } else {
+    this.noResultsMessage = '';
+  }
+},
     
     goProducts(productId) {
 
@@ -484,6 +487,7 @@ h1 {
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 }
+
 .page-link:hover {
   background-color: #e5dcc3; /* 호버 시 배경색 */
   color: #000; /* 호버 시 텍스트 색상 */
