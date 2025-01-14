@@ -151,6 +151,7 @@ export default{
             },
             postcode: null,
             roadAddress: null,
+            isAdult: false,
         };
     },
     setup(){},
