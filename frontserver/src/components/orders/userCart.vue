@@ -88,12 +88,15 @@ export default{
             finalTotalPrice: 0,
             deliveryFee : 3000,
             allSelected : false,
+            user : [],
         };
     },
     setup(){},
     created(){},
     mounted(){
         this.getCartedProducts()
+        this.getUserProfile()
+
     },
     unmounted(){},
     methods:{
@@ -130,6 +133,20 @@ export default{
             this.updateSelectedProduct();
         },
 
+        // GET user profile
+        async getUserProfile(){
+        try{
+            const response = await axios.get(`http://localhost:3000/profile/`, {withCredentials:true}); 
+            //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
+            //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
+            this.user = response.data
+            //console.log(`################userInfo${JSON.stringify(this.user)}`);
+        }catch(err){
+            console.error(err);
+        }
+        },  
+
+
         //Cart READ
         async getCartedProducts() {
             try {
@@ -158,11 +175,11 @@ export default{
                 if (response.status === 200) {
                     alert("장바구니에서 삭제되었다");
                     this.cartedProducts = this.cartedProducts.filter(c => c.id !== cartedProduct_id);
+                    
+                    //총액 계산
+                    this.calculateTotal()                    
                 }
                 console.log(response);
-
-                //총액 계산
-                this.calculateTotal()
             }catch(err){
                 console.error(err);
             }
@@ -189,19 +206,42 @@ export default{
 
         //Ordering Product PUSH to FinalOrderView.vue '/finalOrder/:userId'
         async makeOrder(order){
-            try{                
-                this.userid = this.$route.params.userId
-                //전체주문 = true / 선택주문 = false
-                if(order){
-                    this.productInfoForOrder = this.cartedProducts;
+            try{                        
+                //성인 인증
+                console.log('@@@@@@@@@@@@@@@@@@@@@this.user.birth',this.user.birth);
+                const birthDatA = this.user.birth
+                
+                if(!birthDatA){
+                    alert('먼저 성인 인증을 해주세요')
+                    this.$router.push({
+                        path: `/modify`, ////뷰 변경!!!
+                    })
                 }else{
-                    this.productInfoForOrder = this.selectedProducts;
-                }               
-                console.log(`##############this.productInfoForOrder:${JSON.stringify(this.productInfoForOrder)}`)
-                this.$router.push({
-                    path: `/finalOrder/${this.userid}`, /////// 뷰 변경!!!!!!
-                    query : {productInfoQuery : JSON.stringify(this.productInfoForOrder)}
-                });
+                    const birthDate = new Date(birthDatA);
+                    const currentDate = new Date();
+                    const age = currentDate.getFullYear() - birthDate.getFullYear();
+                    if(age >= 18) {
+                       alert('성인입니다')
+
+                          // 주문생성
+                          this.userid = this.$route.params.userId
+                          //전체주문 = true / 선택주문 = false
+                          if(order){
+                              this.productInfoForOrder = this.cartedProducts;
+                          }else{
+                              this.productInfoForOrder = this.selectedProducts;
+                          }               
+                          console.log(`##############this.productInfoForOrder:${JSON.stringify(this.productInfoForOrder)}`)
+                          this.$router.push({
+                              path: `/finalOrder/${this.userid}`, /////// 뷰 변경!!!!!!
+                              query : {productInfoQuery : JSON.stringify(this.productInfoForOrder)}
+                          });
+
+                    }else {
+                        alert('미성년자는 주류 구입이 불가합니다.')
+                    }              
+                }
+
             }catch(err){
                 console.error(err);
             }

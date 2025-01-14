@@ -144,8 +144,6 @@
 
     <div class="order-button">
       <button type="submit" class="btn-order">결제하기</button>      
-      <p>  </p>
-      <button @click="checkIdentify()" class="btn-order">인증하기</button>      
     </div>
   </form>
 </div>
@@ -446,8 +444,9 @@ export default{
                 this.guide = "";
               }
             },
-          }).open(); // 팝업 창 열기
+          }).open(); // 팝업 창 열기        
         },
+        
     },
     watch: {
         selectedCoupon: {

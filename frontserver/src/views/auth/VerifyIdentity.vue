@@ -32,7 +32,7 @@ export default{
             IMP.certification(
                 {
                     pg : "html5_inicis", // 사용할 PG사
-                    merchant_id: `order_${new Date().getTime()}`, // 주문번호
+                    merchant_uid: `order_${new Date().getTime()}`, // 주문번호
                     m_redirect_url : `http://localhost:3000/`, // 리디렉션 URL (모바일 고려)
                     popup : true, // pc에서는 팝업이가능, 모바일에선 안됨. 그래서 redir 해줘야함
                 },
