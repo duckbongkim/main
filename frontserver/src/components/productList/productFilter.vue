@@ -1,12 +1,8 @@
 <template>
-  <div class="div1">
-    
-    <div>
-        <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-        <button @click="searchProducts">검색</button>
-    </div>
+
+  <div class="div1">  
+
     <h1>상품 목록</h1>
-    
     <div v-if="filteredProducts && filteredProducts.length">
       <!-- 그리드 레이아웃 적용: .container 클래스 추가 -->
       <div class="container">
@@ -32,15 +28,18 @@
             </div>
           </div>
         </div>
-
       </div>
-      
+    </div>
+
+    <div>
+        <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+        <button @click="searchProducts">검색</button>
     </div>
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
-
+    
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
@@ -55,10 +54,8 @@
         </li>
       </ul>
     </nav>
-
   </div>
 </template>
-
 
 <script>
 import axios from 'axios';

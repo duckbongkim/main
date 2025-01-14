@@ -19,30 +19,23 @@
           <button @click.stop="addCarts(product)">
             <i class="fas fa-shopping-cart"></i> 
           </button>
-        </div>
-       
+         </div>
         </div>
       </div>
-
-    
+  </div>
+  
+<!-- 검색기능 -->
+    <div>
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
     
-
-    
-    
-  </div>
-<!-- 검색기능 -->
-  <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
-
 <!-- 페이지네이션 -->
   <nav aria-label="Page navigation">
-
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
@@ -55,11 +48,7 @@
         </li>
       </ul>
     </nav>
-  
   </div>
-
-
-
 </template>
 
 
@@ -313,7 +302,6 @@ export default {
 h1 {
   margin-top: 100px;
 }
-
 .buy-button {
   margin-bottom: 10px;
   display: flex;
@@ -355,8 +343,8 @@ h1 {
   aspect-ratio: 4 / 3;
   object-fit: contain;
   transition: opacity 0.3s;
-}
 
+}
 .product-card:hover img {
   opacity: 0.5; 
 }
@@ -495,7 +483,6 @@ h1 {
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 }
-
 .page-link:hover {
   background-color: #e5dcc3; /* 호버 시 배경색 */
   color: #000; /* 호버 시 텍스트 색상 */
@@ -505,4 +492,5 @@ h1 {
   background-color: #e5dcc3; /* 호버 시 배경색 */
   color: #000; /* 호버 시 텍스트 색상 */
 }
+
 </style>
