@@ -1,6 +1,14 @@
 <template>
-  <div calss="div1">
+  <div class="div1">
+    <!-- 검색기능 -->
+    <div>
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
+    
     <h1>상품 목록</h1>
+
+
    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
@@ -11,38 +19,26 @@
           </div>
           <h2 class="product-title">{{ product.product_name }}</h2>
           <p class="product-price">{{ product.product_price }} 원</p>
-        <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
-         <div class="product-actions">
-          <button @click.stop="addWish(product)">
-            <i class="fas fa-heart"></i> 
-          </button>
-          <button @click.stop="addCarts(product)">
-            <i class="fas fa-shopping-cart"></i> 
-          </button>
-        </div>
-       
+          <!-- 호버시 장바구니 찜 하기 버튼 추가 1월 12일 동진-->
+          <div class="product-actions">
+            <button @click.stop="addWish(product)">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button @click.stop="addCarts(product)">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+          </div>
         </div>
       </div>
-
-    
+    </div>
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
-    
 
-    
-    
-  </div>
-<!-- 검색기능 -->
-  <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
 
-<!-- 페이지네이션 -->
-  <nav aria-label="Page navigation">
-
+    <!-- 페이지네이션 -->
+    <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
@@ -55,11 +51,7 @@
         </li>
       </ul>
     </nav>
-  
   </div>
-
-
-
 </template>
 
 <script>
@@ -82,6 +74,7 @@ export default {
 
   created() {
     this.fetchProducts();  // 컴포넌트 생성 시 상품 데이터를 가져옵니다.
+    this.getUserProfile()
   },
   computed: {
     // 현재 페이지에 맞게 상품 목록을 잘라서 보여줌
@@ -130,7 +123,6 @@ export default {
           ...product,
           isTagged: randomIndexes.includes(index),
         }));
-
         this.filteredProducts = this.products;  // 처음엔 모든 상품을 표시
 
       } catch (error) {
@@ -196,8 +188,6 @@ export default {
             //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
             //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
             this.user = response.data
-            console.log('유저 데이터 가져오기',response)
-            //console.log(`################userInfo${JSON.stringify(this.user)}`);
         }catch(err){
             console.error(err);
             
@@ -222,7 +212,6 @@ export default {
                 
                 const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
                 if(response.status == 201) {
-                    console.log(response.data.message);
                     alert("찜 리스트에 추가되었습니다.");
                 }
             } catch(err) {
@@ -280,7 +269,7 @@ export default {
 
 <style scoped>
 
-h1 {
+.div1 {
   margin-top: 100px;
 }
 
