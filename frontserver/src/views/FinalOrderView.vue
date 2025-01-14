@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <form class="content-wrapper" @submit.prevent="order">
+  <form class="content-wrapper" @submit.prevent="KGpay">
     <div class="order-header">
       <h1>주문/결제</h1>
       <div class="order-steps">
@@ -134,6 +134,13 @@
         </div>
       </div>
     </div>
+    <div class="order-section">
+      <h2 class="section-title">이용약관</h2>
+      <div class="contract-form">
+        <input type="checkbox" v-model="contractformcheck" required>
+        <label>이용약관에 동의합니다.</label>
+      </div>
+    </div>
 
     <div class="order-button">
       <button type="submit" class="btn-order">결제하기</button>      
@@ -151,6 +158,12 @@ export default{
     name:'',
     components:{},
     computed:{
+      fulladdress() {
+        return `${this.roadAddress}/${this.addressDetail}`;
+      },
+      fullProductName(){
+        return this.productInfo.map(product => product.Product.product_name).join(', ');
+      }
     },
     directives:{
         zipcode:{//우편번호 입력 제한
@@ -178,8 +191,7 @@ export default{
             productInfo :[],
 
             finalTotalPrice: 0,
-            deliveryFee : 3000,
-
+            deliveryFee : 10,
             user:{},
             userCoupons:[],
             selectedCoupon:null,
@@ -190,6 +202,8 @@ export default{
             totalPaymentAmount: 0,
             postcode:null,
             roadAddress:'',
+            contractformcheck:false,
+            orderMessage : "",
         };
     },
     setup(){},
@@ -255,11 +269,7 @@ export default{
             try{
                 if(query === 'productInfoQuery'){
                     this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
-                    console.log(`############################Cart${JSON.stringify(this.productInfo)}`)
-                    //{"id":63,"count":1,"total_price":109000,"createdAt":"2025-01-13T07:40:49.000Z","updatedAt":"2025-01-13T07:40:49.000Z","account_id":4,"product_id":23,
-                    //"Product":{"product_name":"카듀 12년","product_price":109000,"product_image":"https://dailyshot.co/m/_next/image?url=https%3A%2F%2Fd1e2y5wc27crnp.cloudfront.net%2Fmedia%2Fcore%2Fproduct%2Fthumbnail%2F6c06d723-d199-41ef-bdbd-9d0b8c69a809.webp&w=640&q=85"},
-                    //"selected":true}
-
+                    //console.log(`############################${JSON.stringify(this.productInfo)}`)
                 }else if(query === 'orderingInfoQuary') {
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
                     const response = await axios.get(`http://localhost:3000/orders/ordering/${InfoFromProductView}`);
@@ -269,14 +279,93 @@ export default{
                     //"Product":{"id":23,"product_name":"카듀 12년","product_price":109000,"product_description":"비번과 셰리를 담았던 통에서 숙성된 달콤하고 매운 맛의 위스키, 토피, 바닐라, 계피 향이 어우러져 부드러운 맛을 냅니다.","product_description_img":null,"product_stock":15,"product_image":"https://dailyshot.co/m/_next/image?url=https%3A%2F%2Fd1e2y5wc27crnp.cloudfront.net%2Fmedia%2Fcore%2Fproduct%2Fthumbnail%2F6c06d723-d199-41ef-bdbd-9d0b8c69a809.webp&w=640&q=85","drink_type":"whisky","product_kind":"drink","created_at":"2025-01-10T17:09:42.000Z","updated_at":"2025-01-10T17:09:42.000Z","product_location_id":null,"supply_factory_id":null}}
                     
                 }
+                console.log("this.productInfo",this.productInfo);
                 //총액 계산
                 this.calculateTotal()
             }catch(err){
                 console.error(err);
             }
         },
+        // Order CREATING
+        async order(rsp){
+          try {
+            const orderInfos = this.productInfo.map(product => ({
+              count : product.count,
+              account_id : this.user.id,
+              product_id : product.Product.id,
+              payment_id : rsp.imp_uid,
+              address : this.roadAddress,              
+              addressDetail : this.addressDetail,
+              addressNumber : this.postcode,
+              orderMessage : this.orderMessage,
+              cart_id : product.cart_id,
+            }));
+            const response = await axios.post(`http://localhost:3000/orders/order`, {
+              orderInfos,
+              hasCouponId : this.selectedCoupon,
+              usePoint : this.usePoint,
+              }, {withCredentials:true}
+            );
+            if(response.status === 200 || response.status === 201){
+              alert(response.data.message);
+              this.$router.push(`/order/${this.user.id}`);
+            }else{
+              alert("결제 실패!");
+            }
+            
+          }catch(err){
+            console.error(err);
+          }
+        },
+        KGpay() {
+          console.log("KGpay 호출");
+          if (!this.postcode || !this.roadAddress || !this.addressDetail) {
+            alert("주소를 입력해주세요.");
+            this.$nextTick(() => {
+                this.$refs.addressSearch.focus();
+            });
+            return;
+          }
+
+          if (!this.contractformcheck) {
+            alert("이용약관에 동의해주세요");
+            this.$nextTick(() => {
+                this.$refs.contractformcheck.focus();
+            });
+            return;
+          }
+
+          // 아임포트 초기화
+          IMP.init("imp00267421"); // 식별코드 변경
+          IMP.request_pay(
+            {
+              //필수
+              pg: "html5_inicis", // KG이니시스
+              pay_method: "card", //결제 수단 (짜피 사용자가 고르는 수단이 적용됨)
+              merchant_uid: `${this.user.email}_${new Date().getTime()}`,//주문번호(고유값)
+              name: this.fullProductName,//제품명
+              amount: this.totalPaymentAmount,//가격
+              //선택
+              buyer_email: this.user.email,
+              buyer_name: this.user.email,
+              buyer_addr: this.fulladdress,
+              buyer_postcode: this.postcode,
+              custom_data: { message: this.orderMessage },//pg사에서 만들어놓지 않은 파라미터를 전달하는 경우 custom_data에 넣어서 보내면 됨.
+            },
+            (rsp) => {
+              console.log("결제 응답:", rsp); // 디버깅용 출력
+              if (rsp.success) {
+                // 결제 성공 시 서버로 데이터 전송
+                this.order(rsp);
+              } else {
+                alert("결제 실패!");
+              }
+            }
+          );
+        },
 
 
+        
         //유저도 가져와야 해
         async getUser(){
             try{
@@ -359,88 +448,6 @@ export default{
             },
           }).open(); // 팝업 창 열기
         },
-
-        //결제 전에 주문지 들어갔는지 확인 코드 필요함.!
-        // Order CREATING
-        async order(){
-          try {
-
-            const orderInfos = this.productInfo.map(product => ({
-              cart_id : product.id, // 주문과 동시에 카트 삭제도 해줘야함
-              count : product.count,
-              account_id : product.account_id,
-              product_id : product.product_id,
-
-              address : this.roadAddress,              
-              addressDetail : this.addressDetail,
-              addressNumber : this.postcode,
-              orderMessage : this.orderMessage,
-            }));
-            console.log(`################orderInfosFRONT:${JSON.stringify(orderInfos)}`);
-            const reaponse = await axios.post('http://localhost:3000/orders/order', orderInfos);
-            
-          }catch(err){
-            console.error(err);
-          }
-        },
-
-
-
-
-        // 인증함수
-        checkIdentify() {
-            //포트원 초기화
-            IMP.init('imp07771767');
-
-            // 사용자 인증 요청, 응답으로 'success'나 'error'를 보냄
-            IMP.certification(
-                {
-                    pg : 'inicis_unified', // 사용할 PG사
-                    merchant_id: `order_${new Date().getTime()}`, // 주문번호
-                    m_redirect_url : `http://localhost:3000/`, // 리디렉션 URL (모바일 고려)
-                    popup : true, // pc에서는 팝업이가능, 모바일에선 안됨. 그래서 redir 해줘야함
-                },
-                // callback, 인증성공데이터 (인증고유id와 주문번호 등이 돌아온다) 포함해 다음 함수 실행
-                (rsp) => { 
-                    if (rsp.success) {
-                        console.log('인증성공', rsp);
-
-                        ///인증성공시 사용자 정보를 불러와 나이를 확인하는 함수 실행
-                        this.sendVerificationData(rsp);
-
-                    } else {
-                        console.error('인증실패', rsp.error_msg);
-                        alert(`사용자 인증 실패 : ${rsp.error_msg}`);
-                    }
-                }
-            )
-        },
-
-        //인증성공한 유저의 rsp(안에 imp_uid, merchant_uid 포함)를 받아, 포트원에 유저 data 요청하는 함수
-        async sendVerificationData(rsp) {
-            try{
-                console.log('##############################sendVerificationData 실행시작');
-                const response = await axios.post('http://localhost:3000/verify', {
-                    imp_uid: rsp.imp_uid, // 인증 고유 id
-                    merchant_uid : rsp.merchant_uid, //주문번호
-                });
-                if(response.status === 200) {
-                    console.log('포트원에 인증데이터 전송 성공 :', response.data);
-                    alert('인증 성공')
-                } else {
-                    console.error('서버 응답 오류:', response.status);
-                    alert('서버오류로 인증 실패')
-                }
-            } catch (error) {
-                console.error('인증데이터 전송 중 오류:', error);
-                alert('네트워크 오류로 인증 데이터를 전송하지 못했습니다.');
-            }
-        },
-
-
-
-        
-
     },
     watch: {
         selectedCoupon: {
