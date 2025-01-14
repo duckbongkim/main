@@ -294,12 +294,18 @@ export default{
               orderMessage : this.orderMessage,
               cart_id : product.cart_id,
             }));
-            await axios.post(`http://localhost:3000/orders/order`, {
+            const response = await axios.post(`http://localhost:3000/orders/order`, {
               orderInfos,
               hasCouponId : this.selectedCoupon,
               usePoint : this.usePoint,
               }, {withCredentials:true}
             );
+            if(response.status === 200 || response.status === 201){
+              alert(response.data.message);
+              this.$router.push(`/order/${this.user.id}`);
+            }else{
+              alert("결제 실패!");
+            }
             
           }catch(err){
             console.error(err);
@@ -343,11 +349,10 @@ export default{
             (rsp) => {
               console.log("결제 응답:", rsp); // 디버깅용 출력
               if (rsp.success) {
-                alert("결제 성공! 결제 정보: " + JSON.stringify(rsp));
                 // 결제 성공 시 서버로 데이터 전송
                 this.order(rsp);
               } else {
-                alert("결제 실패! 오류: " + rsp.error_msg);
+                alert("결제 실패!");
               }
             }
           );
