@@ -210,25 +210,7 @@ export default{
 
             product_id: null,
             orderQuantity : 1,
-            user : [{
-                id: 21,
-                email: "kim123@example.com",
-                password: "password1",
-                name: "김철수",
-                birth: "1990-05-15",
-                nickname: "철수김",
-                phone_number: "010-1234-5678",
-                address: "서울특별시 강남구 테헤란로",
-                addressNumber: 123,
-                addressDetail: "아파트 101호",
-                delete_time: null,
-                ratingPoint: 0,
-                savedMoney: 5000,
-                created_at: "2025-01-05 10:49:36",
-                updated_at: null,
-                super_admin: 0,
-                rating_id: 1
-            }],
+            user : [],
             
         };
     },
@@ -393,26 +375,60 @@ export default{
         },
 
         //Ordering Product PUSH
+        // async makeOrder(){
+        //     try{
+        //         //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+        //         if(!this.checkLogin()) return; 
+        //         const orderingInfo = {
+        //             //userId : this.user.id,
+        //             id :this.selectedProduct.id,
+        //             count : this.orderQuantity, 
+        //         }
+        //         this.$router.push({
+        //             path: `/finalOrder/${this.user.id}`, ////뷰 변경!!!
+        //             query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
+        //         });
+
+        //     }catch(err){
+        //         console.error(err);                
+        //     }
+        // },
         async makeOrder(){
             try{
                 //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
                 if(!this.checkLogin()) return; 
 
-                // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
-                const orderingInfo = {
-                    //userId : this.user.id,
-                    id :this.selectedProduct.id,
-                    count : this.orderQuantity, 
+                console.log('@@@@@@@@@@@@@@@@@@@@@this.user.birth',this.user.birth);
+                
+                if(!this.user.birth){
+                    alert('먼저 성인 인증을 해주세요')
+                    this.$router.push({
+                        path: `/modify`, ////뷰 변경!!!
+                    })
+                }else{
+                    const birthDate = new Date(this.user.birth);
+                    const currentDate = new Date();
+                    const age = currentDate.getFullYear() - birthDate.getFullYear();
+                    if(age >= 18) {
+                        const orderingInfo = {
+                        //userId : this.user.id,
+                        id :this.selectedProduct.id,
+                        count : this.orderQuantity, 
+                        }
+                        this.$router.push({
+                            path: `/finalOrder/${this.user.id}`,
+                            query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
+                        });
+                    }else {
+                        alert('미성년자는 주류 구입이 불가합니다.')
+                    }              
                 }
-                this.$router.push({
-                    path: `/finalOrder/${this.user.id}`, ////뷰 변경!!!
-                    query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
-                });
-
             }catch(err){
                 console.error(err);                
             }
         },
+
+        
 
         //check recently product
         async checkRecentlyProduct(){

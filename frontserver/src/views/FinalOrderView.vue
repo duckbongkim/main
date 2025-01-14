@@ -286,11 +286,15 @@ export default{
             try{
                 if(query === 'productInfoQuery'){
                     this.productInfo = JSON.parse(this.$route.query.productInfoQuery);
-                    
+                    //console.log(`############################${JSON.stringify(this.productInfo)}`)
                 }else if(query === 'orderingInfoQuary') {
                     const InfoFromProductView = this.$route.query.orderingInfoQuary;
                     const response = await axios.get(`http://localhost:3000/orders/ordering/${InfoFromProductView}`);
                     this.productInfo = [response.data];
+                    console.log(`############################ProductView${JSON.stringify(this.productInfo)}`)
+                    //{"id":23,"count":1,
+                    //"Product":{"id":23,"product_name":"카듀 12년","product_price":109000,"product_description":"비번과 셰리를 담았던 통에서 숙성된 달콤하고 매운 맛의 위스키, 토피, 바닐라, 계피 향이 어우러져 부드러운 맛을 냅니다.","product_description_img":null,"product_stock":15,"product_image":"https://dailyshot.co/m/_next/image?url=https%3A%2F%2Fd1e2y5wc27crnp.cloudfront.net%2Fmedia%2Fcore%2Fproduct%2Fthumbnail%2F6c06d723-d199-41ef-bdbd-9d0b8c69a809.webp&w=640&q=85","drink_type":"whisky","product_kind":"drink","created_at":"2025-01-10T17:09:42.000Z","updated_at":"2025-01-10T17:09:42.000Z","product_location_id":null,"supply_factory_id":null}}
+                    
                 }
                 console.log("this.productInfo",this.productInfo);
                 //총액 계산
@@ -458,10 +462,8 @@ export default{
                 this.guide = "";
               }
             },
-          }).open(); // 팝업 창 열기
+          }).open(); // 팝업 창 열기        
         },
-
-
         checkIdentify() {
             // 아임포트 초기화
             IMP.init('imp00267421'); // 발급받은 고유 식별 코드

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="orderList-content">
-            <h1>주문목록</h1>
+            <h1>내 주문목록</h1>
             <table class="table orderList-table">
                 <thead>
                     <tr>
@@ -73,7 +73,6 @@ export default{
                 this.userid = this.$route.params.userId;
                 const response = await axios.get(`http://localhost:3000/orders/order/${this.userid}`);
                 this.orderList = response.data.sort((a, b) => b.id - a.id); // 주문번호순으로 정렬렬
-                console.log(`################orderList: ${JSON.stringify(this.orderList)}`);
             }catch(err){
                 console.error(err);
             }
