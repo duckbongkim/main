@@ -356,7 +356,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+}
 .tags {
   display: flex;
   justify-content: center;
@@ -483,7 +483,7 @@ h1 {
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-
+}
 .page-link:hover {
   background-color: #e5dcc3; /* 호버 시 배경색 */
   color: #000; /* 호버 시 텍스트 색상 */
