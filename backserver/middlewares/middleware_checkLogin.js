@@ -1,11 +1,10 @@
+const Accounts = require('../models/model_accounts');
+
 exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
         next();
     } else {
-        console.log("세션 정보:", req.session);
-        console.log("인증 상태:", req.isAuthenticated());
-        console.log("사용자 정보:", req.user);
-        res.status(403).json({message: 'need login'});
+        res.status(200).json({message: 'need login',isLoggedIn:false});
     }
 };
 exports.isNotLoggedIn = (req,res,next)=>{
@@ -15,4 +14,24 @@ exports.isNotLoggedIn = (req,res,next)=>{
     else{
         res.status(403).json({message:'already logged in'});
     }
+};
+exports.isAdmin = async (req,res,next)=>{
+    try{
+        if(!req.isAuthenticated()){
+            res.status(402).json({message:'need login'});
+        }
+        const account = await Accounts.findOne({where:{email:req.user.email}});
+        if(account.super_admin === true){
+            next();
+        }
+        else{
+            res.status(403).json({message:'not admin'});
+        }
+    }
+    catch(error){
+        console.log("관리자 권한 확인 실패",error);
+        next(error);
+    }
+    
+
 }

@@ -8,7 +8,7 @@
       <!-- 이메일/비밀번호 폼 -->
       <form class="login-form" @submit.prevent="localLogin">
         <div class="form-group">
-          <input type="email" placeholder="이메일" class="form-input" v-model="loginFrom.email" required/>
+          <input ref="emailInput" type="email" placeholder="이메일" class="form-input" v-model="loginFrom.email" required/>
         </div>
         <div class="form-group">
           <input type="password" placeholder="비밀번호" class="form-input" v-model="loginFrom.password" required/>
@@ -24,7 +24,7 @@
 
       <!-- 회원가입 링크 -->
       <div class="signup-link">
-        <p>아직 계정이 없으신가요? <router-link to="/createAccount">회원가입</router-link></p>
+        <p>아직 계정이 없으신가요? <router-link to="/agree">회원가입</router-link></p>
       </div>
 
       <!-- 로그아웃 버튼 추가 -->
@@ -59,24 +59,33 @@ export default{
         async checkLogin() {
             try {
                 const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
-                console.log("response",response);
                 this.isLoggedIn = response.data.isLoggedIn;
             } catch (error) {
+              if(error.response.status === 403){
                 this.isLoggedIn = false;
+              }
+              else{
+                console.log('need login')
+              }
             }
         },
         async localLogin(){
             try{
                 const response = await axios.post('http://localhost:3000/auth',this.loginFrom,{withCredentials:true});
                 if(response.status === 200){
-                    alert('로그인 성공');
+                    this.loginFrom.email = '';
+                    this.loginFrom.password = '';
                     this.checkLogin();
-                }
-                else if(response.status === 401){
-                    alert(response.data.message);
+                    this.$router.push({ //뒤로가기 방지
+                        path: '/',
+                        replace: true
+                    });
                 }
             }catch(error){
-                console.error(error);
+                if(error.response.status === 401){
+                    alert(error.response.data.message);
+                    this.$refs.emailInput?.focus();
+                }
             }
         },
         kakaoLogin(){
@@ -110,13 +119,13 @@ export default{
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #FFFFFF;
 }
 
 .login-box {
   width: 400px;
   padding: 40px;
-  background: white;
+  background: #faf8f3;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
@@ -146,8 +155,8 @@ h2 {
 .login-btn {
   width: 100%;
   padding: 12px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #e5dcc3;
+  color: #333;
   border: none;
   border-radius: 5px;
   font-size: 16px;
@@ -156,7 +165,7 @@ h2 {
 }
 
 .login-btn:hover {
-  background-color: #45a049;
+  background-color: #d4cbb4;
 }
 
 .social-login {
@@ -192,11 +201,12 @@ h2 {
 }
 
 .signup-link a {
-  color: #4CAF50;
+  color: #b4a892;
   text-decoration: none;
 }
 
 .signup-link a:hover {
+  color: #8c826e;
   text-decoration: underline;
 }
 

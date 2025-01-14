@@ -13,6 +13,8 @@ const Replies = require('./model_replies.js');
 const Searched = require('./model_searched.js');
 const SupplyFactory = require('./model_supplyFactory.js');
 const Wishes = require ('./model_wishes.js');
+const OrderStatuses = require ('./model_orderStatuses.js'); //250112 누리 추가
+const HaveCoupons = require('./model_haveCoupons.js');
 
 
 //환경변수 설정
@@ -72,6 +74,12 @@ Wishes.initiate(sequelize);
     // DB와 Sequelize 모델을 연결하고 모델의 정의와 DB 테이블의 구조를 일치시킴.
     // 테이블을 새로 만들지 않더라도 sequelize에서 이 db테이블을 모델로 다룰 수 있도록 초기화해줘야함.
 
+db.HaveCoupons = HaveCoupons;
+HaveCoupons.initiate(sequelize);
+//250112 누리) orderStatus 테이블 추가
+db.OrderStatuses = OrderStatuses;
+OrderStatuses.initiate(sequelize);
+
 
 
 
@@ -97,6 +105,9 @@ db.Orders.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'i
 db.Accounts.hasMany(db.Orders,{foreignKey: { name: 'account_id'}, sourceKey:'id'});
 db.Orders.belongsTo(db.Products,{foreignKey: { name: 'product_id',allowNull: true}, targetKey:'id'});
 db.Products.hasMany(db.Orders,{foreignKey: { name: 'product_id',allowNull: true}, sourceKey:'id'});
+//250112 누리)) 주문상태 테이블 추가 
+db.Orders.belongsTo(db.OrderStatuses, {foreignKey : {name : 'status_id', defaultValue : 1}, targetKey : 'id'});
+db.OrderStatuses.hasMany(db.Orders, {foreignKey : {name : 'status_id', defaultValue : 1}, targetKey : 'id'})
 
 //Buckets
 db.Buckets.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'id'});
@@ -105,35 +116,37 @@ db.Buckets.belongsTo(db.Products,{foreignKey: { name: 'product_id',allowNull: tr
 db.Products.hasMany(db.Buckets,{foreignKey: { name: 'product_id',allowNull: true}, sourceKey:'id'});
 
 //HaveCoupons
-db.Coupons.belongsToMany(db.Accounts, { through: 'HaveCoupons', foreignKey: 'coupon_id' }); //HaveCoupons -> 쿠폰 테이블 명
-db.Accounts.belongsToMany(db.Coupons, { through: 'HaveCoupons', foreignKey: 'account_id' });  
+db.Coupons.belongsToMany(db.Accounts, { through: db.HaveCoupons, foreignKey: 'coupon_id' });
+db.Accounts.belongsToMany(db.Coupons, { through: db.HaveCoupons, foreignKey: 'account_id' });
 
 //Postes
 db.Postes.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'id'});
 db.Accounts.hasMany(db.Postes,{foreignKey: { name: 'account_id'}, sourceKey:'id'});
 
 //Likes
-db.Likes.belongsTo(db.Postes,{foreignKey: { name: 'post_id'}, targetKey:'id'});
+db.Likes.belongsTo(db.Postes,{foreignKey: { name: 'post_id'}, targetKey:'id',onDelete: 'CASCADE'});
 db.Postes.hasMany(db.Likes,{foreignKey: { name: 'post_id'}, sourceKey:'id'});
-db.Likes.belongsTo(db.Replies,{foreignKey: { name: 'reply_id'}, targetKey:'id'});
+db.Likes.belongsTo(db.Replies,{foreignKey: { name: 'reply_id'}, targetKey:'id',onDelete: 'CASCADE'});
 db.Replies.hasMany(db.Likes,{foreignKey: { name: 'reply_id'}, sourceKey:'id'});
 
 //Replies
-db.Replies.belongsTo(db.Postes,{foreignKey: { name: 'post_id'}, targetKey:'id'});
+db.Replies.belongsTo(db.Postes,{foreignKey: { name: 'post_id'}, targetKey:'id',onDelete: 'CASCADE'}); //post_id 삭제시 댓글도 삭제 추가
 db.Postes.hasMany(db.Replies,{foreignKey: { name: 'post_id'}, sourceKey:'id'});
-db.Replies.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'id'});
+db.Replies.belongsTo(db.Accounts,{foreignKey: { name: 'account_id'}, targetKey:'id',onDelete: 'CASCADE'}); //account_id 삭제시 댓글도 삭제 추가
 db.Accounts.hasMany(db.Replies,{foreignKey: { name: 'account_id'}, sourceKey:'id'});
-db.Replies.belongsTo(db.Products,{foreignKey: { name: 'product_id'}, targetKey:'id'});
+db.Replies.belongsTo(db.Products,{foreignKey: { name: 'product_id'}, targetKey:'id',onDelete: 'SET NULL'}); //product_id 삭제시 댓글의 product_id 를 NULL로 설정 추가
 db.Products.hasMany(db.Replies,{foreignKey: { name: 'product_id'}, sourceKey:'id'});
 
 //account
 db.Accounts.belongsTo(db.Ratings,{foreignKey: { name: 'rating_id',defaultValue:1}, targetKey:'id'});
 db.Ratings.hasMany(db.Accounts,{foreignKey: { name: 'rating_id',defaultValue:1}, sourceKey:'id'});
 
-
 //250103 누리) wishes
 db.Wishes.belongsTo(db.Accounts, { foreignKey: 'account_id', targetKey: 'id'});
 db.Wishes.belongsTo(db.Products, { foreignKey : 'product_id', targetKey : 'id'});
+
+db.HaveCoupons.belongsTo(db.Coupons, { foreignKey: 'coupon_id', targetKey: 'id'});
+db.HaveCoupons.belongsTo(db.Accounts, { foreignKey: 'account_id', targetKey: 'id'});
 
 
 module.exports = db;

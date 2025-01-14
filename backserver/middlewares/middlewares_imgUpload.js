@@ -14,7 +14,7 @@ const descriptionImgUploadStorage = multer.diskStorage({
 const descriptionUpload = multer({
     storage: descriptionImgUploadStorage,
     limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB
+        fileSize: 5 * 1024 * 1024, // 5MB
     }
 });
 
@@ -31,11 +31,29 @@ const productImgUploadStorage = multer.diskStorage({
 const productUpload = multer({
     storage: productImgUploadStorage,
     limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB
+        fileSize: 5 * 1024 * 1024, // 5MB
+    }
+});
+
+//게시글 이미지 저장공간 설정
+const postImgUploadStorage = multer.diskStorage({
+    destination: 'uploads/post_imgs/',
+    filename: (req, file, cb) => {
+        const originalName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+        const safeName = originalName.replace(/[^A-Za-z0-9가-힣._-]/g, '_');
+        cb(null, `${Date.now()}-${safeName}`);
+    }
+});
+
+const postUpload = multer({
+    storage: postImgUploadStorage,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
     }
 });
 
 module.exports = {
     descriptionUpload,
-    productUpload
+    productUpload,
+    postUpload
 };

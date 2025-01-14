@@ -3,73 +3,61 @@
     <ul class="review-list">
       <li v-for="(review, index) in reviews" :key="index" class="review-item">
         <div class="review-left">
-          <p class="review-text">{{ review.content }}</p>
+          <p class="review-text clickable" @click="$router.push(`/post/post_detail/${review.id}`)">{{ review.title }}</p>
         </div>
         <div class="review-right">
-          <span class="review-user">{{ review.user }}</span>
-          <span class="review-date">{{ review.date }}</span>
+          <span class="review-user">{{ review.Account.nickname||review.Account.email }}</span>
+          <span class="review-date">{{ review.created_at }}</span>
         </div>
       </li>
     </ul>
 
-    <div class="review-bottom">
-      <button class="review-button">상품후기 글쓰기</button>
+    <div class="review-bottom" v-show="isLogin">
+      <button class="review-button" @click="$router.push(`/products/review/${productId}`)">상품후기 글쓰기</button>
     </div>
   </div>
 </template>
 
 <script>
-
+import axios from 'axios';
 export default{ 
     name:'',
     components:{},
+    inject:['productId'],
     data(){
         return{
-           reviews: [
-        {
-          rating: 1,
-          content: "병이 깨져서 왔어요",
-          reply: "답변드립니다.",
-          user: "aa",
-          date: "2024.05.17",
-        },
-        {
-          rating: 5,
-          content: "맛있어요",
-          reply: null,
-          user: "aa",
-          date: "2025.04.30",
-        },
-        {
-          rating: 4,
-          content: "맛있어요",
-          reply: null,
-          user: "aa",
-          date: "2025.04.30",
-        },
-        {
-          rating: 3,
-          content:
-            "맛은 괜찮은데 배송이 너무 느려요. 다음엔 빨리 보내주세요.",
-          reply: null,
-          user: "aa",
-          date: "2025.04.29",
-        },
-        {
-          rating: 2,
-          content: "병이 깨져서 왔어요",
-          reply: null,
-          user: "aa",
-          date: "2025.04.29",
-        },
-      ],
+           reviews: [],
+           isLogin:false,
         };
     },
     setup(){},
-    created(){},
-    mounted(){},
+    created(){
+      this.checkLogin();
+    },
+    mounted(){
+      this.getReviewList();
+    },
     unmounted(){},
-    methods:{}
+    methods:{
+      async getReviewList(){
+        try{
+          const response = await axios.get(`http://localhost:3000/post/product_review/${this.productId}`);
+          console.log('response',response);
+          this.reviews = response.data;
+        }catch(error){
+          console.error(error);
+        }
+      },
+      async checkLogin(){
+        try {
+          const response = await axios.get('http://localhost:3000/auth/check',{withCredentials:true});
+          this.isLogin = response.data.isLoggedIn;
+        } catch(error) {
+          return false;
+        }
+      },
+    }
+    
 }
 </script>
 
@@ -122,6 +110,15 @@ export default{
 .review-text {
   margin: 5px 0;
   font-size: 14px;
+}
+
+.review-text.clickable {
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.review-text.clickable:hover {
+  color: #007BFF;
 }
 
 .review-reply {
