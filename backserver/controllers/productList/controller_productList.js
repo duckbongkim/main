@@ -29,19 +29,33 @@ exports.getDrinkTpye = async (req, res, next) => {
 // 품목별 상품 조회 (etc상품)
 exports.getProductKind =  async (req, res, next) => {
     const { product_kind } = req.params;
-
+    console.log('요청까지?')
     try {
-      const results = await Products.findAll({
-        where: {
-          product_kind,
-          [Op.or]: [ { product_kind: 'wineglass' }, { product_kind: 'ontherock' } ]
+      let whereCondition = {
+        product_kind: {
+          [Op.in]: ['wineglass', 'ontherock']  // 'wineglass' 또는 'ontherock'만 포함
         }
-      });
-      res.json(results); 
-    } catch (err) {
-      console.error('상품 목록 조회 실패:', err);
-      next(err);
-    }
+      };
+
+    // product_kind가 'wineglass'일 경우, 'wineglass'에 해당하는 상품을 조회
+    if (product_kind === 'wineglass') {
+      whereCondition.product_kind = 'wineglass';
+    } 
+    // product_kind가 'ontherock'일 경우, 'ontherock'에 해당하는 상품을 조회
+    else if (product_kind != 'wineglass') {
+      whereCondition.product_kind = 'ontherock';
+    } 
+    const results = await Products.findAll({
+      where: whereCondition
+    });
+
+    console.log('필터링된 결과:', results); 
+    res.json(results); 
+
+  } catch (err) {
+    console.error('상품 목록 조회 실패:', err);
+    next(err);
+  }
   };
 
 // 상품 검색
