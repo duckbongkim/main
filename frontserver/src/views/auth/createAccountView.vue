@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name">이름</label>
-                        <input type="text" v-model="createAccountData.name" class="form-control" id="name" required>
+                        <input type="text" v-model="createAccountData.name" class="form-control" id="name" readonly required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nickname">닉네임</label>
@@ -30,7 +30,10 @@
                 </div>
                 <div class="mb-3">
                     <label for="birth">생년월일</label>
-                    <input type="date" v-model="createAccountData.birth" class="form-control" id="birth" required>
+                    <div class="input-group">
+                        <input type="date" v-model="createAccountData.birth" class="form-control" id="birth" readonly required>
+                        <button type="button" class="btn btn-secondary" id="verify-age" @click="checkIdentify">본인인증</button>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="phone">핸드폰 번호</label>
@@ -219,6 +222,54 @@ export default{
             },
           }).open(); // 팝업 창 열기
         },
+
+        checkIdentify() {
+            // 아임포트 초기화
+            IMP.init('imp00267421'); // 발급받은 고유 식별 코드
+
+            // 사용자 인증 요청
+            IMP.certification(
+                {
+                pg: 'inicis_unified', // KG 이니시스 (실제 PG사에 맞게 설정)
+                merchant_uid: `verify_${new Date().getTime()}`, // 주문번호
+                m_redirect_url: 'http://localhost:3000/hdj_verify/verify', // 리디렉션 URL (모바일용)
+                popup: true, // PC에서는 항상 true
+                },
+                (rsp) => {
+                // callback
+                if (rsp.success) {
+                    // 인증 성공 시 로직
+                    console.log('인증 성공:', rsp);
+
+                    // 예시: 인증 성공 데이터를 서버로 전송
+                    this.sendVerificationData(rsp);
+                } else {
+                    // 인증 실패 시 로직
+                    console.error('인증 실패:', rsp.error_msg);
+                    alert(`인증 실패: ${rsp.error_msg}`);
+                }
+                }
+            );
+        },
+        async sendVerificationData(rsp) {
+            try {
+                const response = await axios.post('http://localhost:3000/hdj_verify/verify', {
+                imp_uid: rsp.imp_uid, // 인증 고유 ID
+                merchant_uid: rsp.merchant_uid, // 주문 번호
+                });
+
+                if (response.status === 200) {
+                console.log('서버로 인증 데이터 전송 성공:', response.data);
+                alert('인증이 성공적으로 완료되었습니다.');
+                } else {
+                console.error('서버 응답 오류:', response.status);
+                alert('서버 오류로 인증 데이터를 전송하지 못했습니다.');
+                }
+            } catch (error) {
+                console.error('인증 데이터 전송 중 오류:', error);
+                alert('네트워크 오류로 인증 데이터를 전송하지 못했습니다.');
+            }
+        },
     },
     watch:{}
 }
@@ -249,10 +300,13 @@ label {
 
 .input-group .btn {
     margin-left: 10px;
+    white-space: nowrap;
 }
 
-.input-group input[readonly] {
+.input-group input[readonly],
+input[readonly].form-control {
     background-color: #f8f9fa;
+    cursor: not-allowed;
 }
 
 </style>
