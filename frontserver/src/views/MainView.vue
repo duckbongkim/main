@@ -34,13 +34,18 @@
     <section>
       <!-- 신상품 소개하는 캐러셀-->
           <div class="swiper1-title" >
-            <h2>신상품 추천</h2>
-            <p>새롭군요?!</p>
+            <h2>New 상품<span>🍸</span></h2>
+            <p>"새로나온 제품을 한눈에!"</p>
           </div>   
-      <v-carousel v-if="mainData.expensive.length > 0" height="550" show-arrows="hover" cycle hide-delimiter-background>
+      <v-carousel v-if="mainData.newProduct.length > 0" 
+        height="550" 
+        show-arrows="hover" 
+        cycle 
+        hide-delimiter-background
+        style="background-color: #8D6E63;">
         
         <v-carousel-item
-          v-for="item in mainData.expensive"
+          v-for="item in mainData.newProduct"
           :key="item.id"
           @click="goProducts(item.id)"
         >
@@ -58,16 +63,16 @@
     </section>
 
     <!-- swiper expensive-container-->
-      <div class="slider expensive-slider" style="background-color: #F5F3F1; border-radius: 16px; padding: 16px;">
+      <div class="slider expensive-slider" style="background-color: #FAF3E0  ; border-radius: 16px; padding: 16px;">
         <!-- 추천 배너 텍스트 추가 -->
         <div class="expensive-image">
           <img src="img\배너0.jpg" class="left-image" alt="04" />
         </div>
         <div class="swiper-container expensive-container">
           
-          <div class="expensive-title">
-            <h2>고가 상품추천</h2>
-            <p> mz들 픽 </p>
+          <div class="expensive-title" >
+            <h2>가성비 추천<span>🍻</span></h2>
+            <p>"가볍게, 부담 없이! 트렌디한 주류를 한 곳에서."</p>
           </div>
           
           <div class="swiper-wrapper expensive-wrapper">
@@ -88,12 +93,12 @@
       </div>
 
     <!-- swiper 2 -->
-    <section style="background-color: #E7E4E1;">
-      <div class="bar3" style="background-color: #E7E4E1;"></div>
+    <section style="background-color: #8D6E63  ;">
+      <div class="bar3" style="background-color: #8D6E63  ;"></div>
       <div class="recommendation-banner">"20대"에게 추천</div>
-        <div class="swiper1-title">
-          <h2>20대 상품추천</h2>
-          <p>mz상품</p>
+        <div class="swiper1-title" >
+          <h2 >20대 MZ 들의 PICK!<span>🍷</span></h2>
+          <p>"모든 순간에 어울리는 완벽한 술, 여기 다 있습니다."</p>
         </div>      
       <div class="container swiper-container-good">
 
@@ -119,12 +124,11 @@
     <!-- swiper 3 -->
     <section>
       <div class="bar2"></div>
-      <div class="recommendation-banner">"30대"에게 추천</div>
       <div class="container swiper-container-thirties">
 
         <div class="swiper1-title" >
-          <h2>30대 상품추천</h2>
-          <p>30대 추천 상품</p>
+          <h2>30대 상품추천<span>🍷</span></h2>
+          <p>"특별한 날, 특별한 술. 최고의 선택을 도와드립니다."</p>
         </div>
 
         <div class="swiper-wrapper">
@@ -313,7 +317,6 @@ export default{
   /* recommendation-banner */
   .recommendation-banner {
     font-size: 30px;
-    font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
     color: #333;
@@ -469,7 +472,6 @@ export default{
     overflow: hidden; /* 슬라이드 영역 밖의 이미지를 숨깁니다. */
     position: relative; /* 버튼 위치를 슬라이더 컨테이너 기준으로 설정 */
     display: flex;
-    justify-content: center; /* 슬라이드 컨테이너 중앙 정렬 */
     align-items: center; /* 슬라이드 컨테이너 세로 중앙 정렬 */
   }
 
@@ -509,7 +511,7 @@ export default{
   /* 텍스트 */
   .swiper-container-good .swiper-slide p {
     margin: 5px 0; /* 텍스트 간 간격 */
-    color: #222; /* 텍스트 색상 */
+    color: black; /* 텍스트 색상 */
     font-size: 22px; /* 텍스트 크기 조정 */
     text-align: center; /* 텍스트를 가운데 정렬 */
     padding: 5px; /* 텍스트 주변 여백 */
@@ -578,7 +580,7 @@ export default{
   /* 텍스트 스타일 */
   .swiper-container-thirties .swiper-slide p {
     margin: 5px 0; /* 텍스트 간 간격 */
-    color: #222; /* 텍스트 색상 */
+    color: black; /* 텍스트 색상 */
     font-size: 25px; /* 텍스트 크기 조정 (이미지 크기에는 영향 주지 않음) */
     text-align: left; /* 텍스트 왼쪽 정렬 */
     padding: 0; /* 불필요한 여백 제거 */
@@ -606,55 +608,64 @@ export default{
   /* 글, 여백주기 */
   .expensive-title {
     float: left;
-
+    
   }
 
   .expensive-title p {
     float: left;
     margin-top: 10px;
-    font-size: 30px; /* 부제목 크기 */
+    font-size: 20px; /* 부제목 크기 */
+    color: black;
+    font-family: 'Noto Serif KR', serif;
   }
   .expensive-title h2{
     margin: 0;
     font-size: 60px; /* 타이틀 크기 */
+    color: black;
+    font-family: 'Noto sans KR', serif; 
   }
   .swiper1-title { 
     top: 50%;
-
+    color: black;
   }
   .swiper1-title h2 {
     margin: 0;
     font-size: 60px; /* 타이틀 크기 */
-
+    color: black;
+    font-family: 'Noto sans KR', serif; 
   }
 
   .swiper1-title p {
     margin-top: 10px;
-    font-size: 30px; /* 부제목 크기 */
-
+    font-size: 20px; /* 부제목 크기 */
+    color: black;
+    font-family: 'Noto Serif KR', serif; 
   }
   .swiper2-title { 
     top: 50%;
+    color: black;
   }
   .swiper2-title h2 {
     margin: 0;
     font-size: 60px; /* 타이틀 크기 */
-
+    color: black;
+    font-family: 'Noto sans KR', serif; 
   }
 
   .swiper2-title p {
     margin-top: 10px;
-    font-size: 30px; /* 부제목 크기 */
-
+    font-size: 20px; /* 부제목 크기 */
+    color: black;
+    font-family: 'Noto Serif KR', serif; 
   }
 
   .bar1{
-    margin:200px;
+    margin:50px;
   }
   .bar2{
-    margin:100px;
+    margin:50px;
   }
   .bar3{
-    padding:100px;
+    padding:50px;
   }
 </style>
