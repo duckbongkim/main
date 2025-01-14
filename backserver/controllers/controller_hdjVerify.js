@@ -62,7 +62,7 @@ exports.hdjVerify = async (req,res,next)=>{
             console.log('연령 제한 미달:', { name, age });
             res.status(200).json({
               message: '연령 제한 미달',
-              data: { name, age, adult: false },
+              data: { name,birth:birthDate.toLocaleDateString(), phone,age, adult: false },
             });
           }
         } catch (error) {
