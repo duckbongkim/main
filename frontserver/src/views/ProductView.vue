@@ -240,7 +240,7 @@ export default{
 
         // axios 요청 메소드
 
-        // Check Login
+        // // Check Login
 
         checkLogin () {
             if(!this.user.id) {
@@ -375,26 +375,60 @@ export default{
         },
 
         //Ordering Product PUSH
+        // async makeOrder(){
+        //     try{
+        //         //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
+        //         if(!this.checkLogin()) return; 
+        //         const orderingInfo = {
+        //             //userId : this.user.id,
+        //             id :this.selectedProduct.id,
+        //             count : this.orderQuantity, 
+        //         }
+        //         this.$router.push({
+        //             path: `/finalOrder/${this.user.id}`, ////뷰 변경!!!
+        //             query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
+        //         });
+
+        //     }catch(err){
+        //         console.error(err);                
+        //     }
+        // },
         async makeOrder(){
             try{
                 //login check : false값이 들어오면 (로그인되어있지 않으면) return(addWish 함수 종료). 
                 if(!this.checkLogin()) return; 
 
-                // (변경예정) productInfoForOrder 는 장바구니 리스트에서 '선택된' 애들만 들여보내주는걸로 
-                const orderingInfo = {
-                    //userId : this.user.id,
-                    id :this.selectedProduct.id,
-                    count : this.orderQuantity, 
+                console.log('@@@@@@@@@@@@@@@@@@@@@this.user.birth',this.user.birth);
+                
+                if(!this.user.birth){
+                    alert('먼저 성인 인증을 해주세요')
+                    this.$router.push({
+                        path: `/modify`, ////뷰 변경!!!
+                    })
+                }else{
+                    const birthDate = new Date(this.user.birth);
+                    const currentDate = new Date();
+                    const age = currentDate.getFullYear() - birthDate.getFullYear();
+                    if(age >= 18) {
+                        const orderingInfo = {
+                        //userId : this.user.id,
+                        id :this.selectedProduct.id,
+                        count : this.orderQuantity, 
+                        }
+                        this.$router.push({
+                            path: `/finalOrder/${this.user.id}`,
+                            query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
+                        });
+                    }else {
+                        alert('미성년자는 주류 구입이 불가합니다.')
+                    }              
                 }
-                this.$router.push({
-                    path: `/finalOrder/${this.user.id}`, ////뷰 변경!!!
-                    query : {orderingInfoQuary : JSON.stringify(orderingInfo)},
-                });
-
             }catch(err){
                 console.error(err);                
             }
         },
+
+        
 
         //check recently product
         async checkRecentlyProduct(){

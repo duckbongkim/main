@@ -3,11 +3,11 @@
       <h1>커뮤니티 게시판</h1>
       <div class="top-navbar">
         <ul>
-          <li><router-link to="/postlist">전체게시판</router-link></li>
-          <li><router-link to="/postlist/free">자유게시판</router-link></li>
-          <li><router-link to="/postlist/review">리뷰게시판</router-link></li>
-          <li><router-link to="/postlist/inquiry">문의게시판</router-link></li>
-          <li><router-link to="/postlist/report">신고게시판</router-link></li>
+          <li><v-btn><router-link to="/postlist">전체게시판</router-link></v-btn></li>
+          <li><v-btn><router-link to="/postlist/free">자유게시판</router-link></v-btn></li>
+          <li><v-btn><router-link to="/postlist/review">리뷰게시판</router-link></v-btn></li>
+          <li><v-btn><router-link to="/postlist/inquiry">문의게시판</router-link></v-btn></li>
+          <li><v-btn><router-link to="/postlist/report">신고게시판</router-link></v-btn></li>
         </ul>
       </div>
   </div>
@@ -20,13 +20,17 @@
   </script>
   
   <style scoped>
+.top-navbar{
+  margin-top: 50px;
+}
+
   .top-navbar ul {
   list-style-type: none;
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin: 0;
-  padding: 0;
+  margin: 20px;
+  padding: 20px;
 }
 
 .top-navbar li {
@@ -40,6 +44,9 @@
 
 .top-navbar a:hover {
   color: #b6cadf;
+}
+.v-btn {
+  background-color: #f3efe0;
 }
 
 </style>

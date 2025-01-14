@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const {getProducts,getProductKind,searchProducts,getDrinkTpye} =require('../controllers/productList/controller_productList')
+const {getProducts,getProductKind,searchProducts,getDrinkTpye,searchDrinks} =require('../controllers/productList/controller_productList')
 
 //전체 상품리스트 조회
 router.get('/liqueur',getProducts);
@@ -9,7 +9,7 @@ router.get('/liqueur',getProducts);
 router.get('/liqueur/:drink_type',getDrinkTpye);
 
 //상품 품목별 상품리스트 조회
-router.get('/liqueur/:product_kind',getProductKind);
+router.get('/:product_kind',getProductKind);
 
 //검색결과 상품리스트 조회
 router.get('/liqueur/search',searchProducts);

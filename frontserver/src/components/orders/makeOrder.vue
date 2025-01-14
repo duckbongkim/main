@@ -1,10 +1,9 @@
-
 <template>
-    <div class="container">
-        <div class="input-form-background row">
-            <div class="input-form col-md-12 max-auto">
-                <h4>주문창</h4>
-                <table>
+    <div>
+        <div class="makeOrder-content">
+            
+                <h1>내 주문 리스트</h1>
+                <table class="table makeOrder-table">
                     <thead>
                         <tr>
                             <th>상품 이미지</th>
@@ -12,20 +11,24 @@
                             <th>수량</th>
                             <th>상품금액</th>
                             <th>합계금액</th>
+                            <th>취소</th>
+                            <th>환불</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="info in productInfo " :key="info.id">                
-                            <td><img :src="info.Product.product_image"></td>
+                            <td><img :src="info.Product.product_image" class="product-img"></td>
                             <td>{{info.Product.product_name}}</td>
                             <td>{{info.count}}</td>
                             <td>{{info.Product.product_price.toLocaleString()}}</td>
                             <td>{{info.count * info.Product.product_price.toLocaleString()}}</td>
+                            <td><button>취소</button></td>
+                            <td><button>환불</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div> 
-        </div>
+        
     </div>
 </template>
 
@@ -37,7 +40,7 @@ export default{
     components:{},
     data(){
         return{
-            productInfo :[],
+            productInfo :[{}],
             //{"id":8,"count":1,"total_price":2790000,"createdAt":"2025-01-08T04:14:53.000Z","updatedAt":"2025-01-08T04:14:53.000Z","account_id":4,"product_id":4,
             // "Product":{"product_name":"달모어 25년 700ml","product_price":2790000,"product_image":"http://www.kajawine.kr/data/item/4363187205/thumb-TheDalmore25YearsOldbottle_360x480.jpg"}},
             //{"id":10,"count":1,
@@ -82,33 +85,85 @@ export default{
 </script>
 
 <style scoped>
-.container {
-    max-width: 800px;
-}
-
-.input-form {
-    max-width: 680px;
-    margin-top: 80px;
-    padding: 32px;
-    background: #fff;
+.makeOrder-content {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff; /* 흰색 배경 */
     border-radius: 10px;
-    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.btn-block {
+
+.makeOrder-content h1 {
+    font-size: 2rem;
+    text-align: center;
+    color: #4a4a4a;
+    margin-bottom: 20px;
+}
+
+/* 테이블 스타일 */
+.makeOrder-table {
     width: 100%;
-    margin-top: 24px;
+    border-collapse: collapse;
+    text-align: center;
+    background-color: #fff; /* 테이블 흰색 배경 */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-label {
-    margin-bottom: 0.5rem;
+
+.makeOrder-table th {
+    text-align: center;
+    vertical-align: middle;
+    background-color: #f9f9f9; /* 연한 회색 */
+    color: #4A4A4A; /* 텍스트 색상 변경 */
+    padding: 15px;
+    font-size: 1rem;
+    border-bottom: 2px solid #ddd;
 }
 
-.is-invalid {
-    border-color: #ff8080 !important;
+.makeOrder-table td {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1rem;
+    color: #4A4A4A; /* 텍스트 색상 변경 */
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
 }
 
-.is-valid {
-    border-color: #66cc99 !important;
+.makeOrder-table tr:last-child td {
+    border-bottom: none;
 }
+
+/* 버튼 스타일 */
+.makeOrder-table td button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    background-color: rgb(243, 239, 224); /* 장바구니와 동일한 배경색 */
+    color: #4A4A4A; /* 텍스트 색상 변경 */
+    border: none; /* 테두리 제거 */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.makeOrder-table td button:hover {
+    background-color: #e5dcc3; /* 호버 시 배경색 */
+    color: #4A4A4A; /* 호버 시 텍스트 색상 유지 */
+}
+
+
+/* 이미지 스타일 */
+.product-img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ddd; /* 연한 회색 테두리 */
+    border-radius: 5px;
+    padding: 5px;
+}
+
 </style>

@@ -7,50 +7,53 @@
                 
                 <!-- Post content-->
                 <article class="post-article">
-                    <!-- Post header-->
-                    <header class="mb-4">
-                        <!-- Post title-->
-                        <h1 class="fw-bolder mb-1">{{postDetail.title}}</h1>
-                        <!-- 작성자 정보 추가 -->
-                        <p class="text-muted">작성자: {{ postDetail.Account.nickname || '익명' }}</p>
-                    </header>
-                    
-                    <!-- Preview image figure-->
-                    <figure class="mb-4">
-                        <img class="img-fluid rounded shadow" :src="`${postDetail.post_image}`" alt="..." />
-                    </figure>
-                    <!-- Post content-->
-                    <section class="mb-5">
-                        <hr> <!-- 타이틀과 내용을 구별 -->
-                        <div v-html="renderedContent" class="fs-5 mb-4 content-reset"></div>
-                    </section>
-
-                    <!-- 수정, 삭제 버튼 보이기 -->
-                    <div v-if="user.email === postDetail.Account.email || user.super_admin" class="d-flex gap-2 mb-4 justify-content-end">
-                        <button class="btn btn-outline-primary" @click="$router.push(`/post/modifyPost/${postDetail.id}`)">
-                            <i class="bi bi-pencil-square me-1"></i>수정
-                        </button>
-                        <button class="btn btn-outline-danger" @click="deletePost">
-                            <i class="bi bi-trash me-1"></i>삭제
-                        </button>
+                    <!-- 상단 타이틀 섹션 -->
+                    <div class="post-header mb-4">
+                        <div class="title-section" style="text-align: left;">
+                            <h1 class="fw-bolder">{{postDetail.title}}</h1>
+                            <p class="text-muted mb-0">작성자: {{ postDetail.Account.nickname || '익명' }}</p>
+                        </div>
+                        
+                        <!-- 수정, 삭제 버튼 -->
+                        <div v-if="user.email === postDetail.Account.email || user.super_admin" class="action-buttons">
+                            <button class="btn custom-btn me-2" @click="$router.push(`/post/modifyPost/${postDetail.id}`)">
+                                <i class="bi bi-pencil-square me-1"></i>수정
+                            </button>
+                            <button class="btn custom-btn-danger" @click="deletePost">
+                                <i class="bi bi-trash me-1"></i>삭제
+                            </button>
+                        </div>
                     </div>
-                    <!-- 좋아요 버튼 추가 -->
+
+                    <hr class="divider">
+
+                    <!-- 메인 컨텐츠 섹션 -->
+                    <div class="post-content">
+                        <figure class="mb-4" v-if="postDetail.post_image">
+                            <img class="img-fluid rounded shadow" :src="`${postDetail.post_image}`" alt="..." />
+                        </figure>
+                        <div v-html="renderedContent" class="fs-5 mb-4 content-reset"></div>
+                    </div>
+
+                    <!-- 좋아요 버튼 -->
                     <div class="d-flex justify-content-center my-4">
-                        <button class="btn btn-outline-primary d-flex align-items-center gap-2" @click="toggleLike">
+                        <button class="btn custom-btn d-flex align-items-center gap-2" @click="toggleLike">
                             <i class="bi bi-hand-thumbs-up-fill"></i>
                             <span>좋아요 {{ postDetail.like_count }}</span>
                         </button>
                     </div>
                 </article>
                 <!-- Comments section-->
-                <section class="mb-5">
+                <section class="mb-5" style="margin-top: 5rem;">
                     <div class="card bg-light shadow-sm">
                         <div class="card-body">
                             <!-- Comment form-->
                             <form class="mb-4" @submit.prevent="addReply(null)">
                                 <div class="d-flex gap-2">
                                     <textarea ref="replyText" v-model="sendReply.reply_content" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
-                                    <button type="submit" class="btn btn-primary align-self-stretch">댓글 작성</button>
+                                    <button type="submit" class="btn custom-btn d-flex align-items-center submit-btn">
+                                        <span>댓글 작성</span>
+                                    </button>
                                 </div>
                             </form> 
                             <!-- Comment with nested comments-->
@@ -89,7 +92,9 @@
                                                         v-model="replyReplyContents[index]" 
                                                         class="form-control" 
                                                         placeholder="댓글을 입력하세요...">
-                                                    <button type="submit" class="btn btn-primary align-self-stretch">댓글 작성</button>
+                                                    <button type="submit" class="btn custom-btn d-flex align-items-center">
+                                                        <span>작성</span>
+                                                    </button>
                                                 </div>
                                             </form>
                                             <div v-for="re_reply in replyList.filter(rr => rr.reply_reply_id === reply.id)" :key="re_reply.id" class="d-flex" style="width: 90%;">
@@ -324,12 +329,15 @@ export default{
         async toggleLike() {
             try {
                 const response = await axios.post(`http://localhost:3000/post/post_like/${this.postId}`, {}, {withCredentials: true});
-                this.addLikeCount();
-            } catch (error) {
-                if (error.response?.status === 401 || error.response?.status === 403) {
+                console.log("response",response);
+                if(!response.data.isLoggedIn){
                     alert("로그인 후 이용해주세요.");
                 }
-                else if(error.response?.status === 400){
+                else{
+                    this.addLikeCount();
+                }
+            } catch (error) {
+                if(error.response?.status === 400){
                     alert(error.response.data.message);
                 }
                 console.error("좋아요 처리 실패:", error);
@@ -338,12 +346,15 @@ export default{
         async addReplyLike(reply_id) {
             try {
                 const response = await axios.post(`http://localhost:3000/post/reply_like/${reply_id}`, {}, {withCredentials: true});
-                this.updateReplyLikeCount(reply_id);
-            } catch (error) {
-                if (error.response?.status === 401 || error.response?.status === 403) {
+                console.log("response",response);
+                if(!response.data.isLoggedIn){
                     alert("로그인 후 이용해주세요.");
-                } 
-                else if(error.response?.status === 400){
+                }
+                else{
+                    this.updateReplyLikeCount(reply_id);
+                }
+            } catch (error) {
+                if(error.response?.status === 400){
                     alert(error.response.data.message);
                 }
                 else {
@@ -359,7 +370,7 @@ export default{
 <style scoped>
 .post-article {
     background-color: #ffffff;
-    padding: 20px;
+    padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -411,5 +422,70 @@ export default{
 
 .shadow-sm {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 새로운 스타일 추가 */
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem 0;
+}
+
+.title-section {
+    flex: 1;
+}
+
+.divider {
+    border-top: 2px solid #e5dcc3;
+    margin: 2rem 0;
+}
+
+.custom-btn {
+    background-color: #f3efe0;
+    color: #4a4a4a;
+    border: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
+    width: auto;          /* 버튼 너비 자동 조정 */
+    min-width: fit-content; /* 최소 너비 설정 */
+    padding: 0.375rem 0.75rem; /* 버튼 패딩 조정 */
+}
+
+.custom-btn span {
+    display: inline-block; /* 인라인 블록으로 변경 */
+    vertical-align: middle; /* 수직 정렬 중앙 */
+}
+
+.custom-btn:hover {
+    background-color: #e5dcc3;
+    color: #000;
+}
+
+.custom-btn-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+    transition: all 0.3s ease;
+}
+
+.custom-btn-danger:hover {
+    background-color: #f1aeb5;
+    color: #58151c;
+}
+
+.post-content {
+    margin-top: 2rem;
+}
+
+/* 대댓글 버튼 스타일 수정 */
+.btn-outline-primary {
+    border: none;
+}
+
+/* 댓글 작성 버튼 너비 조정 */
+.submit-btn {
+    width: 120px; /* 기본 버튼 너비의 약 3배 */
+    justify-content: center;
 }
 </style>

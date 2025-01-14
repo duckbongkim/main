@@ -1,6 +1,10 @@
 <template>
-  <div calss="div1">
-    <h1>상품 목록</h1>
+  <div class="div1">
+   <h1>상품 목록</h1>
+   <div class="search-container">
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
@@ -19,12 +23,12 @@
           <button @click.stop="addCarts(product)">
             <i class="fas fa-shopping-cart"></i> 
           </button>
-        </div>
-       
+         </div>       
         </div>
       </div>
 
-    
+  </div>
+
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
@@ -39,8 +43,10 @@
       <button @click="searchProducts">검색</button>
     </div>
 
-<!-- 페이지네이션 -->
-  <nav aria-label="Page navigation">
+
+
+    <!-- 페이지네이션 -->
+    <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="currentPage--">이전</a>
@@ -54,7 +60,9 @@
       </ul>
     </nav>
   
-  </div>
+
+</div>
+
 
 </template>
 
@@ -78,6 +86,8 @@ export default {
 
   created() {
     this.fetchProducts();  // 컴포넌트 생성 시 상품 데이터를 가져옵니다.
+    this.getUserProfile()
+
   },
   computed: {
     // 현재 페이지에 맞게 상품 목록을 잘라서 보여줌
@@ -121,12 +131,11 @@ export default {
       try {
         const response = await axios.get('http://localhost:3000/liqueur/liqueur'); // 상품 데이터 가져오기
         this.products = response.data;
-        const randomIndexes = this.getRandomIndexes(this.products.length, 6);
+        const randomIndexes = this.getRandomIndexes(this.products.length, 10);
         this.products = this.products.map((product, index) => ({
           ...product,
           isTagged: randomIndexes.includes(index),
         }));
-
         this.filteredProducts = this.products;  // 처음엔 모든 상품을 표시
 
       } catch (error) {
@@ -192,8 +201,6 @@ export default {
             //알아서 req.user.email 조회해서 유저 data 쏴주는 controller_profile
             //쿠키세션 쓸때는 무조건 {withCredentials:true} 써줘야됨
             this.user = response.data
-            console.log('유저 데이터 가져오기',response)
-            //console.log(`################userInfo${JSON.stringify(this.user)}`);
         }catch(err){
             console.error(err);
             
@@ -218,7 +225,6 @@ export default {
                 
                 const response = await axios.post(`http://localhost:3000/orders/wish`, userWish);
                 if(response.status == 201) {
-                    console.log(response.data.message);
                     alert("찜 리스트에 추가되었습니다.");
                 }
             } catch(err) {
@@ -275,8 +281,7 @@ export default {
 </script>
 
 <style scoped>
-
-h1 {
+.div1 {
   margin-top: 100px;
 }
 
@@ -288,14 +293,19 @@ h1 {
 }
 
 .container {
-  padding: 20px;
+ /* padding: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  gap: 20px; */
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개씩 표시 */
+  gap: 20px; /* 상품 간 간격 */
+  padding: 20px;
 }
 
 .product-card {
-  position: relative;
+  /* position: relative;
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -306,7 +316,21 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%; */
+
+
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  background-color: #fff;
+  transition: transform 0.3s, background-color 0.3s;
 }
 
 .product-card:hover {
@@ -316,12 +340,22 @@ h1 {
 }
 
 .product-card img {
-  width: 100%;
+  /* width: 100%;
   height: auto;
   aspect-ratio: 4 / 3;
   object-fit: contain;
+  transition: opacity 0.3s; */
+
   transition: opacity 0.3s;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  width: 100%; /* 컨테이너에 맞춤 */
+  max-width: 250px; /* 최대 크기 */
+  height: auto; /* 비율 유지 */
+  margin: 0 auto 10px;
+  display: block;
 }
+
 
 .product-card:hover img {
   opacity: 0.5; 
@@ -472,7 +506,34 @@ h1 {
   color: #000; /* 호버 시 텍스트 색상 */
 }
 
+.search-container {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 끝으로 정렬 */
+  align-items: center; /* 입력과 버튼을 수직으로 정렬 */
+  gap: 10px; /* 입력과 버튼 사이 간격 */
+  margin-right: 20px; /* 오른쪽 여백 추가 (필요시 조정) */
+}
 
+.search-container input {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-container button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #f3efe0;
+  color: #4a4a4a;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background-color: #f3efe0;
+}
 
 
 </style>
