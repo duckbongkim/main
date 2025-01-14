@@ -43,7 +43,7 @@ exports.hdjVerify = async (req,res,next)=>{
           const currentYear = new Date().getFullYear();
           const age = currentYear - birthYear;
       
-          if (age >= 18) {
+          if (age >= 20) {
             // 연령 만족
             console.log('인증 성공 및 연령 제한 통과:', {
               name,
