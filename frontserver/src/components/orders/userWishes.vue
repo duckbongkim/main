@@ -128,7 +128,6 @@ export default{
 
 /* 전체 컨테이너 스타일 */
 .wish-content {
-    margin-top: 50px;
     max-width: 1200px;
     margin: 50px auto;
     padding: 20px;
