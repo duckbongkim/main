@@ -33,15 +33,6 @@
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
-    
-    
-    
-  </div>
-<!-- 검색기능 -->
-  <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
 
 
 
