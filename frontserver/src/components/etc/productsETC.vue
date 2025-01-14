@@ -1,7 +1,16 @@
 <template>
-  <div calss="div1">
+  <div class="div1">
     <h1>상품 목록</h1>
-   <div class="container">
+    <!-- 검색기능 -->
+    <div class="search-container">
+      <input
+        v-model="searchQuery"
+        placeholder="검색어를 입력하세요"
+        @keyup.enter="searchProducts"
+      />
+      <button @click="searchProducts">검색</button>
+    </div>
+    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
         <div class="product-details">
@@ -23,13 +32,6 @@
         </div>
       </div>
   </div>
-  
-<!-- 검색기능 -->
-    <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
-
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
@@ -491,6 +493,34 @@ h1 {
 .page-item.active .page-link:hover {
   background-color: #e5dcc3; /* 호버 시 배경색 */
   color: #000; /* 호버 시 텍스트 색상 */
+}
+.search-container {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 끝으로 정렬 */
+  align-items: center; /* 입력과 버튼을 수직으로 정렬 */
+  gap: 10px; /* 입력과 버튼 사이 간격 */
+  margin-right: 20px; /* 오른쪽 여백 추가 (필요시 조정) */
+}
+
+.search-container input {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-container button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #f3efe0;
+  color: #4a4a4a;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background-color: #f3efe0;
 }
 
 </style>

@@ -29,8 +29,8 @@
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin: 0;
-  padding: 0;
+  margin: 20px;
+  padding: 20px;
 }
 
 .top-navbar li {

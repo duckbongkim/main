@@ -1,6 +1,16 @@
 <template>
-  <div class="div1">    
-   <h1>상품 목록</h1>
+  <div class="div1">
+    <h1>상품 목록</h1>
+    <!-- 검색기능 -->
+    <div class="search-container">
+      <input
+        v-model="searchQuery"
+        placeholder="검색어를 입력하세요"
+        @keyup.enter="searchProducts"
+      />
+      <button @click="searchProducts">검색</button>
+    </div>
+
    <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
@@ -277,14 +287,19 @@ export default {
 }
 
 .container {
-  padding: 20px;
+ /* padding: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  gap: 20px; */
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개씩 표시 */
+  gap: 20px; /* 상품 간 간격 */
+  padding: 20px;
 }
 
 .product-card {
-  position: relative;
+  /* position: relative;
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -295,7 +310,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  height: 100%; */
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  background-color: #fff;
+  transition: transform 0.3s ease;
 }
 
 .product-card:hover {
@@ -305,11 +327,17 @@ export default {
 }
 
 .product-card img {
-  width: 100%;
+  /* width: 100%;
   height: auto;
   aspect-ratio: 4 / 3;
   object-fit: contain;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s; */
+
+  width: 100%; /* 컨테이너에 맞춤 */
+  max-width: 250px; /* 최대 크기 */
+  height: auto; /* 비율 유지 */
+  margin: 0 auto 10px;
+  display: block;
 }
 
 .product-card:hover img {
@@ -461,7 +489,34 @@ export default {
   color: #000; /* 호버 시 텍스트 색상 */
 }
 
+.search-container {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 끝으로 정렬 */
+  align-items: center; /* 입력과 버튼을 수직으로 정렬 */
+  gap: 10px; /* 입력과 버튼 사이 간격 */
+  margin-right: 20px; /* 오른쪽 여백 추가 (필요시 조정) */
+}
 
+.search-container input {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-container button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #f3efe0;
+  color: #4a4a4a;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background-color: #f3efe0;
+}
 
 
 </style>
