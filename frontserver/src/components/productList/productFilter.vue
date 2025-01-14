@@ -1,4 +1,5 @@
 <template>
+
   <div class="div1">
     <h1>상품 목록</h1>
     <!-- 검색기능 -->
@@ -34,13 +35,14 @@
           </div>
         </div>
       </div>
+      
     </div>
   
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
-
+    
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
@@ -55,10 +57,8 @@
         </li>
       </ul>
     </nav>
-
   </div>
 </template>
-
 
 <script>
 import axios from 'axios';
