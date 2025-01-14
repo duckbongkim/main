@@ -158,6 +158,9 @@ export default{
     mounted(){},
     unmounted(){},
     methods:{
+        checkDate(){
+            console.log(this.createAccountData.birth);
+        },
         async submitCreateAccount(){
             if(!this.passwordMatch){
                 alert('비밀번호가 일치하지 않습니다.');
@@ -254,16 +257,28 @@ export default{
         async sendVerificationData(rsp) {
             try {
                 const response = await axios.post('http://localhost:3000/hdj_verify/verify', {
-                imp_uid: rsp.imp_uid, // 인증 고유 ID
-                merchant_uid: rsp.merchant_uid, // 주문 번호
+                    imp_uid: rsp.imp_uid, // 인증 고유 ID
+                    merchant_uid: rsp.merchant_uid, // 주문 번호
                 });
 
                 if (response.status === 200) {
-                console.log('서버로 인증 데이터 전송 성공:', response.data);
-                alert('인증이 성공적으로 완료되었습니다.');
+                    console.log('서버로 인증 데이터 전송 성공:', response.data);
+                    alert('인증이 성공적으로 완료되었습니다.');
+                    this.createAccountData.name = response.data.data.name;
+                    
+                    // 날짜 형식 변환
+                    const birthParts = response.data.data.birth.split('/');
+                    const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
+                    this.createAccountData.birth = formattedBirth;
+                    this.createAccountData.phone_number = response.data.data.phone;
+
+                    if(!response.data.data.adult){
+                        alert('성인이 아닙니다.');
+                        return;
+                    }
                 } else {
-                console.error('서버 응답 오류:', response.status);
-                alert('서버 오류로 인증 데이터를 전송하지 못했습니다.');
+                    console.error('서버 응답 오류:', response.status);
+                    alert('서버 오류로 인증 데이터를 전송하지 못했습니다.');
                 }
             } catch (error) {
                 console.error('인증 데이터 전송 중 오류:', error);
@@ -271,7 +286,9 @@ export default{
             }
         },
     },
-    watch:{}
+    watch:{
+        
+    }
 }
 </script>
 
