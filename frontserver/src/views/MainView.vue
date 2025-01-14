@@ -45,11 +45,11 @@
           @click="goProducts(item.id)"
         >
           <v-sheet color="white lighten-2" height="100%" >
-            <div class="d-flex fill-height justify-center align-center">
+            <div class="d-flex justify-center align-center">
               <div class="text-center">
                 <img :src="item.product_image" alt="Product Image" style="max-height: 450px; object-fit: contain;" />
-                <strong class="text-h5" style="font-family: 'Noto Serif KR', serif;">{{ item.product_name }}</strong>
-                <div class="text-h6 mt-2"  style="font-family: 'Noto Serif KR', serif;" >{{ item.product_price.toLocaleString() }}원</div>
+                <strong class="text-h5">{{ item.product_name }}</strong>
+                <div  class="text-h6 mt-2">{{ item.product_price.toLocaleString() }}원</div>
               </div>
             </div>
           </v-sheet>
@@ -112,6 +112,7 @@
         <!-- 네비게이션 버튼 -->
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
+        <div class="bar3" style="background-color: #E7E4E1;"></div>
       </div>
     </section>
 
@@ -323,7 +324,6 @@ export default{
     z-index: 10;
     width: 65%;
     margin-left: 20%;
-    font-family: "Noto Serif KR", serif;
   }
   .container {
   width: 100vw; /* 화면 너비를 100%로 */
@@ -344,14 +344,21 @@ export default{
   .carousel-item img {
     width: 100%; /* 이미지를 캐러셀 아이템 너비에 맞춤 */
     height: auto; /* 높이는 자동으로 조절 */
-    object-fit: cover; /* 이미지 비율 유지하며 최대한 크게 보여줌 */
+    object-fit: contain; /* 이미지 비율 유지하며 최대한 크게 보여줌 */
   }
   .carousel-item{
     width: 100%; 
-    height: 600px;
+    height: auto;
   }
   .test{
     color:black;
+  }
+  .carousel {
+  position: relative;
+  }
+  .carousel img {
+    display: block;
+    height: auto;
   }
   
   /* 기본 swiper 설정 */
@@ -408,15 +415,7 @@ export default{
     margin-top: 100px;
   }
 
-  .expensive-title {
-    float: left;
-    font-family: "Noto Serif KR", serif;
-  }
 
-  .expensive-title p {
-    float: left;
-    font-family: "Noto Serif KR", serif;
-  }
 
   .expensive-wrapper {
     width: 1000px;
@@ -465,7 +464,7 @@ export default{
   /* 슬라이드 컨테이너 */
   .swiper-container-good {
     max-width: 100%;
-    height: 500px; /* 슬라이드 높이 고정 (원하는 높이로 조정 가능) */
+    height: 700px; /* 슬라이드 높이 고정 (원하는 높이로 조정 가능) */
     margin: 0 auto;
     overflow: hidden; /* 슬라이드 영역 밖의 이미지를 숨깁니다. */
     position: relative; /* 버튼 위치를 슬라이더 컨테이너 기준으로 설정 */
@@ -501,7 +500,7 @@ export default{
 
   /* 활성화된 슬라이드 (가운데 이미지) */
   .swiper-container-good .swiper-slide-active img {
-    transform: scale(1.2); /* 활성화된 이미지의 크기를 원래대로 설정 */
+    transform: scale(1.5); /* 활성화된 이미지의 크기를 원래대로 설정 */
     width: 300px; /* 이미지가 슬라이드 영역을 가득 채우도록 합니다. */
     height: 300px; /* 이미지 높이를 80%로 설정하여 텍스트가 들어갈 공간을 확보 */
     z-index: 1; /* 이미지가 텍스트 뒤에 오도록 설정 */
@@ -511,17 +510,17 @@ export default{
   .swiper-container-good .swiper-slide p {
     margin: 5px 0; /* 텍스트 간 간격 */
     color: #222; /* 텍스트 색상 */
-    font-size: 16px; /* 텍스트 크기 조정 */
+    font-size: 22px; /* 텍스트 크기 조정 */
     text-align: center; /* 텍스트를 가운데 정렬 */
     padding: 5px; /* 텍스트 주변 여백 */
-    font-family: "Noto Serif KR", serif;
     position: relative;
     transition: transform 0.25s ease-out; /* 텍스트도 부드럽게 이동 */
+    
   }
 
   /* 활성화된 슬라이드에서 텍스트 아래로 이동 */
   .swiper-container-good .swiper-slide-active p {
-    transform: translateY(40px); /* 이미지가 커지면서 텍스트도 아래로 이동 */
+    transform: translateY(70px); /* 이미지가 커지면서 텍스트도 아래로 이동 */
   }
 
   /* swiper 2: swiper-container-good */
@@ -580,26 +579,13 @@ export default{
   .swiper-container-thirties .swiper-slide p {
     margin: 5px 0; /* 텍스트 간 간격 */
     color: #222; /* 텍스트 색상 */
-    font-size: 20px; /* 텍스트 크기 조정 (이미지 크기에는 영향 주지 않음) */
+    font-size: 25px; /* 텍스트 크기 조정 (이미지 크기에는 영향 주지 않음) */
     text-align: left; /* 텍스트 왼쪽 정렬 */
     padding: 0; /* 불필요한 여백 제거 */
-    font-family: "Noto Serif KR", serif;
-  }
-  .swiper1-title { 
-    top: 50%;
-      font-family: "Noto Serif KR", serif;
-  }
-  .swiper1-title h2 {
-    margin: 0;
-    font-size: 32px; /* 타이틀 크기 */
-      font-family: "Noto Serif KR", serif;
+    text-align: center;
+
   }
 
-  .swiper1-title p {
-    margin-top: 10px;
-    font-size: 16px; /* 부제목 크기 */
-      font-family: "Noto Serif KR", serif;
-  }
   /* swiper 3: swiper-container-thirties */
   .swiper-container-thirties .swiper-button-prev,
   .swiper-container-thirties .swiper-button-next {
@@ -618,19 +604,48 @@ export default{
   }
 
   /* 글, 여백주기 */
+  .expensive-title {
+    float: left;
+
+  }
+
+  .expensive-title p {
+    float: left;
+    margin-top: 10px;
+    font-size: 30px; /* 부제목 크기 */
+  }
+  .expensive-title h2{
+    margin: 0;
+    font-size: 60px; /* 타이틀 크기 */
+  }
+  .swiper1-title { 
+    top: 50%;
+
+  }
+  .swiper1-title h2 {
+    margin: 0;
+    font-size: 60px; /* 타이틀 크기 */
+
+  }
+
+  .swiper1-title p {
+    margin-top: 10px;
+    font-size: 30px; /* 부제목 크기 */
+
+  }
   .swiper2-title { 
     top: 50%;
   }
   .swiper2-title h2 {
     margin: 0;
-    font-size: 24px; /* 타이틀 크기 */
-    font-family: "Noto Serif KR", serif;
+    font-size: 60px; /* 타이틀 크기 */
+
   }
 
   .swiper2-title p {
     margin-top: 10px;
-    font-size: 16px; /* 부제목 크기 */
-    font-family: "Noto Serif KR", serif;
+    font-size: 30px; /* 부제목 크기 */
+
   }
 
   .bar1{

@@ -208,21 +208,6 @@ export default{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 네비게이션 내 모든 링크와 메뉴 항목에 글꼴 적용 */
-.navbar a {
-  font-family: 'Noto Serif KR', serif;
-}
-
-/* 드롭다운 메뉴 항목에도 동일한 글꼴 적용 */
-.navbar .dropdown-menu .dropdown-item {
-  font-family: 'Noto Serif KR', serif;
-}
-
-/* 네비게이션 아이콘의 글꼴도 변경 */
-.navbar .nav-item i {
-  font-family: 'Noto Serif KR', serif;
-}
-
 @media (max-width: 768px) {
   .navbar-nav {
     text-align: center;
