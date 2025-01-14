@@ -2,7 +2,7 @@
   <div class="div1">
     <h1>상품 목록</h1>
     <div class="container">
-      <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
+      <div v-for="product in filteredProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
         <div class="product-details">
           <div class="tags">
