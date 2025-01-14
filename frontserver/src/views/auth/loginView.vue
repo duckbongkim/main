@@ -119,13 +119,13 @@ export default{
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #FFFFFF;
 }
 
 .login-box {
   width: 400px;
   padding: 40px;
-  background: white;
+  background: #faf8f3;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
@@ -155,8 +155,8 @@ h2 {
 .login-btn {
   width: 100%;
   padding: 12px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #e5dcc3;
+  color: #333;
   border: none;
   border-radius: 5px;
   font-size: 16px;
@@ -165,7 +165,7 @@ h2 {
 }
 
 .login-btn:hover {
-  background-color: #45a049;
+  background-color: #d4cbb4;
 }
 
 .social-login {
@@ -201,11 +201,12 @@ h2 {
 }
 
 .signup-link a {
-  color: #4CAF50;
+  color: #b4a892;
   text-decoration: none;
 }
 
 .signup-link a:hover {
+  color: #8c826e;
   text-decoration: underline;
 }
 
