@@ -1,6 +1,11 @@
 <template>
   <div class="div1">
     <h1>상품 목록</h1>
+    <!-- 검색기능 -->
+    <div class="search-container">
+      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
+      <button @click="searchProducts">검색</button>
+    </div>
     <div class="container">
       <div v-for="product in filteredProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
@@ -24,11 +29,7 @@
       </div>
   </div>
 
-<!-- 검색기능 -->
-    <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
+
 
 
     <div v-if="noResultsMessage" class="no-results">

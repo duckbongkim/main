@@ -264,7 +264,7 @@ router.get('/order/:userid', async (req, res, next) => {
     try {
         const {userid} = req.params;
 
-        console.log(`################백userid: ${userid}`);
+        
         const orderList = await Orders.findAll(
             {where : {account_id : userid},
             include : [
@@ -272,7 +272,7 @@ router.get('/order/:userid', async (req, res, next) => {
                 {model: OrderStatuses, attributes : ['status']},
             ]
         }); 
-        console.log(`################백userid: ${JSON.stringify(orderList)}`);
+        
 
         res.status(200).json(orderList);
     }catch(err){
@@ -300,15 +300,11 @@ router.patch('/cancelledOrder/:userid', async (req, res, next) => {
 router.get('/cancelledOrder/:userid', async (req, res, next) => {
     try {
         const {userid} = req.params;
-
-        console.log(`################백userid: ${userid}`);
         const orderList = await Orders.findAll(
             {where : {account_id : userid},
             include : [{model:Products, attributes : ['product_name', 'product_image', 'product_price']},{model: OrderStatuses, attributes : ['status', 'id']},
             ],
         }); 
-        console.log(`################백orderList: ${JSON.stringify(orderList)}`);
-
         res.status(200).json(orderList);
     }catch(err){
         console.error(err);
