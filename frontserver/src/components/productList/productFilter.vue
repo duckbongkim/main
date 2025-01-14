@@ -13,9 +13,9 @@
           <div class="product-details">
             <div class="tags">
               <!-- 추천상품 아이콘 -->
-              <p v-if="product.isTagged" class="recommended-badge">👍추천상품</p>
+              <p v-if="product.isRecommended" class="recommended-badge">👍추천상품</p>
               <!-- 인기상품 아이콘 -->
-              <p v-if="product.isTagged" class="popular-badge">🔥인기상품</p>
+              <p v-if="product.isPopular" class="popular-badge">🔥인기상품</p>
             </div>
             <h2 class="product-title">{{ product.product_name }}</h2>
             <p class="product-price">{{ product.product_price }} 원</p>
@@ -29,10 +29,9 @@
             </div>
           </div>
         </div>
-
       </div>
-      
     </div>
+
 
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
@@ -60,7 +59,9 @@
 <script>
 import axios from 'axios';
 
+
 export default {
+  
   props: ['drink_type'],
   data() {
     return {
@@ -126,39 +127,38 @@ export default {
     this.fetchProductsByType(this.drink_type);  // 초기 로드 시 drink_type에 맞는 상품들만 불러오기
   },
   methods: {
+    // goProducts 함수 정의
+    goProducts(productId) {
+      // 예를 들어, 상품 목록 페이지로 이동
+      this.$router.push(`/products/${productId}`);  // 'products'는 라우터에서 정의한 페이지 이름
+    },
     async fetchProducts() {
       try {
         const response = await axios.get('http://localhost:3000/liqueur/liqueur'); // 상품 데이터 가져오기
         this.products = response.data;
+        const randomIndexes = this.getRandomIndexes(this.products.length, 6);
+        this.products = this.products.map((product, index) => ({
+          ...product,
+          isTagged: randomIndexes.includes(index),
+        }));
 
-        const randomIndexes = this.getRandomIndexes(this.products.length, 6); // 6개의 랜덤 인덱스 생성
-        console.log(randomIndexes);  // 확인해보세요
-          this.products = this.products.map((product, index) => {
-            const isTagged = randomIndexes.includes(index);
-            console.log(product.product_name, isTagged);  // 콘솔에 출력
-            return {
-              ...product,
-              isTagged: isTagged,
-            };
-          });
+        this.filteredProducts = this.products;  // 처음엔 모든 상품을 표시
 
-
-        this.filteredProducts = this.products; // 처음엔 모든 상품을 표시
       } catch (error) {
         console.error(error);
       }
     },
-
     getRandomIndexes(arrayLength, count) {
-      const indexes = [];
-      while (indexes.length < count) {
-        const randomIndex = Math.floor(Math.random() * arrayLength);
-        if (!indexes.includes(randomIndex)) {
-          indexes.push(randomIndex);
-        }
+    const indexes = [];
+    while (indexes.length < count) {
+      const randomIndex = Math.floor(Math.random() * arrayLength);
+      if (!indexes.includes(randomIndex)) {
+        indexes.push(randomIndex);
       }
-      return indexes;
-    },
+    }
+    return indexes;
+  },
+
 
 
     // drink_type에 맞는 상품 목록을 불러오는 메서드
