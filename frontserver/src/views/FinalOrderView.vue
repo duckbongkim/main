@@ -134,11 +134,29 @@
         </div>
       </div>
     </div>
+
+    <!-- 이용약관 -->
     <div class="order-section">
       <h2 class="section-title">이용약관</h2>
       <div class="contract-form">
-        <input type="checkbox" v-model="contractformcheck" required>
-        <label>이용약관에 동의합니다.</label>
+        <div class="terms-content">
+          주류 구매를 위한 본인인증이 필요합니다. 본인인증을 진행하는 과정에서 인증 명의 도용과 관련된 모든 법적인 책임은 인증을 진행한 당사자에게 있습니다.
+        </div>
+        <div class="verification-section">
+          <button type="button" ref="verifyIdentityRef"
+                  class="btn-verify" 
+                  @click="checkIdentify"
+                  :class="{ verified: isVerified }">
+            {{ isVerified ? '인증완료' : '본인인증' }}
+          </button>
+        </div>
+        <div class="terms-checkbox">
+          <input type="checkbox" 
+                 v-model="contractformcheck" 
+                 :disabled="!isVerified"
+                 required>
+          <label>이용약관에 동의합니다.</label>
+        </div>
       </div>
     </div>
 
@@ -202,6 +220,7 @@ export default{
             roadAddress:'',
             contractformcheck:false,
             orderMessage : "",
+            isVerified:false,
         };
     },
     setup(){},
@@ -322,9 +341,9 @@ export default{
           }
 
           if (!this.contractformcheck) {
-            alert("이용약관에 동의해주세요");
+            alert("본인인증 후 이용약관에 동의해주세요");
             this.$nextTick(() => {
-                this.$refs.contractformcheck.focus();
+                this.$refs.verifyIdentityRef.focus();
             });
             return;
           }
@@ -365,7 +384,6 @@ export default{
             try{
               const response = await axios.get('http://localhost:3000/profile',{withCredentials:true});
               this.user = response.data;
-              console.log("user@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",this.user);
             }catch(err){
               console.error(err);
             }
@@ -441,6 +459,65 @@ export default{
               }
             },
           }).open(); // 팝업 창 열기
+        },
+
+
+        checkIdentify() {
+            // 아임포트 초기화
+            IMP.init('imp00267421'); // 발급받은 고유 식별 코드
+
+            // 사용자 인증 요청
+            IMP.certification(
+                {
+                pg: 'inicis_unified', // KG 이니시스 (실제 PG사에 맞게 설정)
+                merchant_uid: `verify_${new Date().getTime()}`, // 주문번호
+                m_redirect_url: 'http://localhost:3000/hdj_verify/verify', // 리디렉션 URL (모바일용)
+                popup: true, // PC에서는 항상 true
+                },
+                (rsp) => {
+                // callback
+                if (rsp.success) {
+                    // 인증 성공 시 로직
+                    console.log('인증 성공:', rsp);
+
+                    // 예시: 인증 성공 데이터를 서버로 전송
+                    this.sendVerificationData(rsp);
+                } else {
+                    // 인증 실패 시 로직
+                    console.error('인증 실패:', rsp.error_msg);
+                    alert(`인증 실패: ${rsp.error_msg}`);
+                }
+                }
+            );
+        },
+        async sendVerificationData(rsp) {
+            try {
+                const response = await axios.post('http://localhost:3000/hdj_verify/verify', {
+                    imp_uid: rsp.imp_uid, // 인증 고유 ID
+                    merchant_uid: rsp.merchant_uid, // 주문 번호
+                });
+
+                if (response.status === 200) {
+                    console.log('서버로 인증 데이터 전송 성공:', response.data);
+                    alert('인증이 성공적으로 완료되었습니다.' , response.data);
+                    
+                    
+                    if(!response.data.data.adult){
+                        alert('성인이 아닙니다. 미성년자는 주문이 불가합니다.');
+                        this.$router.push('/');
+                        return;
+                    }
+                    else{
+                      this.isVerified = response.data.data.adult;
+                    }
+                } else {
+                    console.error('서버 응답 오류:', response.status);
+                    alert('서버 오류로 인증 데이터를 전송하지 못했습니다.');
+                }
+            } catch (error) {
+                console.error('인증 데이터 전송 중 오류:', error);
+                alert('네트워크 오류로 인증 데이터를 전송하지 못했습니다.');
+            }
         },
     },
     watch: {
@@ -783,7 +860,49 @@ export default{
   }
 }
 
+.terms-content {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
 
+.verification-section {
+  margin: 1rem 0;
+  text-align: center;
+}
 
+.btn-verify {
+  padding: 0.8rem 2rem;
+  background: #F3EFE0;
+  color: #4A4A4A;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-verify:hover {
+  background: #E5DCC3;
+}
+
+.btn-verify.verified {
+  background: #28a745;
+  color: white;
+  cursor: default;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.terms-checkbox input[type="checkbox"]:disabled + label {
+  color: #999;
+}
 
 </style>
