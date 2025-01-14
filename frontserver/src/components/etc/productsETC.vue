@@ -357,7 +357,6 @@ h1 {
   flex-direction: column;
   justify-content: space-between;
 }
-
 .tags {
   display: flex;
   justify-content: center;

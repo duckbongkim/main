@@ -33,15 +33,7 @@
         </div>
       </div>
 </div>
-    <!-- 검색기능 -->
-    <div>
-      <input v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="searchProducts" />
-      <button @click="searchProducts">검색</button>
-    </div>
 
-    <div v-if="noResultsMessage" class="no-results">
-      {{ noResultsMessage }}
-    </div>
 
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
@@ -124,7 +116,7 @@ export default {
       try {
         const response = await axios.get('http://localhost:3000/liqueur/liqueur'); // 상품 데이터 가져오기
         this.products = response.data;
-        const randomIndexes = this.getRandomIndexes(this.products.length, 6);
+        const randomIndexes = this.getRandomIndexes(this.products.length, 10);
         this.products = this.products.map((product, index) => ({
           ...product,
           isTagged: randomIndexes.includes(index),
@@ -312,12 +304,19 @@ export default {
   justify-content: space-between;
   height: 100%; */
 
+
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px;
   text-align: center;
   background-color: #fff;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s, background-color 0.3s;
 }
 
 .product-card:hover {
@@ -333,12 +332,16 @@ export default {
   object-fit: contain;
   transition: opacity 0.3s; */
 
-  width: 100%; 
-  max-width: 250px; 
-  height: auto; 
+  transition: opacity 0.3s;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  width: 100%; /* 컨테이너에 맞춤 */
+  max-width: 250px; /* 최대 크기 */
+  height: auto; /* 비율 유지 */
   margin: 0 auto 10px;
   display: block;
 }
+
 
 .product-card:hover img {
   opacity: 0.5; 

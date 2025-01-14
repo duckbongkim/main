@@ -315,6 +315,12 @@ export default {
   justify-content: space-between;
   height: 100%; */
 
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px;
@@ -336,6 +342,9 @@ export default {
   object-fit: contain;
   transition: opacity 0.3s; */
 
+  aspect-ratio: 4 / 3;
+  transition: opacity 0.3s;
+  object-fit: contain;
   width: 100%; /* 컨테이너에 맞춤 */
   max-width: 250px; /* 최대 크기 */
   height: auto; /* 비율 유지 */
