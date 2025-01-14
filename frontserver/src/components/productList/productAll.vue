@@ -7,7 +7,9 @@
     </div>
     
     <h1>상품 목록</h1>
-    <div class="container">
+
+
+   <div class="container">
       <div v-for="product in paginatedProducts" :key="product.id" class="product-card" @click="goProducts(product.id)">
         <img :src="product.product_image" :alt="product.product_name" />
         <div class="product-details">
@@ -33,6 +35,7 @@
     <div v-if="noResultsMessage" class="no-results">
       {{ noResultsMessage }}
     </div>
+
 
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
