@@ -176,6 +176,8 @@ export default{
                 return;
             }
             try{
+                const formaPhone = this.createAccountData.phone_number.replace(/-/g, '');
+                this.createAccountData.phone_number = formaPhone;
                 const response = await axios.post('http://localhost:3000/auth/signup',this.createAccountData,{withCredentials:true});
                 // 성공 시 알림 표시 후 루트로 이동
                 alert('회원가입이 성공적으로 완료되었습니다.');
@@ -266,12 +268,20 @@ export default{
                     console.log('서버로 인증 데이터 전송 성공:', response.data);
                     alert('인증이 성공적으로 완료되었습니다.');
                     this.createAccountData.name = response.data.data.name;
-                    
-                    // 날짜 형식 변환
-                    const birthParts = response.data.data.birth.split('.');
-                    const formattedBirth = `${birthParts[0]}-${birthParts[1].trim().padStart(2, '0')}-${birthParts[2].trim().padStart(2, '0')}`;
-                    console.log(formattedBirth)
-                    this.createAccountData.birth = formattedBirth;
+
+                    const userAgent = navigator.userAgent;
+                    if(userAgent.includes('Windows NT')){
+                        const birthParts = response.data.data.birth.split('.');
+                        const formattedBirth = `${birthParts[0]}-${birthParts[1].trim().padStart(2, '0')}-${birthParts[2].trim().padStart(2, '0')}`;
+                        this.createAccountData.birth = formattedBirth;
+                    }
+                    else{
+                        // 날짜 형식 변환
+                        const birthParts = response.data.data.birth.split('/');
+                        const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
+                        this.createAccountData.birth = formattedBirth;
+                    }
+
                     this.createAccountData.phone_number = response.data.data.phone;
                     
 

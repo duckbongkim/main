@@ -69,7 +69,7 @@
                        :max="user.savedMoney" 
                        min="0" 
                        placeholder="사용할 적립금을 입력해주세요">
-                <button class="btn-apply-point" @click="applyPoint">적립금 적용</button>
+                <button type="button"  class="btn-apply-point" @click="applyPoint">적립금 적용</button>
             </div>
             <span class="available-point">사용 가능한 적립금: {{user.savedMoney?.toLocaleString()}}원</span>
           </div>
@@ -321,6 +321,7 @@ export default{
               orderInfos,
               hasCouponId : this.selectedCoupon,
               usePoint : this.usePoint,
+              totalPaymentAmount : this.totalPaymentAmount,
               }, {withCredentials:true}
             );
             if(response.status === 200 || response.status === 201){
@@ -412,8 +413,12 @@ export default{
                 this.tempUsePoint = this.finalTotalPrice;
                 return;
             }
+            if(this.tempUsePoint === 0){
+                return;
+            }
             
             this.usePoint = Number(this.tempUsePoint);
+            alert("적립금 적용 완료. 적용된 적립금 : "+this.usePoint+"원");
             this.calculateTotal();
         },
         useUserAddress(){
