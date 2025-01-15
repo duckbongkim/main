@@ -318,6 +318,7 @@ export default{
                     this.modifyUser.name = response.data.data.name;
 
                     // 날짜 형식 변환
+
                     // const birthParts = response.data.data.birth.split('/');
                     // const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
                     // this.modifyUser.birth = formattedBirth;
@@ -334,6 +335,7 @@ export default{
                         const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
                         this.modifyUser.birth = formattedBirth;
                     }
+
 
 
 

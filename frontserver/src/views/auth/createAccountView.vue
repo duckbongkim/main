@@ -268,6 +268,7 @@ export default{
                     console.log('서버로 인증 데이터 전송 성공:', response.data);
                     alert('인증이 성공적으로 완료되었습니다.');
                     this.createAccountData.name = response.data.data.name;
+
                     const userAgent = navigator.userAgent;
                     if(userAgent.includes('Windows NT')){
                         const birthParts = response.data.data.birth.split('.');
@@ -280,6 +281,7 @@ export default{
                         const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
                         this.createAccountData.birth = formattedBirth;
                     }
+
                     this.createAccountData.phone_number = response.data.data.phone;
                     
 
