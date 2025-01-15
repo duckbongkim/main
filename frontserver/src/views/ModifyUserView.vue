@@ -319,6 +319,7 @@ export default{
 
                     // 날짜 형식 변환
 
+
                     // const birthParts = response.data.data.birth.split('/');
                     // const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
                     // this.modifyUser.birth = formattedBirth;
@@ -335,11 +336,6 @@ export default{
                         const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
                         this.modifyUser.birth = formattedBirth;
                     }
-
-
-
-
-
                     this.modifyUser.phone_number = response.data.data.phone;
                     this.isVerify = true;
                     if(!response.data.data.adult){
