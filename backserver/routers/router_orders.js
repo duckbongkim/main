@@ -7,6 +7,7 @@ const Products = require ('../models/model_products');
 const Wishes = require ('../models/model_wishes');
 const Orders = require ('../models/model_orders');
 const HasCoupon = require('../models/model_haveCoupons.js');
+const Ratings = require('../models/model_ratings');
 
 const OrderStatuses = require('../models/model_orderStatuses');
 const {Op} = require('sequelize');
@@ -212,9 +213,12 @@ router.post('/order', async (req, res, next) => {
     try {
         const orderInfos = req.body.orderInfos;
         const hasCoupon = req.body.hasCouponId;
-
-        transaction = await Orders.sequelize.transaction(); 
-        // 트랜잭션은 모든작업이 성공적으로 완료되면 커밋하고, 실패 시 롤백
+        const totalPaymentAmount = req.body.totalPaymentAmount;
+        console.log("##########################totalPaymentAmount",totalPaymentAmount);
+        const user = await Accounts.findOne({where : {email : req.user.email}});
+        const UserRating = await Ratings.findOne({where : {id : user.rating_id}});
+        const saveMoney = Math.ceil(totalPaymentAmount * UserRating.saved_money_rate);
+        console.log("##########################saveMoney",saveMoney);
         for(const info of orderInfos){
             if (!info.count || !info.account_id || !info.product_id || !info.address) {
                 throw new Error("누락된 필수 주문 정보가 있습니다.");
@@ -242,12 +246,16 @@ router.post('/order', async (req, res, next) => {
         }
         if(req.body.usePoint > 0){
             console.log("usePoint:",req.body.usePoint);
-            const user = await Accounts.findOne({where : {email : req.user.email}});
-            const changedPoint = user.savedMoney - req.body.usePoint;
+            
+            const changedPoint = user.savedMoney - req.body.usePoint + saveMoney;
             console.log("changedPoint:",changedPoint);
             await Accounts.update({savedMoney : changedPoint}, {where : {email : req.user.email}});
         }
-        await transaction.commit(); // 모든 작업 성공 시 커밋
+        else{
+            const changedPoint = user.savedMoney + saveMoney;
+            console.log("changedPoint:",changedPoint);
+            await Accounts.update({savedMoney : changedPoint}, {where : {email : req.user.email}});
+        }
         res.status(201).json({ message: "모든 주문이 성공적으로 처리되었습니다." });
         
     }catch(err){
