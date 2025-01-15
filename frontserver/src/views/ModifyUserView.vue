@@ -189,6 +189,8 @@ export default{
                     });
                     return;
                 }
+                const formaPhone = this.modifyUser.phone_number.replace(/-/g, '');
+                this.modifyUser.phone_number = formaPhone;
                 const response = await axios.patch(`http://localhost:3000/profile/modifyUser`,this.modifyUser,{withCredentials:true});
                 if(response.status === 200){
                     alert('사용자 정보가 수정되었습니다.');
@@ -316,9 +318,26 @@ export default{
                     this.modifyUser.name = response.data.data.name;
 
                     // 날짜 형식 변환
-                    const birthParts = response.data.data.birth.split('/');
-                    const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
-                    this.modifyUser.birth = formattedBirth;
+                    // const birthParts = response.data.data.birth.split('/');
+                    // const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
+                    // this.modifyUser.birth = formattedBirth;
+
+                    const userAgent = navigator.userAgent;
+                    if(userAgent.includes('Windows NT')){
+                        const birthParts = response.data.data.birth.split('.');
+                        const formattedBirth = `${birthParts[0]}-${birthParts[1].trim().padStart(2, '0')}-${birthParts[2].trim().padStart(2, '0')}`;
+                        this.modifyUser.birth = formattedBirth;
+                    }
+                    else{
+                        // 날짜 형식 변환
+                        const birthParts = response.data.data.birth.split('/');
+                        const formattedBirth = `${birthParts[2]}-${birthParts[0].padStart(2, '0')}-${birthParts[1].padStart(2, '0')}`;
+                        this.modifyUser.birth = formattedBirth;
+                    }
+
+
+
+
                     this.modifyUser.phone_number = response.data.data.phone;
                     this.isVerify = true;
                     if(!response.data.data.adult){
